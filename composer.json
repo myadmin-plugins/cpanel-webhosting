@@ -20,8 +20,7 @@
         "php": ">=5.0.0",
         "ext-soap": "*",
 	"symfony/event-dispatcher": "*",
-	"detain/myadmin-plugin-installer": "dev-master",
-	"detain/cpanel-webhosting": "*"
+	"detain/myadmin-plugin-installer": "dev-master"
     },
     "autoload": {
         "psr-4": {"Detain\\MyAdminCpanel\\": "src/"}
