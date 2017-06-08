@@ -15,10 +15,10 @@ return [
 	'version' => '1.0.0',
 	'type' => 'licenses',
 	'hooks' => [
-		'function.requirements' => ['Detain\MyAdminCpanel\Plugin', 'Requirements'],
+		/*'function.requirements' => ['Detain\MyAdminCpanel\Plugin', 'Requirements'],
 		'licenses.settings' => ['Detain\MyAdminCpanel\Plugin', 'Settings'],
 		'licenses.activate' => ['Detain\MyAdminCpanel\Plugin', 'Activate'],
 		'licenses.change_ip' => ['Detain\MyAdminCpanel\Plugin', 'ChangeIp'],
-		'ui.menu' => ['Detain\MyAdminCpanel\Plugin', 'Menu']
+		'ui.menu' => ['Detain\MyAdminCpanel\Plugin', 'Menu'] */
 	],
 ];
