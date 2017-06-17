@@ -4,16 +4,6 @@ filter:
         - tests/*
 
 build:
-    tests:
-        override:
-            - composer update --with-dependencies -v -o
-            -
-                command: 'vendor/bin/phpunit --bootstrap tests/bootstrap.php tests/ -v --coverage-clover clover.xml --whitelist src/'
-                coverage:
-                    file: 'clover.xml'
-                    format: 'clover'
-
-build:
     environment:
         php: 7.0.6
     dependencies:
@@ -27,6 +17,7 @@ build:
             - shellcheck-run
             - csslint-run [file|dir]
             -
+                #command: 'vendor/bin/phpunit --bootstrap tests/bootstrap.php tests/ -v --coverage-clover clover.xml --whitelist src/'
                 command: 'phpdbg -qrr vendor/bin/phpunit --bootstrap tests/bootstrap.php tests/ -v --coverage-clover clover.xml --whitelist src/'
                 coverage:
                     file: 'clover.xml'
