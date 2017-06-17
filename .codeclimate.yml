@@ -13,6 +13,8 @@ engines:
     checks:
       Design/TooManyPublicMethods:
         enabled: false
+      Naming/ShortVariable:
+        enabled: false
       CleanCode/BooleanArgumentFlag:
         enabled: false
       Controversial/Superglobals:
