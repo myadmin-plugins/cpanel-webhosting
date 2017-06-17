@@ -25,7 +25,7 @@ before_script:
   - pear install pear/XML_RPC2
   - phpenv rehash
   - travis_retry composer self-update
-  - travis_retry composer install --no-interaction --dev --prefer-dist
+  - travis_retry composer update --with-dependencies --no-interaction --dev --prefer-dist
 script: 
   - if [ "$TRAVIS_PHP_VERSION" = "7.0" ]; then phpdbg -qrr vendor/bin/phpunit --bootstrap tests/bootstrap.php tests/ -v --coverage-clover coverage.xml --whitelist src/; fi;
   - if [ "$TRAVIS_PHP_VERSION" != "7.0" ]; then vendor/bin/phpunit --bootstrap tests/bootstrap.php tests/ -v; fi
