@@ -15,6 +15,7 @@ cache:
   directories:
     - $HOME/.composer/cache/files
     - tmp/pear/download/
+    - vendor/
 addons:
   code_climate:
     repo_token: $CODECLIMATE_REPO_TOKEN
@@ -24,10 +25,12 @@ before_script:
   - pear install pear/XML_RPC2
   - phpenv rehash
   - travis_retry composer self-update
-  - travis_retry composer install --no-interaction --dev --prefer-dist
+  - travis_retry composer install --no-interaction --dev --prefer-source
 script: 
-  - if [ "$TRAVIS_PHP_VERSION" = "7.0" ]; then phpdbg -qrr vendor/bin/phpunit --bootstrap tests/bootstrap.php tests/ -v --coverage-clover build/logs/clover.xml --whitelist src/; else vendor/bin/phpunit --bootstrap tests/bootstrap.php tests/ -v; fi
+  - if [ "$TRAVIS_PHP_VERSION" = "7.0" ]; then phpdbg -qrr vendor/bin/phpunit --bootstrap tests/bootstrap.php tests/ -v --coverage-clover coverage.xml --whitelist src/; fi;
+  - if [ "$TRAVIS_PHP_VERSION" != "7.0" ]; then vendor/bin/phpunit --bootstrap tests/bootstrap.php tests/ -v; fi
 after_success:
-  - if [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_PHP_VERSION" == "7.0" ]; then travis_retry vendor/bin/test-reporter --coverage-report=build/logs/clover.xml; fi
-  - if [ "$TRAVIS_PHP_VERSION" = "7.0" ]; then travis_retry php vendor/bin/coveralls -v --coverage_clover=build/logs/clover.xml; fi;
-  - if [ "$TRAVIS_PHP_VERSION" = "7.0" ]; then travis_retry php vendor/bin/codacycoverage clover build/logs/clover.xml; fi;
+  - if [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_PHP_VERSION" == "7.0" ]; then travis_retry vendor/bin/test-reporter --coverage-report=coverage.xml; fi
+  - if [ "$TRAVIS_PHP_VERSION" = "7.0" ]; then travis_retry bash <(curl -s https://codecov.io/bash); fi;
+  - if [ "$TRAVIS_PHP_VERSION" = "7.0" ]; then travis_retry php vendor/bin/coveralls -v --coverage_clover=coverage.xml; fi;
+  - if [ "$TRAVIS_PHP_VERSION" = "7.0" ]; then travis_retry php vendor/bin/codacycoverage clover coverage.xml; fi;
