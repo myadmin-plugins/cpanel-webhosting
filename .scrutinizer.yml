@@ -1,17 +1,12 @@
-
 filter:
     excluded_paths:
         - tests/*
-
 build:
     environment:
-        php: 5.6
+        php: 7.0
     cache:
         disabled:             false
-
-        # Accepts an array of directories
         directories:
-            - ~/relative-to-the-users-home
             - ~/.composer/cache
             - tmp/
             - vendor/
@@ -21,16 +16,15 @@ build:
             - composer update --with-dependencies -v -o
     tests:
         override:
-            - eslint-run "public_html/js/*js"
-            - shellcheck-run "scripts/*/*sh"
-            - csslint-run "public_html/css"
+            - jshint-run public_html/js/*js
+            - shellcheck-run scripts/*/*sh
+            - csslint-run public_html/css
             -
                 command: 'vendor/bin/phpunit --bootstrap tests/bootstrap.php tests/ -v --coverage-clover coverage.xml --whitelist src/'
                 #command: 'phpdbg -qrr vendor/bin/phpunit --bootstrap tests/bootstrap.php tests/ -v --coverage-clover coverage.xml --whitelist src/'
                 coverage:
                     file: 'coverage.xml'
                     format: 'clover'
-
 checks:
     php:
         uppercase_constants: true
@@ -84,7 +78,6 @@ checks:
         avoid_corrupting_byteorder_marks: true
         avoid_closing_tag: true
         argument_type_checks: true
-
 coding_style:
     php:
         indentation:
