@@ -16,9 +16,9 @@ build:
             - composer update --with-dependencies -v -o
     tests:
         override:
-            - jshint-run $(ls public_html/js/*.js)
-            - shellcheck-run -s bash $(ls scripts/*/*.sh)
-            - csslint-run --exclude-list=public_html/css/domains.css,public_html/css/minified,public_html/css/reset.css,public_html/css/price_win.css public_html/css
+            #- jshint-run $(ls public_html/js/*.js)
+            #- shellcheck-run -s bash $(ls scripts/*/*.sh)
+            #- csslint-run --exclude-list=public_html/css/domains.css,public_html/css/minified,public_html/css/reset.css,public_html/css/price_win.css public_html/css
             -
                 command: 'vendor/bin/phpunit --bootstrap tests/bootstrap.php tests/ -v --coverage-clover coverage.xml --whitelist src/'
                 #command: 'phpdbg -qrr vendor/bin/phpunit --bootstrap tests/bootstrap.php tests/ -v --coverage-clover coverage.xml --whitelist src/'
@@ -27,6 +27,7 @@ build:
                     format: 'clover'
 checks:
     php:
+        duplication: true
         uppercase_constants: true
         return_doc_comment_if_not_inferrable: true
         return_doc_comments: true
