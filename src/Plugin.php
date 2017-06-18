@@ -82,7 +82,7 @@ class Plugin {
 		$loader->add_requirement('vps_add_cpanel', '/vps/addons/vps_add_cpanel.php');
 	}
 
-	public static function Settings(GenericEvent $event) {
+	public static function getSettings(GenericEvent $event) {
 		// will be executed when the licenses.settings event is dispatched
 		$settings = $event->getSubject();
 		$settings->add_text_setting('licenses', 'Cpanel', 'cpanel_username', 'Cpanel Username:', 'Cpanel Username', $settings->get_setting('FANTASTICO_USERNAME'));
