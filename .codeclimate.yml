@@ -20,15 +20,15 @@ engines:
     config:
       CyclomaticComplexity:
         reportLevel: 100
-      CodeSize/ExcessiveClassComplexity:
+      ExcessiveClassComplexity:
         maximum: 200
-      Design/NpathComplexity:
+      NpathComplexity:
         minimum: 500
-      Design/TooManyMethods:
+      TooManyMethods:
         maxmethods: 50
-      Design/WeightedMethodCount:
+      WeightedMethodCount:
         maxmethods: 50
-      CodeSize/ExcessiveMethodLength:
+      ExcessiveMethodLength:
         minimum: 250
         ignore-whitespace: true
     checks:
