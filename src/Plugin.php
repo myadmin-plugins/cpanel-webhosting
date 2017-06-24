@@ -20,22 +20,21 @@ class Plugin {
 	public static function getHooks() {
 		return [
 			self::$module.'.settings' => [__CLASS__, 'getSettings'],
+			self::$module.'.activate' => [__CLASS__, 'getActivate'],
 			'ui.menu' => [__CLASS__, 'getMenu'],
 		];
 	}
 
 	public static function getActivate(GenericEvent $event) {
 		$license = $event->getSubject();
-		if ($event['category'] == SERVICE_TYPES_FANTASTICO) {
+		if ($event['category'] == SERVICE_TYPES_WEB_CPANEL) {
 			myadmin_log(self::$module, 'info', 'Cpanel Activation', __LINE__, __FILE__);
-			function_requirements('activate_cpanel');
-			activate_cpanel($license->get_ip(), $event['field1']);
 			$event->stopPropagation();
 		}
 	}
 
 	public static function getChangeIp(GenericEvent $event) {
-		if ($event['category'] == SERVICE_TYPES_FANTASTICO) {
+		if ($event['category'] == SERVICE_TYPES_WEB_CPANEL) {
 			$license = $event->getSubject();
 			$settings = get_module_settings(self::$module);
 			$cpanel = new Cpanel(FANTASTICO_USERNAME, FANTASTICO_PASSWORD);
