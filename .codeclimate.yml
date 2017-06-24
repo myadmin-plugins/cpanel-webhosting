@@ -24,6 +24,10 @@ engines:
         maximum: 200
       Design/NpathComplexity:
         minimum: 500
+      Design/TooManyMethods:
+        maxmethods: 50
+      Design/TooManyPublicMethods:
+        maxmethods: 30
       Design/WeightedMethodCount:
         maxmethods: 50
       CodeSize/ExcessiveMethodLength:
