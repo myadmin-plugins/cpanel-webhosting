@@ -9,6 +9,8 @@ engines:
     checks:
       Similar code:
         enabled: false
+      Identical code:
+        enabled: false
   fixme:
     enabled: true
   phpmd:
