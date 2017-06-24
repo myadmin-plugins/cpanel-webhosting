@@ -20,6 +20,8 @@ engines:
         reportLevel: 100
       CodeSize/ExcessiveClassComplexity:
         maximum: 200
+      CodeSize/NPathComplexity:
+        maximum: 300
     checks:
       Design/TooManyPublicMethods:
         enabled: false
