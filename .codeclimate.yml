@@ -7,6 +7,8 @@ engines:
       - javascript
       - php
     checks:
+      ExcessivePublicCount:
+        enabled: false
       Similar code:
         enabled: false
       Identical code:
@@ -16,16 +18,20 @@ engines:
   phpmd:
     enabled: true
     config:
-      CodeSize/CyclomaticComplexity:
+      CyclomaticComplexity:
         reportLevel: 100
       CodeSize/ExcessiveClassComplexity:
         maximum: 200
-      CodeSize/NPathComplexity:
+      Design/NpathComplexity:
         minimum: 500
+      Design/WeightedMethodCount:
+        maxmethods: 50
       CodeSize/ExcessiveMethodLength:
         minimum: 250
         ignore-whitespace: true
     checks:
+      ExcessivePublicCount:
+        enabled: false
       Design/TooManyPublicMethods:
         enabled: false
       Naming/ShortVariable:
