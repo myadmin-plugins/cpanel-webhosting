@@ -28,6 +28,8 @@ engines:
         enabled: false
       CleanCode/StaticAccess:
         enabled: false
+      CodeSize/CyclomaticComplexity:
+        reportLevel: 100
 ratings:
   paths:
   - "**.inc"
