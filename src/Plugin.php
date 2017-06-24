@@ -54,7 +54,7 @@ class Plugin {
 		}
 	}
 
-	public static function Menu(GenericEvent $event) {
+	public static function getMenu(GenericEvent $event) {
 		// will be executed when the licenses.settings event is dispatched
 		$menu = $event->getSubject();
 		$module = 'licenses';
