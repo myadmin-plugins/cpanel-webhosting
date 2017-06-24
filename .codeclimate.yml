@@ -6,6 +6,9 @@ engines:
       languages:
       - javascript
       - php
+    checks:
+      Similar code:
+        enabled: false
   fixme:
     enabled: true
   phpmd:
