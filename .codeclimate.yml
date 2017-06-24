@@ -21,9 +21,10 @@ engines:
       CodeSize/ExcessiveClassComplexity:
         maximum: 200
       CodeSize/NPathComplexity:
-        maximum: 500
+        minimum: 500
       CodeSize/ExcessiveMethodLength:
-        maximum: 250
+        minimum: 250
+        ignore-whitespace: true
     checks:
       Design/TooManyPublicMethods:
         enabled: false
