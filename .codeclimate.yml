@@ -17,7 +17,7 @@ engines:
     enabled: true
   phpmd:
     enabled: true
-    checks:
+    config:
       CyclomaticComplexity:
         reportLevel: 100
       CodeSize/ExcessiveClassComplexity:
@@ -31,6 +31,7 @@ engines:
       CodeSize/ExcessiveMethodLength:
         minimum: 250
         ignore-whitespace: true
+    checks:
       ExcessivePublicCount:
         enabled: false
       Design/TooManyPublicMethods:
