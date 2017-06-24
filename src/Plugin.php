@@ -22,7 +22,7 @@ class Plugin {
 		];
 	}
 
-	public static function Activate(GenericEvent $event) {
+	public static function getActivate(GenericEvent $event) {
 		$license = $event->getSubject();
 		if ($event['category'] == SERVICE_TYPES_FANTASTICO) {
 			myadmin_log('licenses', 'info', 'Cpanel Activation', __LINE__, __FILE__);
