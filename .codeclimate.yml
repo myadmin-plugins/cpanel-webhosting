@@ -32,6 +32,12 @@ engines:
         minimum: 250
         ignore-whitespace: true
     checks:
+      Design/NpathComplexity:
+        enabled: false
+      Design/LongMethod:
+        enabled: false
+      CyclomaticComplexity:
+        enabled: false
       ExcessivePublicCount:
         enabled: false
       Design/TooManyPublicMethods:
