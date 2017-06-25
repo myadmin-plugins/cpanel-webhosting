@@ -43,7 +43,7 @@ class Plugin {
 			$hash = $serverdata[$settings['PREFIX'].'_key'];
 			$ip = $serverdata[$settings['PREFIX'].'_ip'];
 			$success = TRUE;
-			$extra = run_event('parse_service_extra', $serviceInfo[$settings['PREFIX'] . '_extra'], self::$module);
+			$extra = run_event('parse_service_extra', $serviceInfo[$settings['PREFIX'].'_extra'], self::$module);
 			function_requirements('whm_api');
 			$user = 'root';
 			$whm = new \xmlapi($ip);
@@ -55,11 +55,11 @@ class Plugin {
 			$whm->set_user($user);
 			$whm->set_hash($hash);
 			//$whm = whm_api('faith.interserver.net');
-			$field1 = explode(',', $serviceTypes[$serviceInfo[$settings['PREFIX'] . '_type']]['services_field1']);
+			$field1 = explode(',', $serviceTypes[$serviceInfo[$settings['PREFIX'].'_type']]['services_field1']);
 			if (in_array('reseller', $field1))
-				$response = json_decode($whm->unsuspendreseller($serviceInfo[$settings['PREFIX'] . '_username']), TRUE);
+				$response = json_decode($whm->unsuspendreseller($serviceInfo[$settings['PREFIX'].'_username']), TRUE);
 			else
-				$response = json_decode($whm->unsuspendacct($serviceInfo[$settings['PREFIX'] . '_username']), TRUE);
+				$response = json_decode($whm->unsuspendacct($serviceInfo[$settings['PREFIX'].'_username']), TRUE);
 			myadmin_log(self::$module, 'info', json_encode($response), __LINE__, __FILE__);
 			$event->stopPropagation();
 		}
