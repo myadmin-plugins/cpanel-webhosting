@@ -21,6 +21,7 @@ class Plugin {
 		return [
 			self::$module.'.settings' => [__CLASS__, 'getSettings'],
 			self::$module.'.activate' => [__CLASS__, 'getActivate'],
+			self::$module.'.reactivate' => [__CLASS__, 'getReactivate'],
 			'ui.menu' => [__CLASS__, 'getMenu'],
 		];
 	}
@@ -29,6 +30,37 @@ class Plugin {
 		$license = $event->getSubject();
 		if ($event['category'] == SERVICE_TYPES_WEB_CPANEL) {
 			myadmin_log(self::$module, 'info', 'Cpanel Activation', __LINE__, __FILE__);
+			$event->stopPropagation();
+		}
+	}
+
+	public static function getReactivate(GenericEvent $event) {
+		$service = $event->getSubject();
+		if ($event['category'] == SERVICE_TYPES_WEB_CPANEL) {
+			$serviceInfo = $service->getServiceInfo();
+			$settings = get_module_settings(self::$module);
+			$serverdata = get_service_master($serviceInfo[$settings['PREFIX'].'_server'], self::$module);
+			$hash = $serverdata[$settings['PREFIX'].'_key'];
+			$ip = $serverdata[$settings['PREFIX'].'_ip'];
+			$success = true;
+			$extra = run_event('parse_service_extra', $serviceInfo[$settings['PREFIX'] . '_extra'], self::$module);
+			function_requirements('whm_api');
+			$user = 'root';
+			$whm = new \xmlapi($ip);
+			//$whm->set_debug('true');
+			$whm->set_port('2087');
+			$whm->set_protocol('https');
+			$whm->set_output('json');
+			$whm->set_auth_type('hash');
+			$whm->set_user($user);
+			$whm->set_hash($hash);
+			//$whm = whm_api('faith.interserver.net');
+			$field1 = explode(',', $serviceTypes[$serviceInfo[$settings['PREFIX'] . '_type']]['services_field1']);
+			if (in_array('reseller', $field1))
+				$response = json_decode($whm->unsuspendreseller($serviceInfo[$settings['PREFIX'] . '_username']), TRUE);
+			else
+				$response = json_decode($whm->unsuspendacct($serviceInfo[$settings['PREFIX'] . '_username']), TRUE);
+			myadmin_log(self::$module, 'info', json_encode($response), __LINE__, __FILE__);
 			$event->stopPropagation();
 		}
 	}
