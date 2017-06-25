@@ -53,9 +53,9 @@ class Plugin {
 				'maxsub' => 'unlimited',
 			);
 			if ($service_types[$type]['services_field1'] == 'reseller')
-				$reseller = true;
+				$reseller = TRUE;
 			else
-				$reseller = false;
+				$reseller = FALSE;
 			if ($service_types[$type]['services_field2'] != '') {
 				$fields = explode(',', $service_types[$type]['services_field2']);
 				foreach ($fields as $field) {
@@ -117,8 +117,8 @@ class Plugin {
 					$response = json_decode($response);
 				}
 			}
-			if (mb_strpos($response->result[0]->statusmsg, 'Sorry, the password you selected cannot be used because it is too weak and would be too easy to crack.') !== false) {
-				while (mb_strpos($response->result[0]->statusmsg, 'Sorry, the password you selected cannot be used because it is too weak and would be too easy to crack.') !== false) {
+			if (mb_strpos($response->result[0]->statusmsg, 'Sorry, the password you selected cannot be used because it is too weak and would be too easy to crack.') !== FALSE) {
+				while (mb_strpos($response->result[0]->statusmsg, 'Sorry, the password you selected cannot be used because it is too weak and would be too easy to crack.') !== FALSE) {
 					$options['password'] .= '1';
 					myadmin_log(self::$module, 'info', "Trying Password {$options['password']}", __LINE__, __FILE__);
 					$response = $whm->xmlapi_query('createacct', $options);
@@ -135,8 +135,8 @@ class Plugin {
 					request_log(self::$module, $service[$settings['PREFIX'].'_custid'], __FUNCTION__, 'cpanel', 'limitbw', array('username' => $username, 'options' => $options['bwlimit']), $response3);
 					myadmin_log(self::$module, 'info', 'Response: '.str_replace('\n', "\n", strip_tags($response3)), __LINE__, __FILE__);
 				}
-				if ($reseller === true) {
-					$response2 = $whm->setupreseller($username, false);
+				if ($reseller === TRUE) {
+					$response2 = $whm->setupreseller($username, FALSE);
 					request_log(self::$module, $service[$settings['PREFIX'].'_custid'], __FUNCTION__, 'cpanel', 'setupreseller', array('username' => $username), $response2);
 					myadmin_log(self::$module, 'info', "Response: {$response2}", __LINE__, __FILE__);
 					$response3 = $whm->listacls();
@@ -230,17 +230,17 @@ class Plugin {
 					$data['site_desc'] = $soft->scripts[$script]['fullname'];
 					myadmin_log(self::$module, 'info', 'Installing '.$soft->scripts[$script]['fullname'], __LINE__, __FILE__);
 					//$result = myadmin_unstringify($soft->install($script, $data));
-					$result = json_decode($soft->install($script, $data), true);
+					$result = json_decode($soft->install($script, $data), TRUE);
 					request_log(self::$module, $service[$settings['PREFIX'].'_custid'], __FUNCTION__, 'softaculous', 'install', array('script' => $script, 'data' => $data), $result);
 					myadmin_log(self::$module, 'info', json_encode($result), __LINE__, __FILE__);
 				}
-				$response = add_dns_record(14426, 'wh'.$id, $ip, 'A', 86400, 0, true);
+				$response = add_dns_record(14426, 'wh'.$id, $ip, 'A', 86400, 0, TRUE);
 				myadmin_log(self::$module, 'info', 'Response: '.json_encode($response), __LINE__, __FILE__);
 				$response = $whm->park($options['username'], 'wh'.$id.'.ispot.cc', '');
 				myadmin_log(self::$module, 'info', 'Response: '.json_encode($response), __LINE__, __FILE__);
-				return true;
+				return TRUE;
 			} else {
-				return false;
+				return FALSE;
 			}
 			$event->stopPropagation();
 		}
