@@ -75,7 +75,7 @@ class Plugin {
 			myadmin_log(self::$module, 'info', json_encode($options), __LINE__, __FILE__);
 			$response = $whm->xmlapi_query('createacct', $options);
 			request_log(self::$module, $service[$settings['PREFIX'].'_custid'], __FUNCTION__, 'cpanel', 'createacct', $options, $response);
-			myadmin_log(self::$module, 'info', 'Response: ' . str_replace('\n', '', strip_tags($response)), __LINE__, __FILE__);
+			myadmin_log(self::$module, 'info', 'Response: '.str_replace('\n', '', strip_tags($response)), __LINE__, __FILE__);
 			$response = json_decode($response);
 			if ($response->result[0]->statusmsg == 'Sorry, the password may not contain the username for security reasons.') {
 				$ousername = $username;
@@ -97,7 +97,7 @@ class Plugin {
 					$username .= 'a';
 					$username = mb_substr($username, 1);
 					$options['username'] = $username;
-					myadmin_log(self::$module, 'info', 'Trying Username ' . $options['username'], __LINE__, __FILE__);
+					myadmin_log(self::$module, 'info', 'Trying Username '.$options['username'], __LINE__, __FILE__);
 					$response = $whm->xmlapi_query('createacct', $options);
 					request_log(self::$module, $service[$settings['PREFIX'].'_custid'], __FUNCTION__, 'cpanel', 'createacct', $options, $response);
 					myadmin_log(self::$module, 'info', "Response: $response", __LINE__, __FILE__);
@@ -110,7 +110,7 @@ class Plugin {
 					$username .= 'a';
 					$username = mb_substr($username, 1);
 					$options['username'] = $username;
-					myadmin_log(self::$module, 'info', 'Trying Username ' . $options['username'], __LINE__, __FILE__);
+					myadmin_log(self::$module, 'info', 'Trying Username '.$options['username'], __LINE__, __FILE__);
 					$response = $whm->xmlapi_query('createacct', $options);
 					request_log(self::$module, $service[$settings['PREFIX'].'_custid'], __FUNCTION__, 'cpanel', 'createacct', $options, $response);
 					myadmin_log(self::$module, 'info', "Response: $response", __LINE__, __FILE__);
@@ -133,7 +133,7 @@ class Plugin {
 				if (isset($options['bwlimit']) && $options['bwlimit'] != 'unlimited') {
 					$response3 = $whm->limitbw($username, $options['bwlimit']);
 					request_log(self::$module, $service[$settings['PREFIX'].'_custid'], __FUNCTION__, 'cpanel', 'limitbw', array('username' => $username, 'options' => $options['bwlimit']), $response3);
-					myadmin_log(self::$module, 'info', 'Response: ' . str_replace('\n', "\n", strip_tags($response3)), __LINE__, __FILE__);
+					myadmin_log(self::$module, 'info', 'Response: '.str_replace('\n', "\n", strip_tags($response3)), __LINE__, __FILE__);
 				}
 				if ($reseller === true) {
 					$response2 = $whm->setupreseller($username, false);
@@ -228,16 +228,16 @@ class Plugin {
 					$data['store_owner'] = $userdata['account_lid'];
 					$data['store_address'] = (isset($userdata['address']) ? $userdata['address'] : '');
 					$data['site_desc'] = $soft->scripts[$script]['fullname'];
-					myadmin_log(self::$module, 'info', 'Installing ' . $soft->scripts[$script]['fullname'], __LINE__, __FILE__);
+					myadmin_log(self::$module, 'info', 'Installing '.$soft->scripts[$script]['fullname'], __LINE__, __FILE__);
 					//$result = myadmin_unstringify($soft->install($script, $data));
 					$result = json_decode($soft->install($script, $data), true);
 					request_log(self::$module, $service[$settings['PREFIX'].'_custid'], __FUNCTION__, 'softaculous', 'install', array('script' => $script, 'data' => $data), $result);
 					myadmin_log(self::$module, 'info', json_encode($result), __LINE__, __FILE__);
 				}
-				$response = add_dns_record(14426, 'wh' . $id, $ip, 'A', 86400, 0, true);
-				myadmin_log(self::$module, 'info', 'Response: ' . json_encode($response), __LINE__, __FILE__);
-				$response = $whm->park($options['username'], 'wh' . $id . '.ispot.cc', '');
-				myadmin_log(self::$module, 'info', 'Response: ' . json_encode($response), __LINE__, __FILE__);
+				$response = add_dns_record(14426, 'wh'.$id, $ip, 'A', 86400, 0, true);
+				myadmin_log(self::$module, 'info', 'Response: '.json_encode($response), __LINE__, __FILE__);
+				$response = $whm->park($options['username'], 'wh'.$id.'.ispot.cc', '');
+				myadmin_log(self::$module, 'info', 'Response: '.json_encode($response), __LINE__, __FILE__);
 				return true;
 			} else {
 				return false;
