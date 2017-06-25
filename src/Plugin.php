@@ -30,6 +30,218 @@ class Plugin {
 		$license = $event->getSubject();
 		if ($event['category'] == SERVICE_TYPES_WEB_CPANEL) {
 			myadmin_log(self::$module, 'info', 'Cpanel Activation', __LINE__, __FILE__);
+			function_requirements('whm_api');
+			$user = 'root';
+			$whm = new xmlapi($ip);
+			//$whm->set_debug('true');
+			$whm->set_port('2087');
+			$whm->set_protocol('https');
+			$whm->set_output('json');
+			$whm->set_auth_type('hash');
+			$whm->set_user($user);
+			$whm->set_hash($hash);
+			//		$whm = whm_api('faith.interserver.net');
+			$options = array(
+				'ip' => 'n',
+				'cgi' => 1,
+				'frontpage' => 0,
+				'hasshell' => 0,
+				'cpmod' => 'paper_lantern',
+				'maxsql' => 'unlimited',
+				'maxpop' => 'unlimited',
+				'maxlst' => 0,
+				'maxsub' => 'unlimited',
+			);
+			if ($service_types[$type]['services_field1'] == 'reseller')
+				$reseller = true;
+			else
+				$reseller = false;
+			if ($service_types[$type]['services_field2'] != '') {
+				$fields = explode(',', $service_types[$type]['services_field2']);
+				foreach ($fields as $field) {
+					list($key, $value) = explode('=', $field);
+					if ($key == 'script')
+						$extra[$key] = $value;
+					else
+						$options[$key] = $value;
+				}
+			}
+			$options = array_merge($options, array(
+				'domain' => $hostname,
+				'username' => $username,
+				'password' => $password,
+				'contactemail' => $email,
+			));
+			myadmin_log(self::$module, 'info', json_encode($options), __LINE__, __FILE__);
+			$response = $whm->xmlapi_query('createacct', $options);
+			request_log(self::$module, $service[$settings['PREFIX'].'_custid'], __FUNCTION__, 'cpanel', 'createacct', $options, $response);
+			myadmin_log(self::$module, 'info', 'Response: ' . str_replace('\n', '', strip_tags($response)), __LINE__, __FILE__);
+			$response = json_decode($response);
+			if ($response->result[0]->statusmsg == 'Sorry, the password may not contain the username for security reasons.') {
+				$ousername = $username;
+				while ($response->result[0]->statusmsg == 'Sorry, the password may not contain the username for security reasons.') {
+					$username .= 'a';
+					$username = mb_substr($username, 1);
+					$options['username'] = $username;
+					myadmin_log(self::$module, 'info', "Trying Username {$options['username']}", __LINE__, __FILE__);
+					$response = $whm->xmlapi_query('createacct', $options);
+					request_log(self::$module, $service[$settings['PREFIX'].'_custid'], __FUNCTION__, 'cpanel', 'createacct', $options, $response);
+					myadmin_log(self::$module, 'info', "Response: {$response}", __LINE__, __FILE__);
+					$response = json_decode($response);
+				}
+			}
+
+			if ($response->result[0]->statusmsg == 'Sorry, a group for that username already exists.') {
+				$ousername = $username;
+				while ($response->result[0]->statusmsg == 'Sorry, a group for that username already exists.') {
+					$username .= 'a';
+					$username = mb_substr($username, 1);
+					$options['username'] = $username;
+					myadmin_log(self::$module, 'info', 'Trying Username ' . $options['username'], __LINE__, __FILE__);
+					$response = $whm->xmlapi_query('createacct', $options);
+					request_log(self::$module, $service[$settings['PREFIX'].'_custid'], __FUNCTION__, 'cpanel', 'createacct', $options, $response);
+					myadmin_log(self::$module, 'info', "Response: $response", __LINE__, __FILE__);
+					$response = json_decode($response);
+				}
+			}
+			if (preg_match("/^.*This system already has an account named .{1,3}{$username}.{1,3}\.$/m", $response->result[0]->statusmsg) || preg_match("/^.*The name of another account on this server has the same initial/m", $response->result[0]->statusmsg)) {
+				$ousername = $username;
+				while (preg_match("/^.*This system already has an account named .{1,3}{$username}.{1,3}\.$/m", $response->result[0]->statusmsg) || preg_match("/^.*The name of another account on this server has the same initial/m", $response->result[0]->statusmsg)) {
+					$username .= 'a';
+					$username = mb_substr($username, 1);
+					$options['username'] = $username;
+					myadmin_log(self::$module, 'info', 'Trying Username ' . $options['username'], __LINE__, __FILE__);
+					$response = $whm->xmlapi_query('createacct', $options);
+					request_log(self::$module, $service[$settings['PREFIX'].'_custid'], __FUNCTION__, 'cpanel', 'createacct', $options, $response);
+					myadmin_log(self::$module, 'info', "Response: $response", __LINE__, __FILE__);
+					$response = json_decode($response);
+				}
+			}
+			if (mb_strpos($response->result[0]->statusmsg, 'Sorry, the password you selected cannot be used because it is too weak and would be too easy to crack.') !== false) {
+				while (mb_strpos($response->result[0]->statusmsg, 'Sorry, the password you selected cannot be used because it is too weak and would be too easy to crack.') !== false) {
+					$options['password'] .= '1';
+					myadmin_log(self::$module, 'info', "Trying Password {$options['password']}", __LINE__, __FILE__);
+					$response = $whm->xmlapi_query('createacct', $options);
+					request_log(self::$module, $service[$settings['PREFIX'].'_custid'], __FUNCTION__, 'cpanel', 'createacct', $options, $response);
+					myadmin_log(self::$module, 'info', "Response: $response", __LINE__, __FILE__);
+					$response = json_decode($response);
+				}
+				$GLOBALS['tf']->history->add($settings['PREFIX'], 'password', $id, $options['password']);
+			}
+			if ($response->result[0]->status == 1) {
+				$ip = $response->result[0]->options->ip;
+				if (isset($options['bwlimit']) && $options['bwlimit'] != 'unlimited') {
+					$response3 = $whm->limitbw($username, $options['bwlimit']);
+					request_log(self::$module, $service[$settings['PREFIX'].'_custid'], __FUNCTION__, 'cpanel', 'limitbw', array('username' => $username, 'options' => $options['bwlimit']), $response3);
+					myadmin_log(self::$module, 'info', 'Response: ' . str_replace('\n', "\n", strip_tags($response3)), __LINE__, __FILE__);
+				}
+				if ($reseller === true) {
+					$response2 = $whm->setupreseller($username, false);
+					request_log(self::$module, $service[$settings['PREFIX'].'_custid'], __FUNCTION__, 'cpanel', 'setupreseller', array('username' => $username), $response2);
+					myadmin_log(self::$module, 'info', "Response: {$response2}", __LINE__, __FILE__);
+					$response3 = $whm->listacls();
+
+					$acls = json_decode($response3);
+					request_log(self::$module, $service[$settings['PREFIX'].'_custid'], __FUNCTION__, 'cpanel', 'listacls', array(), $response);
+					//myadmin_log(self::$module, 'info', json_encode($acls));
+					if (!isset($acls->acls->reseller)) {
+						$acl = array(
+							'acl-add-pkg' => 1, // Allow the creation of packages.
+							'acl-add-pkg-ip' => 1, // Allow the creation of packages with dedicated IPs.
+							'acl-add-pkg-shell' => 1, // Allow the creation of packages with shell access.
+							'acl-all' => 0, // All features.
+							'acl-allow-addoncreate' => 0, // Allow the creation of packages with unlimited addon domains.
+							'acl-allow-parkedcreate' => 1, // Allow the creation of packages with parked domains.
+							'acl-allow-unlimited-disk-pkgs' => 0, // Allow the creation of packages with unlimited disk space.
+							'acl-allow-unlimited-pkgs' => 0, // Allow the creation of packages with unlimited bandwidth.
+							'acl-clustering' => 0, // Enable clustering.
+							'acl-create-acct' => 1, // Allow the reseller to create a new account.
+							'acl-create-dns' => 1, // Allow the reseller to add DNS zones.
+							'acl-demo-setup' => 0, // Allow the reseller to turn an account into a demo account.
+							'acl-disallow-shell' => 0, // Never allow creation of accounts with shell access.
+							'acl-edit-account' => 1, // Allow the reseller to modify an account.
+							'acl-edit-dns' => 1, // Allow editing of DNS zones.
+							'acl-edit-mx' => 0, // Allow editing of MX entries,
+							'acl-edit-pkg' => 1, // Allow editing of packages.
+							'acl-frontpage' => 0, // Allow the reseller to install and uninstall FrontPage extensions.
+							'acl-kill-acct' => 1, // Allow termination of accounts.
+							'acl-kill-dns' => 0, // Allow the reseller to remove DNS entries.
+							'acl-limit-bandwidth' => 1, // Allow the reseller to modify bandiwdth limits.   Warning: This will allow the reseller to circumvent package bandwidth limits, if you are not using resource limits!
+							'acl-list-accts' => 1, // Allow the reseller to list his or her accounts.
+							'acl-mailcheck' => 1, // Allow the reseller to access the WHM Mail Troubleshooter.
+							'acl-mod-subdomains' => 1, // Allow the reseller to enable and disable subdomains.
+							'acl-news' => 1, // Allow the reseller to modify cPanel/WHM news.
+							'acl-onlyselfandglobalpkgs' => 1, // Prevent the creation of accounts with packages that are neither global nor owned by this user.
+							'acl-park-dns' => 1, // Allow the reseller to park domains.
+							'acl-passwd' => 1, // Allow the reseller to modify passwords.
+							'acl-quota' => 1, // Allow the reseller to modify disk quotas.   Warning: This will allow resellers to circumvent package limits for disk space, if you are not using resource limits!
+							'acl-rearrange-accts' => 0, // Allow the reseller to rearrange accounts.
+							'acl-res-cart' => 0, // Allow the reseller to reset the shopping cart.
+							'acl-status' => 0, // Allow the reseller to view the Service Status feature in WHM.
+							'acl-resftp' => 0, // Allow the reseller to synchronize FTP passwords.
+							'acl-restart' => 0, // Allow the reseller to restart services.
+							'acl-show-bandwidth' => 1, // Allow the reseller to view accounts' bandwidth usage.
+							'acl-ssl' => 0, // Allow the reseller to access the SSL Manager.
+							'acl-ssl-gencrt' => 1, // Allow the reseller to access the SSL CSR/CRT generator.
+							'acl-stats' => 1, // Allow the reseller to view account statistics.
+							'acl-suspend-acct' => 1, // Allow the reseller to suspend accounts.
+							'acl-upgrade-account' => 1, // Allow the reseller to upgrade and downgrade accounts.
+							'acllist' => 'reseller'
+						);
+						$result = $whm->saveacllist($acl);
+						myadmin_log(self::$module, 'info', $result, __LINE__, __FILE__);
+						request_log(self::$module, $service[$settings['PREFIX'].'_custid'], __FUNCTION__, 'cpanel', 'saveacllist', $acl, $result);
+						myadmin_log(self::$module, 'info', 'Reseller ACL Created', __LINE__, __FILE__);
+					} else {
+						myadmin_log(self::$module, 'info', 'Reseller ACL Exists', __LINE__, __FILE__);
+					}
+					$request = array('reseller' => $username, 'acllist' => 'reseller');
+					$result = $whm->setacls($request);
+					myadmin_log(self::$module, 'info', $result, __LINE__, __FILE__);
+					request_log(self::$module, $service[$settings['PREFIX'].'_custid'], __FUNCTION__, 'cpanel', 'setacls', $request, $result);
+					myadmin_log(self::$module, 'info', 'Reseller assigned to ACL', __LINE__, __FILE__);
+				}
+				$username = $db->real_escape($username);
+				$db->query("update {$settings['TABLE']} set {$settings['PREFIX']}_ip='$ip', {$settings['PREFIX']}_username='$username' where {$settings['PREFIX']}_id='$id'", __LINE__, __FILE__);
+				website_welcome_email($id);
+				if (isset($extra['script']) && $extra['script'] > 0) {
+					$script = (int)$extra['script'];
+					include_once('include/webhosting/softaculous/sdk.php');
+					$userdata = $GLOBALS['tf']->accounts->read($service[$settings['PREFIX'].'_custid']);
+					$soft = new Softaculous_SDK();
+					$soft->login = "https://{$username}:{$password}@{$serverdata[$settings['PREFIX'].'_name']}:2083/frontend/paper_lantern/softaculous/index.live.php";
+					$soft->list_scripts();
+					$data['overwrite_existing'] = 1;
+					$data['softdomain'] = $hostname;
+					$data['softdirectory'] = '';
+					$data['admin_username'] = 'admin';
+					$data['admin_pass'] = $password;
+					$data['admin_email'] = $email;
+					$data['admin_realname'] = (isset($userdata['name']) ? $userdata['name'] : $userdata['account_lid']);
+					list($data['admin_fname'], $data['admin_lname']) = (isset($userdata['name']) ? explode(' ', $userdata['name']) : explode('@', $userdata['account_lid']));
+					$data['softdb'] = $soft->scripts[$script]['softname'];
+					$data['dbusername'] = $soft->scripts[$script]['softname'];
+					$data['dbuserpass'] = $password;
+					$data['language'] = 'en';
+					$data['site_name'] = $soft->scripts[$script]['fullname'];
+					$data['store_name'] = $soft->scripts[$script]['fullname'];
+					$data['store_owner'] = $userdata['account_lid'];
+					$data['store_address'] = (isset($userdata['address']) ? $userdata['address'] : '');
+					$data['site_desc'] = $soft->scripts[$script]['fullname'];
+					myadmin_log(self::$module, 'info', 'Installing ' . $soft->scripts[$script]['fullname'], __LINE__, __FILE__);
+					//$result = myadmin_unstringify($soft->install($script, $data));
+					$result = json_decode($soft->install($script, $data), true);
+					request_log(self::$module, $service[$settings['PREFIX'].'_custid'], __FUNCTION__, 'softaculous', 'install', array('script' => $script, 'data' => $data), $result);
+					myadmin_log(self::$module, 'info', json_encode($result), __LINE__, __FILE__);
+				}
+				$response = add_dns_record(14426, 'wh' . $id, $ip, 'A', 86400, 0, true);
+				myadmin_log(self::$module, 'info', 'Response: ' . json_encode($response), __LINE__, __FILE__);
+				$response = $whm->park($options['username'], 'wh' . $id . '.ispot.cc', '');
+				myadmin_log(self::$module, 'info', 'Response: ' . json_encode($response), __LINE__, __FILE__);
+				return true;
+			} else {
+				return false;
+			}
 			$event->stopPropagation();
 		}
 	}
