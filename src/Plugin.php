@@ -32,7 +32,7 @@ class Plugin {
 			myadmin_log(self::$module, 'info', 'Cpanel Activation', __LINE__, __FILE__);
 			function_requirements('whm_api');
 			$user = 'root';
-			$whm = new xmlapi($ip);
+			$whm = new \xmlapi($ip);
 			//$whm->set_debug('true');
 			$whm->set_port('2087');
 			$whm->set_protocol('https');
