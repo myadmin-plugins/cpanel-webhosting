@@ -40,7 +40,7 @@ switch ($db->Record['website_type'])
 		} catch (Exception $e) {
 			$msg = "Caught Exception Processing {$db->Record['website_name']}: ".$e->getMessage();
 			myadmin_log('scripts', 'info', $msg, __LINE__, __FILE__);
-			echo $msg."\n";
+			echo $msg.PHP_EOL;
 		}
 		break;
 }
