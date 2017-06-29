@@ -27,9 +27,20 @@ class Plugin {
 	}
 
 	public static function getActivate(GenericEvent $event) {
-		$license = $event->getSubject();
+		$service = $event->getSubject();
 		if ($event['category'] == SERVICE_TYPES_WEB_CPANEL) {
 			myadmin_log(self::$module, 'info', 'Cpanel Activation', __LINE__, __FILE__);
+			$serviceInfo = $service->getServiceInfo();
+			$settings = get_module_settings(self::$module);
+			$serverdata = get_service_master($serviceInfo[$settings['PREFIX'].'_server'], self::$module);
+			$hash = $serverdata[$settings['PREFIX'].'_key'];
+			$ip = $serverdata[$settings['PREFIX'].'_ip'];
+			$extra = run_event('parse_service_extra', $serviceInfo[$settings['PREFIX'].'_extra'], self::$module);
+			$hostname = $serviceInfo[$settings['PREFIX'].'_hostname'];
+			if (trim($hostname) == '')
+				$hostname = $serviceInfo[$settings['PREFIX'].'_id'].'.server.com';
+			$password = website_get_password($serviceInfo[$settings['PREFIX'].'_id']);
+			$username = get_new_webhosting_username($serviceInfo[$settings['PREFIX'].'_id'], $hostname, $serviceInfo[$settings['PREFIX'].'_server']);
 			function_requirements('whm_api');
 			$user = 'root';
 			$whm = new \xmlapi($ip);
@@ -52,12 +63,12 @@ class Plugin {
 				'maxlst' => 0,
 				'maxsub' => 'unlimited',
 			);
-			if ($service_types[$type]['services_field1'] == 'reseller')
+			if ($service_types[$serviceInfo[$settings['PREFIX'].'_type']]['services_field1'] == 'reseller')
 				$reseller = TRUE;
 			else
 				$reseller = FALSE;
-			if ($service_types[$type]['services_field2'] != '') {
-				$fields = explode(',', $service_types[$type]['services_field2']);
+			if ($service_types[$serviceInfo[$settings['PREFIX'].'_type']]['services_field2'] != '') {
+				$fields = explode(',', $service_types[$serviceInfo[$settings['PREFIX'].'_type']]['services_field2']);
 				foreach ($fields as $field) {
 					list($key, $value) = explode('=', $field);
 					if ($key == 'script')
@@ -74,7 +85,7 @@ class Plugin {
 			));
 			myadmin_log(self::$module, 'info', json_encode($options), __LINE__, __FILE__);
 			$response = $whm->xmlapi_query('createacct', $options);
-			request_log(self::$module, $service[$settings['PREFIX'].'_custid'], __FUNCTION__, 'cpanel', 'createacct', $options, $response);
+			request_log(self::$module, $serviceInfo[$settings['PREFIX'].'_custid'], __FUNCTION__, 'cpanel', 'createacct', $options, $response);
 			myadmin_log(self::$module, 'info', 'Response: '.str_replace('\n', '', strip_tags($response)), __LINE__, __FILE__);
 			$response = json_decode($response);
 			if ($response->result[0]->statusmsg == 'Sorry, the password may not contain the username for security reasons.') {
@@ -85,7 +96,7 @@ class Plugin {
 					$options['username'] = $username;
 					myadmin_log(self::$module, 'info', "Trying Username {$options['username']}", __LINE__, __FILE__);
 					$response = $whm->xmlapi_query('createacct', $options);
-					request_log(self::$module, $service[$settings['PREFIX'].'_custid'], __FUNCTION__, 'cpanel', 'createacct', $options, $response);
+					request_log(self::$module, $serviceInfo[$settings['PREFIX'].'_custid'], __FUNCTION__, 'cpanel', 'createacct', $options, $response);
 					myadmin_log(self::$module, 'info', "Response: {$response}", __LINE__, __FILE__);
 					$response = json_decode($response);
 				}
@@ -99,7 +110,7 @@ class Plugin {
 					$options['username'] = $username;
 					myadmin_log(self::$module, 'info', 'Trying Username '.$options['username'], __LINE__, __FILE__);
 					$response = $whm->xmlapi_query('createacct', $options);
-					request_log(self::$module, $service[$settings['PREFIX'].'_custid'], __FUNCTION__, 'cpanel', 'createacct', $options, $response);
+					request_log(self::$module, $serviceInfo[$settings['PREFIX'].'_custid'], __FUNCTION__, 'cpanel', 'createacct', $options, $response);
 					myadmin_log(self::$module, 'info', "Response: $response", __LINE__, __FILE__);
 					$response = json_decode($response);
 				}
@@ -112,7 +123,7 @@ class Plugin {
 					$options['username'] = $username;
 					myadmin_log(self::$module, 'info', 'Trying Username '.$options['username'], __LINE__, __FILE__);
 					$response = $whm->xmlapi_query('createacct', $options);
-					request_log(self::$module, $service[$settings['PREFIX'].'_custid'], __FUNCTION__, 'cpanel', 'createacct', $options, $response);
+					request_log(self::$module, $serviceInfo[$settings['PREFIX'].'_custid'], __FUNCTION__, 'cpanel', 'createacct', $options, $response);
 					myadmin_log(self::$module, 'info', "Response: $response", __LINE__, __FILE__);
 					$response = json_decode($response);
 				}
@@ -122,27 +133,27 @@ class Plugin {
 					$options['password'] .= '1';
 					myadmin_log(self::$module, 'info', "Trying Password {$options['password']}", __LINE__, __FILE__);
 					$response = $whm->xmlapi_query('createacct', $options);
-					request_log(self::$module, $service[$settings['PREFIX'].'_custid'], __FUNCTION__, 'cpanel', 'createacct', $options, $response);
+					request_log(self::$module, $serviceInfo[$settings['PREFIX'].'_custid'], __FUNCTION__, 'cpanel', 'createacct', $options, $response);
 					myadmin_log(self::$module, 'info', "Response: $response", __LINE__, __FILE__);
 					$response = json_decode($response);
 				}
-				$GLOBALS['tf']->history->add($settings['PREFIX'], 'password', $id, $options['password']);
+				$GLOBALS['tf']->history->add($settings['PREFIX'], 'password', $serviceInfo[$settings['PREFIX'].'_id'], $options['password']);
 			}
 			if ($response->result[0]->status == 1) {
 				$ip = $response->result[0]->options->ip;
 				if (isset($options['bwlimit']) && $options['bwlimit'] != 'unlimited') {
 					$response3 = $whm->limitbw($username, $options['bwlimit']);
-					request_log(self::$module, $service[$settings['PREFIX'].'_custid'], __FUNCTION__, 'cpanel', 'limitbw', array('username' => $username, 'options' => $options['bwlimit']), $response3);
+					request_log(self::$module, $serviceInfo[$settings['PREFIX'].'_custid'], __FUNCTION__, 'cpanel', 'limitbw', array('username' => $username, 'options' => $options['bwlimit']), $response3);
 					myadmin_log(self::$module, 'info', 'Response: '.str_replace('\n', "\n", strip_tags($response3)), __LINE__, __FILE__);
 				}
 				if ($reseller === TRUE) {
 					$response2 = $whm->setupreseller($username, FALSE);
-					request_log(self::$module, $service[$settings['PREFIX'].'_custid'], __FUNCTION__, 'cpanel', 'setupreseller', array('username' => $username), $response2);
+					request_log(self::$module, $serviceInfo[$settings['PREFIX'].'_custid'], __FUNCTION__, 'cpanel', 'setupreseller', array('username' => $username), $response2);
 					myadmin_log(self::$module, 'info', "Response: {$response2}", __LINE__, __FILE__);
 					$response3 = $whm->listacls();
 
 					$acls = json_decode($response3);
-					request_log(self::$module, $service[$settings['PREFIX'].'_custid'], __FUNCTION__, 'cpanel', 'listacls', array(), $response);
+					request_log(self::$module, $serviceInfo[$settings['PREFIX'].'_custid'], __FUNCTION__, 'cpanel', 'listacls', array(), $response);
 					//myadmin_log(self::$module, 'info', json_encode($acls));
 					if (!isset($acls->acls->reseller)) {
 						$acl = array(
@@ -190,7 +201,7 @@ class Plugin {
 						);
 						$result = $whm->saveacllist($acl);
 						myadmin_log(self::$module, 'info', $result, __LINE__, __FILE__);
-						request_log(self::$module, $service[$settings['PREFIX'].'_custid'], __FUNCTION__, 'cpanel', 'saveacllist', $acl, $result);
+						request_log(self::$module, $serviceInfo[$settings['PREFIX'].'_custid'], __FUNCTION__, 'cpanel', 'saveacllist', $acl, $result);
 						myadmin_log(self::$module, 'info', 'Reseller ACL Created', __LINE__, __FILE__);
 					} else {
 						myadmin_log(self::$module, 'info', 'Reseller ACL Exists', __LINE__, __FILE__);
@@ -198,16 +209,16 @@ class Plugin {
 					$request = array('reseller' => $username, 'acllist' => 'reseller');
 					$result = $whm->setacls($request);
 					myadmin_log(self::$module, 'info', $result, __LINE__, __FILE__);
-					request_log(self::$module, $service[$settings['PREFIX'].'_custid'], __FUNCTION__, 'cpanel', 'setacls', $request, $result);
+					request_log(self::$module, $serviceInfo[$settings['PREFIX'].'_custid'], __FUNCTION__, 'cpanel', 'setacls', $request, $result);
 					myadmin_log(self::$module, 'info', 'Reseller assigned to ACL', __LINE__, __FILE__);
 				}
 				$username = $db->real_escape($username);
-				$db->query("update {$settings['TABLE']} set {$settings['PREFIX']}_ip='$ip', {$settings['PREFIX']}_username='$username' where {$settings['PREFIX']}_id='$id'", __LINE__, __FILE__);
-				website_welcome_email($id);
+				$db->query("update {$settings['TABLE']} set {$settings['PREFIX']}_ip='$ip', {$settings['PREFIX']}_username='$username' where {$settings['PREFIX']}_id='{$serviceInfo[$settings['PREFIX'].'_id']}'", __LINE__, __FILE__);
+				website_welcome_email($serviceInfo[$settings['PREFIX'].'_id']);
 				if (isset($extra['script']) && $extra['script'] > 0) {
 					$script = (int)$extra['script'];
 					include_once('include/webhosting/softaculous/sdk.php');
-					$userdata = $GLOBALS['tf']->accounts->read($service[$settings['PREFIX'].'_custid']);
+					$userdata = $GLOBALS['tf']->accounts->read($serviceInfo[$settings['PREFIX'].'_custid']);
 					$soft = new Softaculous_SDK();
 					$soft->login = "https://{$username}:{$password}@{$serverdata[$settings['PREFIX'].'_name']}:2083/frontend/paper_lantern/softaculous/index.live.php";
 					$soft->list_scripts();
@@ -231,12 +242,12 @@ class Plugin {
 					myadmin_log(self::$module, 'info', 'Installing '.$soft->scripts[$script]['fullname'], __LINE__, __FILE__);
 					//$result = myadmin_unstringify($soft->install($script, $data));
 					$result = json_decode($soft->install($script, $data), TRUE);
-					request_log(self::$module, $service[$settings['PREFIX'].'_custid'], __FUNCTION__, 'softaculous', 'install', array('script' => $script, 'data' => $data), $result);
+					request_log(self::$module, $serviceInfo[$settings['PREFIX'].'_custid'], __FUNCTION__, 'softaculous', 'install', array('script' => $script, 'data' => $data), $result);
 					myadmin_log(self::$module, 'info', json_encode($result), __LINE__, __FILE__);
 				}
-				$response = add_dns_record(14426, 'wh'.$id, $ip, 'A', 86400, 0, TRUE);
+				$response = add_dns_record(14426, 'wh'.$serviceInfo[$settings['PREFIX'].'_id'], $ip, 'A', 86400, 0, TRUE);
 				myadmin_log(self::$module, 'info', 'Response: '.json_encode($response), __LINE__, __FILE__);
-				$response = $whm->park($options['username'], 'wh'.$id.'.ispot.cc', '');
+				$response = $whm->park($options['username'], 'wh'.$serviceInfo[$settings['PREFIX'].'_id'].'.ispot.cc', '');
 				myadmin_log(self::$module, 'info', 'Response: '.json_encode($response), __LINE__, __FILE__);
 				return TRUE;
 			} else {
