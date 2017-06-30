@@ -33,10 +33,10 @@ class Plugin {
 			$serviceTypes = run_event('get_service_types', false, self::$module);
 			$serviceInfo = $service->getServiceInfo();
 			$settings = get_module_settings(self::$module);
+			$extra = run_event('parse_service_extra', $serviceInfo[$settings['PREFIX'].'_extra'], self::$module);
 			$serverdata = get_service_master($serviceInfo[$settings['PREFIX'].'_server'], self::$module);
 			$hash = $serverdata[$settings['PREFIX'].'_key'];
 			$ip = $serverdata[$settings['PREFIX'].'_ip'];
-			$extra = run_event('parse_service_extra', $serviceInfo[$settings['PREFIX'].'_extra'], self::$module);
 			$hostname = $serviceInfo[$settings['PREFIX'].'_hostname'];
 			if (trim($hostname) == '')
 				$hostname = $serviceInfo[$settings['PREFIX'].'_id'].'.server.com';
@@ -64,7 +64,7 @@ class Plugin {
 				'maxlst' => 0,
 				'maxsub' => 'unlimited',
 			);
-			if ($serviceTypes[$serviceInfo[$settings['PREFIX'].'_type']]['services_field1'] == 'reseller')
+			if ($event['field1'] == 'reseller')
 				$reseller = TRUE;
 			else
 				$reseller = FALSE;
@@ -266,7 +266,6 @@ class Plugin {
 			$serverdata = get_service_master($serviceInfo[$settings['PREFIX'].'_server'], self::$module);
 			$hash = $serverdata[$settings['PREFIX'].'_key'];
 			$ip = $serverdata[$settings['PREFIX'].'_ip'];
-			$extra = run_event('parse_service_extra', $serviceInfo[$settings['PREFIX'].'_extra'], self::$module);
 			function_requirements('whm_api');
 			$user = 'root';
 			$whm = new \xmlapi($ip);
@@ -278,8 +277,7 @@ class Plugin {
 			$whm->set_user($user);
 			$whm->set_hash($hash);
 			//$whm = whm_api('faith.interserver.net');
-			$field1 = explode(',', $serviceTypes[$serviceInfo[$settings['PREFIX'].'_type']]['services_field1']);
-			if (in_array('reseller', $field1))
+			if (in_array('reseller', explode(',', $event['field1'])))
 				$response = json_decode($whm->unsuspendreseller($serviceInfo[$settings['PREFIX'].'_username']), TRUE);
 			else
 				$response = json_decode($whm->unsuspendacct($serviceInfo[$settings['PREFIX'].'_username']), TRUE);
