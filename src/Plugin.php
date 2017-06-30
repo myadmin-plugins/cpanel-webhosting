@@ -30,6 +30,7 @@ class Plugin {
 		$service = $event->getSubject();
 		if ($event['category'] == SERVICE_TYPES_WEB_CPANEL) {
 			myadmin_log(self::$module, 'info', 'Cpanel Activation', __LINE__, __FILE__);
+			$service_types = run_event('get_service_types', false, self::$module);
 			$serviceInfo = $service->getServiceInfo();
 			$settings = get_module_settings(self::$module);
 			$serverdata = get_service_master($serviceInfo[$settings['PREFIX'].'_server'], self::$module);
