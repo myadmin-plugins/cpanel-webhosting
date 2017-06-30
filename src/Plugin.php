@@ -30,7 +30,7 @@ class Plugin {
 		$service = $event->getSubject();
 		if ($event['category'] == SERVICE_TYPES_WEB_CPANEL) {
 			myadmin_log(self::$module, 'info', 'Cpanel Activation', __LINE__, __FILE__);
-			$service_types = run_event('get_service_types', false, self::$module);
+			$serviceTypes = run_event('get_service_types', false, self::$module);
 			$serviceInfo = $service->getServiceInfo();
 			$settings = get_module_settings(self::$module);
 			$serverdata = get_service_master($serviceInfo[$settings['PREFIX'].'_server'], self::$module);
@@ -64,12 +64,12 @@ class Plugin {
 				'maxlst' => 0,
 				'maxsub' => 'unlimited',
 			);
-			if ($service_types[$serviceInfo[$settings['PREFIX'].'_type']]['services_field1'] == 'reseller')
+			if ($serviceTypes[$serviceInfo[$settings['PREFIX'].'_type']]['services_field1'] == 'reseller')
 				$reseller = TRUE;
 			else
 				$reseller = FALSE;
-			if ($service_types[$serviceInfo[$settings['PREFIX'].'_type']]['services_field2'] != '') {
-				$fields = explode(',', $service_types[$serviceInfo[$settings['PREFIX'].'_type']]['services_field2']);
+			if ($serviceTypes[$serviceInfo[$settings['PREFIX'].'_type']]['services_field2'] != '') {
+				$fields = explode(',', $serviceTypes[$serviceInfo[$settings['PREFIX'].'_type']]['services_field2']);
 				foreach ($fields as $field) {
 					list($key, $value) = explode('=', $field);
 					if ($key == 'script')
