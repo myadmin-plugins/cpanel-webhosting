@@ -22,8 +22,7 @@ if ($db->num_rows() == 0)
 $db->next_record(MYSQL_ASSOC);
 echo "Processing {$db->Record['website_name']}\n";
 $updates = [];
-switch ($db->Record['website_type'])
-{
+switch ($db->Record['website_type']) {
 	case SERVICE_TYPES_WEB_PPA:				// Parallels Plesk Automation
 		break;
 	case SERVICE_TYPES_WEB_PLESK:			// Parallels Plesk
@@ -43,8 +42,7 @@ switch ($db->Record['website_type'])
 		}
 		break;
 }
-if (sizeof($updates) > 0)
-{
+if (sizeof($updates) > 0) {
 	$query = [];
 	foreach ($updates as $key => $value)
 		$query[] = "website_{$key} = '" . $db->real_escape($value) . "'";
