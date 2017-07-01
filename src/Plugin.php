@@ -81,7 +81,7 @@ class Plugin {
 				'domain' => $hostname,
 				'username' => $username,
 				'password' => $password,
-				'contactemail' => $email,
+				'contactemail' => $event['email'],
 			));
 			myadmin_log(self::$module, 'info', json_encode($options), __LINE__, __FILE__);
 			$response = $whm->xmlapi_query('createacct', $options);
@@ -212,6 +212,7 @@ class Plugin {
 					request_log(self::$module, $serviceClass->getCustid(), __FUNCTION__, 'cpanel', 'setacls', $request, $result);
 					myadmin_log(self::$module, 'info', 'Reseller assigned to ACL', __LINE__, __FILE__);
 				}
+				$db = get_module_db(self::$module);
 				$username = $db->real_escape($username);
 				$db->query("update {$settings['TABLE']} set {$settings['PREFIX']}_ip='$ip', {$settings['PREFIX']}_username='$username' where {$settings['PREFIX']}_id='{$serviceClass->getId()}'", __LINE__, __FILE__);
 				website_welcome_email($serviceClass->getId());
@@ -227,7 +228,7 @@ class Plugin {
 					$data['softdirectory'] = '';
 					$data['admin_username'] = 'admin';
 					$data['admin_pass'] = $password;
-					$data['admin_email'] = $email;
+					$data['admin_email'] = $event['email'];
 					$data['admin_realname'] = (isset($userdata['name']) ? $userdata['name'] : $userdata['account_lid']);
 					list($data['admin_fname'], $data['admin_lname']) = (isset($userdata['name']) ? explode(' ', $userdata['name']) : explode('@', $userdata['account_lid']));
 					$data['softdb'] = $soft->scripts[$script]['softname'];
