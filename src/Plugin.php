@@ -250,9 +250,9 @@ class Plugin {
 				myadmin_log(self::$module, 'info', 'Response: '.json_encode($response), __LINE__, __FILE__);
 				$response = $whm->park($options['username'], 'wh'.$serviceClass->getId().'.ispot.cc', '');
 				myadmin_log(self::$module, 'info', 'Response: '.json_encode($response), __LINE__, __FILE__);
-				return TRUE;
+				$event['success'] = TRUE;
 			} else {
-				return FALSE;
+				$event['success'] = FALSE;
 			}
 			$event->stopPropagation();
 		}
