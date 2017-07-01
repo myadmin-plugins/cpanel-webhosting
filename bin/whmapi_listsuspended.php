@@ -20,7 +20,7 @@ function_requirements('whm_api');
 if ($db->num_rows() == 0)
 	die("Invalid Server {$_SERVER['argv'][1]} passed, did not match any webhosting server name");
 $db->next_record(MYSQL_ASSOC);
-echo "Processing {$db->Record['website_name']}\n";
+echo "processing {$db->Record['website_name']}\n";
 $updates = [];
 switch ($db->Record['website_type']) {
 	case SERVICE_TYPES_WEB_PPA:				// Parallels Plesk Automation
