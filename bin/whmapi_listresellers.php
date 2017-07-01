@@ -10,7 +10,7 @@
 * @category Webhosting
 */
 
-require_once(__DIR__.'/../../../include/functions.inc.php');
+require_once(__DIR__.'/../../../../include/functions.inc.php');
 $db = get_module_db('webhosting');
 $db2 = get_module_db('webhosting');
 if (sizeof($_SERVER['argv']) < 2)
