@@ -23,7 +23,7 @@ class Plugin {
 			self::$module.'.activate' => [__CLASS__, 'getActivate'],
 			self::$module.'.reactivate' => [__CLASS__, 'getReactivate'],
 			self::$module.'.deactivate' => [__CLASS__, 'getDeactivate'],
-			self::$module.'.deactivate' => [__CLASS__, 'getTerminate'],
+			self::$module.'.terminate' => [__CLASS__, 'getTerminate'],
 			'ui.menu' => [__CLASS__, 'getMenu'],
 		];
 	}
