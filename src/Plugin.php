@@ -22,6 +22,7 @@ class Plugin {
 			self::$module.'.settings' => [__CLASS__, 'getSettings'],
 			self::$module.'.activate' => [__CLASS__, 'getActivate'],
 			self::$module.'.reactivate' => [__CLASS__, 'getReactivate'],
+			self::$module.'.deactivate' => [__CLASS__, 'getDeactivate'],
 			'ui.menu' => [__CLASS__, 'getMenu'],
 		];
 	}
@@ -281,6 +282,16 @@ class Plugin {
 			else
 				$response = json_decode($whm->unsuspendacct($serviceClass->getUsername()), TRUE);
 			myadmin_log(self::$module, 'info', json_encode($response), __LINE__, __FILE__);
+			$event->stopPropagation();
+		}
+	}
+
+	public static function getDeactivate(GenericEvent $event) {
+		if ($event['category'] == SERVICE_TYPES_WEB_CPANEL) {
+			myadmin_log(self::$module, 'info', 'Cpanel Deactivation', __LINE__, __FILE__);
+			$serviceClass = $event->getSubject();
+			$serviceTypes = run_event('get_service_types', FALSE, self::$module);
+			$settings = get_module_settings(self::$module);
 			$event->stopPropagation();
 		}
 	}
