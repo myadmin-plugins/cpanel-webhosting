@@ -293,6 +293,27 @@ class Plugin {
 			$serviceClass = $event->getSubject();
 			$serviceTypes = run_event('get_service_types', FALSE, self::$module);
 			$settings = get_module_settings(self::$module);
+			$extra = run_event('parse_service_extra', $serviceClass->getExtra(), self::$module);
+			$serverdata = get_service_master($serviceClass->getServer(), self::$module);
+			$hash = $serverdata[$settings['PREFIX'].'_key'];
+			$ip = $serverdata[$settings['PREFIX'].'_ip'];
+			function_requirements('whm_api');
+			$user = 'root';
+			$whm = new \xmlapi($ip);
+			//$whm->set_debug('true');
+			$whm->set_port('2087');
+			$whm->set_protocol('https');
+			$whm->set_output('json');
+			$whm->set_auth_type('hash');
+			$whm->set_user($user);
+			$whm->set_hash($hash);
+			//$whm = whm_api('faith.interserver.net');
+			$field1 = explode(',', $service_types[$serviceClass->getType()]['services_field1']);
+			if (in_array('reseller', $field1))
+				$response = json_decode($whm->suspendreseller($serviceClass->getUsername(), 'Canceled Service'), true);
+			else
+				$response = json_decode($whm->suspendacct($serviceClass->getUsername(), 'Canceled Service'), true);
+			myadmin_log(self::$module, 'info', json_encode($response), __LINE__, __FILE__);
 			$event->stopPropagation();
 		}
 	}
@@ -303,6 +324,47 @@ class Plugin {
 			$serviceClass = $event->getSubject();
 			$serviceTypes = run_event('get_service_types', FALSE, self::$module);
 			$settings = get_module_settings(self::$module);
+			$extra = run_event('parse_service_extra', $serviceClass->getExtra(), self::$module);
+			$serverdata = get_service_master($serviceClass->getServer(), self::$module);
+			$hash = $serverdata[$settings['PREFIX'].'_key'];
+			$ip = $serverdata[$settings['PREFIX'].'_ip'];
+			function_requirements('whm_api');
+			$user = 'root';
+			$whm = new \xmlapi($ip);
+			//$whm->set_debug('true');
+			$whm->set_port('2087');
+			$whm->set_protocol('https');
+			$whm->set_output('json');
+			$whm->set_auth_type('hash');
+			$whm->set_user($user);
+			$whm->set_hash($hash);
+			//$whm = whm_api('faith.interserver.net');
+			if (trim($serviceClass->getUsername()) != '') {
+				$field1 = explode(',', $service_types[$serviceClass->getType()]['services_field1']);
+				if (in_array('reseller', $field1))
+					$response = json_decode($whm->terminatereseller($serviceClass->getUsername(), true));
+				else
+					$response = json_decode($whm->removeacct($serviceClass->getUsername(), false));
+				myadmin_log(self::$module, 'info', json_encode($response), __LINE__, __FILE__);
+			} else
+				myadmin_log(self::$module, 'info', "Skipping WHMAPI/Server Removal for {$serviceClass->getHostname()} because username is blank", __LINE__, __FILE__);
+			$dnsr = json_decode($whm->dumpzone($serviceClass->getHostname()));
+			if ($dnsr->result[0]->status == 1) {
+				$db->query("select * from {$settings['TABLE']} where {$settings['PREFIX']}_hostname='{$serviceClass->getHostname()}' and {$settings['PREFIX']}_id != {$id} and {$settings['PREFIX']}_status = 'active'", __LINE__, __FILE__);
+				if ($db->num_rows() == 0) {
+					myadmin_log(self::$module, 'info', "Removing Hanging DNS entry for {$serviceClass->getHostname()}", __LINE__, __FILE__);
+					$whm->killdns($serviceClass->getHostname());
+				} else
+					myadmin_log(self::$module, 'info', "Skipping Removing DNS entry for {$serviceClass->getHostname()} because other non deleted sites w/ the same hostname exist", __LINE__, __FILE__);
+			}
+			if (trim($serviceClass->getUsername()) == '')
+				return true;
+			elseif ($response->result[0]->status == 1)
+				return true;
+			elseif ($response->result[0]->statusmsg == "System user {$serviceClass->getUsername()} does not exist!")
+				return true;
+			else
+				return false;
 			$event->stopPropagation();
 		}
 	}
