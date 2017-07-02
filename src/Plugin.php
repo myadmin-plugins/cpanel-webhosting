@@ -219,7 +219,7 @@ class Plugin {
 				$db->query("update {$settings['TABLE']} set {$settings['PREFIX']}_ip='$ip', {$settings['PREFIX']}_username='$username' where {$settings['PREFIX']}_id='{$serviceClass->getId()}'", __LINE__, __FILE__);
 				website_welcome_email($serviceClass->getId());
 				if (isset($extra['script']) && $extra['script'] > 0) {
-					$script = (int)$extra['script'];
+					$script = (int) $extra['script'];
 					include_once('include/webhosting/softaculous/sdk.php');
 					$userdata = $GLOBALS['tf']->accounts->read($serviceClass->getCustid());
 					$soft = new Softaculous_SDK();
@@ -307,9 +307,9 @@ class Plugin {
 			$whm->set_hash($hash);
 			//$whm = whm_api('faith.interserver.net');
 			if (in_array('reseller', explode(',', $event['field1'])))
-				$response = json_decode($whm->suspendreseller($serviceClass->getUsername(), 'Canceled Service'), true);
+				$response = json_decode($whm->suspendreseller($serviceClass->getUsername(), 'Canceled Service'), TRUE);
 			else
-				$response = json_decode($whm->suspendacct($serviceClass->getUsername(), 'Canceled Service'), true);
+				$response = json_decode($whm->suspendacct($serviceClass->getUsername(), 'Canceled Service'), TRUE);
 			myadmin_log(self::$module, 'info', json_encode($response), __LINE__, __FILE__);
 			$event->stopPropagation();
 		}
@@ -336,9 +336,9 @@ class Plugin {
 			//$whm = whm_api('faith.interserver.net');
 			if (trim($serviceClass->getUsername()) != '') {
 				if (in_array('reseller', explode(',', $event['field1'])))
-					$response = json_decode($whm->terminatereseller($serviceClass->getUsername(), true));
+					$response = json_decode($whm->terminatereseller($serviceClass->getUsername(), TRUE));
 				else
-					$response = json_decode($whm->removeacct($serviceClass->getUsername(), false));
+					$response = json_decode($whm->removeacct($serviceClass->getUsername(), FALSE));
 				myadmin_log(self::$module, 'info', json_encode($response), __LINE__, __FILE__);
 			} else
 				myadmin_log(self::$module, 'info', "Skipping WHMAPI/Server Removal for {$serviceClass->getHostname()} because username is blank", __LINE__, __FILE__);
@@ -352,13 +352,13 @@ class Plugin {
 					myadmin_log(self::$module, 'info', "Skipping Removing DNS entry for {$serviceClass->getHostname()} because other non deleted sites w/ the same hostname exist", __LINE__, __FILE__);
 			}
 			if (trim($serviceClass->getUsername()) == '')
-				return true;
+				return TRUE;
 			elseif ($response->result[0]->status == 1)
-				return true;
+				return TRUE;
 			elseif ($response->result[0]->statusmsg == "System user {$serviceClass->getUsername()} does not exist!")
-				return true;
+				return TRUE;
 			else
-				return false;
+				return FALSE;
 			$event->stopPropagation();
 		}
 	}
