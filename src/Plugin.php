@@ -23,6 +23,7 @@ class Plugin {
 			self::$module.'.activate' => [__CLASS__, 'getActivate'],
 			self::$module.'.reactivate' => [__CLASS__, 'getReactivate'],
 			self::$module.'.deactivate' => [__CLASS__, 'getDeactivate'],
+			self::$module.'.deactivate' => [__CLASS__, 'getTerminate'],
 			'ui.menu' => [__CLASS__, 'getMenu'],
 		];
 	}
@@ -289,6 +290,16 @@ class Plugin {
 	public static function getDeactivate(GenericEvent $event) {
 		if ($event['category'] == SERVICE_TYPES_WEB_CPANEL) {
 			myadmin_log(self::$module, 'info', 'Cpanel Deactivation', __LINE__, __FILE__);
+			$serviceClass = $event->getSubject();
+			$serviceTypes = run_event('get_service_types', FALSE, self::$module);
+			$settings = get_module_settings(self::$module);
+			$event->stopPropagation();
+		}
+	}
+
+	public static function getTerminate(GenericEvent $event) {
+		if ($event['category'] == SERVICE_TYPES_WEB_CPANEL) {
+			myadmin_log(self::$module, 'info', 'Cpanel Termination', __LINE__, __FILE__);
 			$serviceClass = $event->getSubject();
 			$serviceTypes = run_event('get_service_types', FALSE, self::$module);
 			$settings = get_module_settings(self::$module);
