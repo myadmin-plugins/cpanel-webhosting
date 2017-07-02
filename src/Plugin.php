@@ -65,7 +65,7 @@ class Plugin {
 				'maxlst' => 0,
 				'maxsub' => 'unlimited',
 			);
-			if ($event['field1'] == 'reseller')
+			if (in_array('reseller', explode(',', $event['field1'])))
 				$reseller = TRUE;
 			else
 				$reseller = FALSE;
@@ -306,7 +306,7 @@ class Plugin {
 			$whm->set_user($user);
 			$whm->set_hash($hash);
 			//$whm = whm_api('faith.interserver.net');
-			if (in_array('reseller', $event['field1']))
+			if (in_array('reseller', explode(',', $event['field1'])))
 				$response = json_decode($whm->suspendreseller($serviceClass->getUsername(), 'Canceled Service'), true);
 			else
 				$response = json_decode($whm->suspendacct($serviceClass->getUsername(), 'Canceled Service'), true);
@@ -335,7 +335,7 @@ class Plugin {
 			$whm->set_hash($hash);
 			//$whm = whm_api('faith.interserver.net');
 			if (trim($serviceClass->getUsername()) != '') {
-				if (in_array('reseller', $event['field1']))
+				if (in_array('reseller', explode(',', $event['field1'])))
 					$response = json_decode($whm->terminatereseller($serviceClass->getUsername(), true));
 				else
 					$response = json_decode($whm->removeacct($serviceClass->getUsername(), false));
