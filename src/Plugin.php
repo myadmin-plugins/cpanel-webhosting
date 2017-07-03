@@ -220,7 +220,7 @@ class Plugin {
 				website_welcome_email($serviceClass->getId());
 				if (isset($extra['script']) && $extra['script'] > 0) {
 					$script = (int) $extra['script'];
-					include_once('include/webhosting/softaculous/sdk.php');
+					include_once(__DIR__.'/../../../../include/webhosting/softaculous/sdk.php');
 					$userdata = $GLOBALS['tf']->accounts->read($serviceClass->getCustid());
 					$soft = new Softaculous_SDK();
 					$soft->login = "https://{$username}:{$password}@{$serverdata[$settings['PREFIX'].'_name']}:2083/frontend/paper_lantern/softaculous/index.live.php";
