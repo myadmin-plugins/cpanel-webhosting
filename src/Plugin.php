@@ -24,6 +24,7 @@ class Plugin {
 			self::$module.'.reactivate' => [__CLASS__, 'getReactivate'],
 			self::$module.'.deactivate' => [__CLASS__, 'getDeactivate'],
 			self::$module.'.terminate' => [__CLASS__, 'getTerminate'],
+			'function.requirements' => [__CLASS__, 'getRequirements'],
 			'ui.menu' => [__CLASS__, 'getMenu'],
 		];
 	}
@@ -493,18 +494,81 @@ class Plugin {
 
 	public static function getRequirements(GenericEvent $event) {
 		$loader = $event->getSubject();
-		$loader->add_requirement('crud_cpanel_list', '/../vendor/detain/crud/src/crud/crud_cpanel_list.php');
-		$loader->add_requirement('crud_reusable_cpanel', '/../vendor/detain/crud/src/crud/crud_reusable_cpanel.php');
-		$loader->add_requirement('get_cpanel_licenses', '/../vendor/detain/myadmin-cpanel-webhosting/src/cpanel.inc.php');
-		$loader->add_requirement('get_cpanel_list', '/../vendor/detain/myadmin-cpanel-webhosting/src/cpanel.inc.php');
-		$loader->add_requirement('cpanel_licenses_list', '/../vendor/detain/myadmin-cpanel-webhosting/src/cpanel_licenses_list.php');
-		$loader->add_requirement('cpanel_list', '/../vendor/detain/myadmin-cpanel-webhosting/src/cpanel_list.php');
-		$loader->add_requirement('get_available_cpanel', '/../vendor/detain/myadmin-cpanel-webhosting/src/cpanel.inc.php');
-		$loader->add_requirement('activate_cpanel', '/../vendor/detain/myadmin-cpanel-webhosting/src/cpanel.inc.php');
-		$loader->add_requirement('get_reusable_cpanel', '/../vendor/detain/myadmin-cpanel-webhosting/src/cpanel.inc.php');
-		$loader->add_requirement('reusable_cpanel', '/../vendor/detain/myadmin-cpanel-webhosting/src/reusable_cpanel.php');
-		$loader->add_requirement('class.Cpanel', '/../vendor/detain/cpanel-webhosting/src/Cpanel.php');
-		$loader->add_requirement('vps_add_cpanel', '/vps/addons/vps_add_cpanel.php');
+		$loader->add_requirement('whm_get_accounts', '/webhosting/whmapi.functions.inc.php');
+		$loader->add_requirement('whm_api', '/webhosting/whmapi.functions.inc.php');
+		$loader->add_requirement('whm_choose_server', '/webhosting/whmapi.functions.inc.php');
+		$loader->add_requirement('whm_createacct', '/webhosting/whmapi.functions.inc.php');
+		$loader->add_requirement('whm_passwd', '/webhosting/whmapi.functions.inc.php');
+		$loader->add_requirement('whm_limitbw', '/webhosting/whmapi.functions.inc.php');
+		$loader->add_requirement('whm_listaccts', '/webhosting/whmapi.functions.inc.php');
+		$loader->add_requirement('whm_modifyacct', '/webhosting/whmapi.functions.inc.php');
+		$loader->add_requirement('whm_editquota', '/webhosting/whmapi.functions.inc.php');
+		$loader->add_requirement('whm_accountsummary', '/webhosting/whmapi.functions.inc.php');
+		$loader->add_requirement('whm_suspendacct', '/webhosting/whmapi.functions.inc.php');
+		$loader->add_requirement('whm_listsuspended', '/webhosting/whmapi.functions.inc.php');
+		$loader->add_requirement('whm_removeacct', '/webhosting/whmapi.functions.inc.php');
+		$loader->add_requirement('whm_unsuspendacct', '/webhosting/whmapi.functions.inc.php');
+		$loader->add_requirement('whm_changepackage', '/webhosting/whmapi.functions.inc.php');
+		$loader->add_requirement('whm_myprivs', '/webhosting/whmapi.functions.inc.php');
+		$loader->add_requirement('whm_domainuserdata', '/webhosting/whmapi.functions.inc.php');
+		$loader->add_requirement('whm_setsiteip', '/webhosting/whmapi.functions.inc.php');
+		$loader->add_requirement('whm_restoreaccount', '/webhosting/whmapi.functions.inc.php');
+		$loader->add_requirement('whm_adddns', '/webhosting/whmapi.functions.inc.php');
+		$loader->add_requirement('whm_addzonerecord', '/webhosting/whmapi.functions.inc.php');
+		$loader->add_requirement('whm_editzonerecord', '/webhosting/whmapi.functions.inc.php');
+		$loader->add_requirement('whm_getzonerecord', '/webhosting/whmapi.functions.inc.php');
+		$loader->add_requirement('whm_killdns', '/webhosting/whmapi.functions.inc.php');
+		$loader->add_requirement('whm_listzones', '/webhosting/whmapi.functions.inc.php');
+		$loader->add_requirement('whm_dumpzone', '/webhosting/whmapi.functions.inc.php');
+		$loader->add_requirement('whm_lookupnsip', '/webhosting/whmapi.functions.inc.php');
+		$loader->add_requirement('whm_removezonerecord', '/webhosting/whmapi.functions.inc.php');
+		$loader->add_requirement('whm_resetzone', '/webhosting/whmapi.functions.inc.php');
+		$loader->add_requirement('whm_resolvedomainname', '/webhosting/whmapi.functions.inc.php');
+		$loader->add_requirement('whm_listmxs', '/webhosting/whmapi.functions.inc.php');
+		$loader->add_requirement('whm_savemxs', '/webhosting/whmapi.functions.inc.php');
+		$loader->add_requirement('whm_addpkg', '/webhosting/whmapi.functions.inc.php');
+		$loader->add_requirement('whm_killpkg', '/webhosting/whmapi.functions.inc.php');
+		$loader->add_requirement('whm_editpkg', '/webhosting/whmapi.functions.inc.php');
+		$loader->add_requirement('whm_listpkgs', '/webhosting/whmapi.functions.inc.php');
+		$loader->add_requirement('whm_getfeaturelist', '/webhosting/whmapi.functions.inc.php');
+		$loader->add_requirement('whm_setupreseller', '/webhosting/whmapi.functions.inc.php');
+		$loader->add_requirement('whm_saveacllist', '/webhosting/whmapi.functions.inc.php');
+		$loader->add_requirement('whm_listacls', '/webhosting/whmapi.functions.inc.php');
+		$loader->add_requirement('whm_listresellers', '/webhosting/whmapi.functions.inc.php');
+		$loader->add_requirement('whm_resellerstats', '/webhosting/whmapi.functions.inc.php');
+		$loader->add_requirement('whm_unsetupreseller', '/webhosting/whmapi.functions.inc.php');
+		$loader->add_requirement('whm_setacls', '/webhosting/whmapi.functions.inc.php');
+		$loader->add_requirement('whm_terminatereseller', '/webhosting/whmapi.functions.inc.php');
+		$loader->add_requirement('whm_setresellerips', '/webhosting/whmapi.functions.inc.php');
+		$loader->add_requirement('whm_setresellerlimits', '/webhosting/whmapi.functions.inc.php');
+		$loader->add_requirement('whm_setresellermainip', '/webhosting/whmapi.functions.inc.php');
+		$loader->add_requirement('whm_setresellerpackagelimit', '/webhosting/whmapi.functions.inc.php');
+		$loader->add_requirement('whm_suspendreseller', '/webhosting/whmapi.functions.inc.php');
+		$loader->add_requirement('whm_unsuspendreseller', '/webhosting/whmapi.functions.inc.php');
+		$loader->add_requirement('whm_acctcounts', '/webhosting/whmapi.functions.inc.php');
+		$loader->add_requirement('whm_setresellernameservers', '/webhosting/whmapi.functions.inc.php');
+		$loader->add_requirement('whm_gethostname', '/webhosting/whmapi.functions.inc.php');
+		$loader->add_requirement('whm_version', '/webhosting/whmapi.functions.inc.php');
+		$loader->add_requirement('whm_loadavg', '/webhosting/whmapi.functions.inc.php');
+		$loader->add_requirement('whm_getdiskusage', '/webhosting/whmapi.functions.inc.php');
+		$loader->add_requirement('whm_systemloadavg', '/webhosting/whmapi.functions.inc.php');
+		$loader->add_requirement('whm_getlanglist', '/webhosting/whmapi.functions.inc.php');
+		$loader->add_requirement('whm_reboot', '/webhosting/whmapi.functions.inc.php');
+		$loader->add_requirement('whm_addip', '/webhosting/whmapi.functions.inc.php');
+		$loader->add_requirement('whm_delip', '/webhosting/whmapi.functions.inc.php');
+		$loader->add_requirement('whm_listips', '/webhosting/whmapi.functions.inc.php');
+		$loader->add_requirement('whm_sethostname', '/webhosting/whmapi.functions.inc.php');
+		$loader->add_requirement('whm_setresolvers', '/webhosting/whmapi.functions.inc.php');
+		$loader->add_requirement('whm_showbw', '/webhosting/whmapi.functions.inc.php');
+		$loader->add_requirement('whm_nvset', '/webhosting/whmapi.functions.inc.php');
+		$loader->add_requirement('whm_nvget', '/webhosting/whmapi.functions.inc.php');
+		$loader->add_requirement('whm_restartservice', '/webhosting/whmapi.functions.inc.php');
+		$loader->add_requirement('whm_servicestatus', '/webhosting/whmapi.functions.inc.php');
+		$loader->add_requirement('whm_configureservice', '/webhosting/whmapi.functions.inc.php');
+		$loader->add_requirement('whm_fetchsslinfo', '/webhosting/whmapi.functions.inc.php');
+		$loader->add_requirement('whm_generatessl', '/webhosting/whmapi.functions.inc.php');
+		$loader->add_requirement('whm_installssl', '/webhosting/whmapi.functions.inc.php');
+		$loader->add_requirement('whm_listcrts', '/webhosting/whmapi.functions.inc.php');
 	}
 
 	public static function getSettings(GenericEvent $event) {
