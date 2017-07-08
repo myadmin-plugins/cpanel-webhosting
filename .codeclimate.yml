@@ -32,6 +32,8 @@ engines:
         minimum: 250
         ignore-whitespace: true
     checks:
+      UnusedFormalParameter:
+        enabled: false
       Design/NpathComplexity:
         enabled: false
       Design/WeightedMethodCount:
