@@ -23,13 +23,13 @@ $db->next_record(MYSQL_ASSOC);
 echo "processing {$db->Record['website_name']}\n";
 $updates = [];
 switch ($db->Record['website_type']) {
-	case SERVICE_TYPES_WEB_PPA:				// Parallels Plesk Automation
+	case get_service_define('WEB_PPA'):				// Parallels Plesk Automation
 		break;
-	case SERVICE_TYPES_WEB_PLESK:			// Parallels Plesk
+	case get_service_define('WEB_PLESK'):			// Parallels Plesk
 		break;
-	case SERVICE_TYPES_WEB_VESTA:			// VestaCP
+	case get_service_define('WEB_VESTA'):			// VestaCP
 		break;
-	case SERVICE_TYPES_WEB_CPANEL:			// cPanel/WHM
+	case get_service_define('WEB_CPANEL'):			// cPanel/WHM
 	default:
 		try {
 			$whm = whm_api($db->Record['website_id']);

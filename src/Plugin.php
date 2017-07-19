@@ -30,7 +30,7 @@ class Plugin {
 	}
 
 	public static function getActivate(GenericEvent $event) {
-		if ($event['category'] == SERVICE_TYPES_WEB_CPANEL) {
+		if ($event['category'] == get_service_define('WEB_CPANEL')) {
 			myadmin_log(self::$module, 'info', 'Cpanel Activation', __LINE__, __FILE__);
 			$serviceClass = $event->getSubject();
 			$serviceTypes = run_event('get_service_types', FALSE, self::$module);
@@ -262,7 +262,7 @@ class Plugin {
 	}
 
 	public static function getReactivate(GenericEvent $event) {
-		if ($event['category'] == SERVICE_TYPES_WEB_CPANEL) {
+		if ($event['category'] == get_service_define('WEB_CPANEL')) {
 			$serviceClass = $event->getSubject();
 			$settings = get_module_settings(self::$module);
 			$serverdata = get_service_master($serviceClass->getServer(), self::$module);
@@ -289,7 +289,7 @@ class Plugin {
 	}
 
 	public static function getDeactivate(GenericEvent $event) {
-		if ($event['category'] == SERVICE_TYPES_WEB_CPANEL) {
+		if ($event['category'] == get_service_define('WEB_CPANEL')) {
 			myadmin_log(self::$module, 'info', 'Cpanel Deactivation', __LINE__, __FILE__);
 			$serviceClass = $event->getSubject();
 			$settings = get_module_settings(self::$module);
@@ -317,7 +317,7 @@ class Plugin {
 	}
 
 	public static function getTerminate(GenericEvent $event) {
-		if ($event['category'] == SERVICE_TYPES_WEB_CPANEL) {
+		if ($event['category'] == get_service_define('WEB_CPANEL')) {
 			myadmin_log(self::$module, 'info', 'Cpanel Termination', __LINE__, __FILE__);
 			$serviceClass = $event->getSubject();
 			$settings = get_module_settings(self::$module);
@@ -365,7 +365,7 @@ class Plugin {
 	}
 
 	public static function getChangeIp(GenericEvent $event) {
-		if ($event['category'] == SERVICE_TYPES_WEB_CPANEL) {
+		if ($event['category'] == get_service_define('WEB_CPANEL')) {
 			$serviceClass = $event->getSubject();
 			$settings = get_module_settings(self::$module);
 			$cpanel = new Cpanel(FANTASTICO_USERNAME, FANTASTICO_PASSWORD);
@@ -573,8 +573,8 @@ class Plugin {
 
 	public static function getSettings(GenericEvent $event) {
 		$settings = $event->getSubject();
-		$settings->add_select_master(self::$module, 'Default Servers', self::$module, 'new_website_cpanel_server', 'Default CPanel Setup Server', NEW_WEBSITE_CPANEL_SERVER, SERVICE_TYPES_WEB_CPANEL);
-		$settings->add_select_master(self::$module, 'Default Servers', self::$module, 'new_website_wordpress_server', 'Default WordPress Setup Server', NEW_WEBSITE_WORDPRESS_SERVER, SERVICE_TYPES_WEB_WORDPRESS);
+		$settings->add_select_master(self::$module, 'Default Servers', self::$module, 'new_website_cpanel_server', 'Default CPanel Setup Server', NEW_WEBSITE_CPANEL_SERVER, get_service_define('WEB_CPANEL'));
+		$settings->add_select_master(self::$module, 'Default Servers', self::$module, 'new_website_wordpress_server', 'Default WordPress Setup Server', NEW_WEBSITE_WORDPRESS_SERVER, get_service_define('WEB_WORDPRESS'));
 		$settings->add_dropdown_setting(self::$module, 'Out of Stock', 'outofstock_webhosting_cpanel', 'Out Of Stock CPanel Webhosting', 'Enable/Disable Sales Of This Type', $settings->get_setting('OUTOFSTOCK_WEBHOSTING_CPANEL'), ['0', '1'], ['No', 'Yes']);
 		$settings->add_dropdown_setting(self::$module, 'Out of Stock', 'outofstock_webhosting_wordpress', 'Out Of Stock WordPress Managed Webhosting', 'Enable/Disable Sales Of This Type', $settings->get_setting('OUTOFSTOCK_WEBHOSTING_WORDPRESS'), ['0', '1'], ['No', 'Yes']);
 		$settings->add_dropdown_setting(self::$module, 'CPanel Defaults', 'cpanel_package_defaults_ip', 'CPanel Package Defaults - IP', 'Enable/Disable Dedicated IP for new Sites', $settings->get_setting('CPANEL_PACKAGE_DEFAULTS_IP'), ['n', 'y'], ['No', 'Yes']);
