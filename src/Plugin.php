@@ -35,7 +35,7 @@ class Plugin {
 			self::$module.'.deactivate' => [__CLASS__, 'getDeactivate'],
 			self::$module.'.terminate' => [__CLASS__, 'getTerminate'],
 			'function.requirements' => [__CLASS__, 'getRequirements'],
-			'ui.menu' => [__CLASS__, 'getMenu'],
+			'ui.menu' => [__CLASS__, 'getMenu']
 		];
 	}
 
@@ -78,7 +78,7 @@ class Plugin {
 				'maxsql' => 'unlimited',
 				'maxpop' => 'unlimited',
 				'maxlst' => 0,
-				'maxsub' => 'unlimited',
+				'maxsub' => 'unlimited'
 			];
 			if (in_array('reseller', explode(',', $event['field1'])))
 				$reseller = TRUE;
@@ -98,8 +98,8 @@ class Plugin {
 				'domain' => $hostname,
 				'username' => $username,
 				'password' => $password,
-				'contactemail' => $event['email'],
-			]
+				'contactemail' => $event['email']
+			                               ]
 			);
 			myadmin_log(self::$module, 'info', json_encode($options), __LINE__, __FILE__);
 			$response = $whm->xmlapi_query('createacct', $options);
