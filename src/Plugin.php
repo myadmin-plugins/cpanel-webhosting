@@ -5,6 +5,11 @@ namespace Detain\MyAdminCpanel;
 use Detain\Cpanel\Cpanel;
 use Symfony\Component\EventDispatcher\GenericEvent;
 
+/**
+ * Class Plugin
+ *
+ * @package Detain\MyAdminCpanel
+ */
 class Plugin {
 
 	public static $name = 'CPanel Webhosting';
@@ -13,10 +18,15 @@ class Plugin {
 	public static $module = 'webhosting';
 	public static $type = 'service';
 
-
+	/**
+	 * Plugin constructor.
+	 */
 	public function __construct() {
 	}
 
+	/**
+	 * @return array
+	 */
 	public static function getHooks() {
 		return [
 			self::$module.'.settings' => [__CLASS__, 'getSettings'],
@@ -29,6 +39,10 @@ class Plugin {
 		];
 	}
 
+	/**
+	 * @param \Symfony\Component\EventDispatcher\GenericEvent $event
+	 * @throws \Exception
+	 */
 	public static function getActivate(GenericEvent $event) {
 		if ($event['category'] == get_service_define('WEB_CPANEL')) {
 			myadmin_log(self::$module, 'info', 'Cpanel Activation', __LINE__, __FILE__);
@@ -261,6 +275,10 @@ class Plugin {
 		}
 	}
 
+	/**
+	 * @param \Symfony\Component\EventDispatcher\GenericEvent $event
+	 * @throws \Exception
+	 */
 	public static function getReactivate(GenericEvent $event) {
 		if ($event['category'] == get_service_define('WEB_CPANEL')) {
 			$serviceClass = $event->getSubject();
@@ -288,6 +306,10 @@ class Plugin {
 		}
 	}
 
+	/**
+	 * @param \Symfony\Component\EventDispatcher\GenericEvent $event
+	 * @throws \Exception
+	 */
 	public static function getDeactivate(GenericEvent $event) {
 		if ($event['category'] == get_service_define('WEB_CPANEL')) {
 			myadmin_log(self::$module, 'info', 'Cpanel Deactivation', __LINE__, __FILE__);
@@ -316,6 +338,11 @@ class Plugin {
 		}
 	}
 
+	/**
+	 * @param \Symfony\Component\EventDispatcher\GenericEvent $event
+	 * @return bool
+	 * @throws \Exception
+	 */
 	public static function getTerminate(GenericEvent $event) {
 		if ($event['category'] == get_service_define('WEB_CPANEL')) {
 			myadmin_log(self::$module, 'info', 'Cpanel Termination', __LINE__, __FILE__);
@@ -364,6 +391,9 @@ class Plugin {
 		}
 	}
 
+	/**
+	 * @param \Symfony\Component\EventDispatcher\GenericEvent $event
+	 */
 	public static function getChangeIp(GenericEvent $event) {
 		if ($event['category'] == get_service_define('WEB_CPANEL')) {
 			$serviceClass = $event->getSubject();
@@ -385,6 +415,9 @@ class Plugin {
 		}
 	}
 
+	/**
+	 * @param \Symfony\Component\EventDispatcher\GenericEvent $event
+	 */
 	public static function getMenu(GenericEvent $event) {
 		$menu = $event->getSubject();
 		if ($GLOBALS['tf']->ima == 'admin') {
@@ -492,6 +525,9 @@ class Plugin {
 		}
 	}
 
+	/**
+	 * @param \Symfony\Component\EventDispatcher\GenericEvent $event
+	 */
 	public static function getRequirements(GenericEvent $event) {
 		$loader = $event->getSubject();
 		$loader->add_requirement('whm_get_accounts', '/webhosting/whmapi.functions.inc.php');
@@ -571,6 +607,9 @@ class Plugin {
 		$loader->add_requirement('whm_listcrts', '/webhosting/whmapi.functions.inc.php');
 	}
 
+	/**
+	 * @param \Symfony\Component\EventDispatcher\GenericEvent $event
+	 */
 	public static function getSettings(GenericEvent $event) {
 		$settings = $event->getSubject();
 		$settings->add_select_master(self::$module, 'Default Servers', self::$module, 'new_website_cpanel_server', 'Default CPanel Setup Server', NEW_WEBSITE_CPANEL_SERVER, get_service_define('WEB_CPANEL'));
