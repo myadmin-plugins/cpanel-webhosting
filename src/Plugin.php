@@ -69,7 +69,7 @@ class Plugin {
 			$whm->set_user($user);
 			$whm->set_hash($hash);
 			//		$whm = whm_api('faith.interserver.net');
-			$options = array(
+			$options = [
 				'ip' => 'n',
 				'cgi' => 1,
 				'frontpage' => 0,
@@ -79,7 +79,7 @@ class Plugin {
 				'maxpop' => 'unlimited',
 				'maxlst' => 0,
 				'maxsub' => 'unlimited',
-			);
+			];
 			if (in_array('reseller', explode(',', $event['field1'])))
 				$reseller = TRUE;
 			else
@@ -94,12 +94,13 @@ class Plugin {
 						$options[$key] = $value;
 				}
 			}
-			$options = array_merge($options, array(
+			$options = array_merge($options, [
 				'domain' => $hostname,
 				'username' => $username,
 				'password' => $password,
 				'contactemail' => $event['email'],
-			));
+			]
+			);
 			myadmin_log(self::$module, 'info', json_encode($options), __LINE__, __FILE__);
 			$response = $whm->xmlapi_query('createacct', $options);
 			request_log(self::$module, $serviceClass->getCustid(), __FUNCTION__, 'cpanel', 'createacct', $options, $response);
@@ -160,20 +161,20 @@ class Plugin {
 				$ip = $response->result[0]->options->ip;
 				if (isset($options['bwlimit']) && $options['bwlimit'] != 'unlimited') {
 					$response3 = $whm->limitbw($username, $options['bwlimit']);
-					request_log(self::$module, $serviceClass->getCustid(), __FUNCTION__, 'cpanel', 'limitbw', array('username' => $username, 'options' => $options['bwlimit']), $response3);
+					request_log(self::$module, $serviceClass->getCustid(), __FUNCTION__, 'cpanel', 'limitbw', ['username' => $username, 'options' => $options['bwlimit']], $response3);
 					myadmin_log(self::$module, 'info', 'Response: '.str_replace('\n', "\n", strip_tags($response3)), __LINE__, __FILE__);
 				}
 				if ($reseller === TRUE) {
 					$response2 = $whm->setupreseller($username, FALSE);
-					request_log(self::$module, $serviceClass->getCustid(), __FUNCTION__, 'cpanel', 'setupreseller', array('username' => $username), $response2);
+					request_log(self::$module, $serviceClass->getCustid(), __FUNCTION__, 'cpanel', 'setupreseller', ['username' => $username], $response2);
 					myadmin_log(self::$module, 'info', "Response: {$response2}", __LINE__, __FILE__);
 					$response3 = $whm->listacls();
 
 					$acls = json_decode($response3);
-					request_log(self::$module, $serviceClass->getCustid(), __FUNCTION__, 'cpanel', 'listacls', array(), $response);
+					request_log(self::$module, $serviceClass->getCustid(), __FUNCTION__, 'cpanel', 'listacls', [], $response);
 					//myadmin_log(self::$module, 'info', json_encode($acls));
 					if (!isset($acls->acls->reseller)) {
-						$acl = array(
+						$acl = [
 							'acl-add-pkg' => 1, // Allow the creation of packages.
 							'acl-add-pkg-ip' => 1, // Allow the creation of packages with dedicated IPs.
 							'acl-add-pkg-shell' => 1, // Allow the creation of packages with shell access.
@@ -215,7 +216,7 @@ class Plugin {
 							'acl-suspend-acct' => 1, // Allow the reseller to suspend accounts.
 							'acl-upgrade-account' => 1, // Allow the reseller to upgrade and downgrade accounts.
 							'acllist' => 'reseller'
-						);
+						];
 						$result = $whm->saveacllist($acl);
 						myadmin_log(self::$module, 'info', $result, __LINE__, __FILE__);
 						request_log(self::$module, $serviceClass->getCustid(), __FUNCTION__, 'cpanel', 'saveacllist', $acl, $result);
@@ -223,7 +224,7 @@ class Plugin {
 					} else {
 						myadmin_log(self::$module, 'info', 'Reseller ACL Exists', __LINE__, __FILE__);
 					}
-					$request = array('reseller' => $username, 'acllist' => 'reseller');
+					$request = ['reseller' => $username, 'acllist' => 'reseller'];
 					$result = $whm->setacls($request);
 					myadmin_log(self::$module, 'info', $result, __LINE__, __FILE__);
 					request_log(self::$module, $serviceClass->getCustid(), __FUNCTION__, 'cpanel', 'setacls', $request, $result);
@@ -260,7 +261,7 @@ class Plugin {
 					myadmin_log(self::$module, 'info', 'Installing '.$soft->scripts[$script]['fullname'], __LINE__, __FILE__);
 					//$result = myadmin_unstringify($soft->install($script, $data));
 					$result = json_decode($soft->install($script, $data), TRUE);
-					request_log(self::$module, $serviceClass->getCustid(), __FUNCTION__, 'softaculous', 'install', array('script' => $script, 'data' => $data), $result);
+					request_log(self::$module, $serviceClass->getCustid(), __FUNCTION__, 'softaculous', 'install', ['script' => $script, 'data' => $data], $result);
 					myadmin_log(self::$module, 'info', json_encode($result), __LINE__, __FILE__);
 				}
 				$response = add_dns_record(14426, 'wh'.$serviceClass->getId(), $ip, 'A', 86400, 0, TRUE);
