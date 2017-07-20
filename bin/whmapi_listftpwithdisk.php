@@ -12,7 +12,7 @@
 require_once(__DIR__.'/../../../../include/functions.inc.php');
 $db = get_module_db('webhosting');
 $db2 = get_module_db('webhosting');
-if (sizeof($_SERVER['argv']) < 3)
+if (count($_SERVER['argv']) < 3)
 	die("Call like {$_SERVER['argv'][0]} <hostname> <username>\n where <hostname> is a webhosting server such as webhosting2004.interserver.net\n and <username> is the username of a current user on the server");
 $db->query("select * from website_masters where website_name='".$db->real_escape($_SERVER['argv'][1])."'", __LINE__, __FILE__);
 function_requirements('whm_api');
@@ -42,7 +42,7 @@ switch ($db->Record['website_type']) {
 		}
 		break;
 }
-if (sizeof($updates) > 0) {
+if (count($updates) > 0) {
 	$query = [];
 	foreach ($updates as $key => $value)
 		$query[] = "website_{$key} = '".$db->real_escape($value)."'";
