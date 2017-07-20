@@ -133,9 +133,9 @@ class Plugin {
 					$response = json_decode($response);
 				}
 			}
-			if (preg_match("/^.*This system already has an account named .{1,3}{$username}.{1,3}\.$/m", $response->result[0]->statusmsg) || preg_match("/^.*The name of another account on this server has the same initial/m", $response->result[0]->statusmsg)) {
+			if (preg_match("/^.*This system already has an account named .{1,3}{$username}.{1,3}\.$/m", $response->result[0]->statusmsg) || preg_match('/^.*The name of another account on this server has the same initial/m', $response->result[0]->statusmsg)) {
 				$ousername = $username;
-				while (preg_match("/^.*This system already has an account named .{1,3}{$username}.{1,3}\.$/m", $response->result[0]->statusmsg) || preg_match("/^.*The name of another account on this server has the same initial/m", $response->result[0]->statusmsg)) {
+				while (preg_match("/^.*This system already has an account named .{1,3}{$username}.{1,3}\.$/m", $response->result[0]->statusmsg) || preg_match('/^.*The name of another account on this server has the same initial/m', $response->result[0]->statusmsg)) {
 					$username .= 'a';
 					$username = mb_substr($username, 1);
 					$options['username'] = $username;
@@ -400,7 +400,7 @@ class Plugin {
 			$serviceClass = $event->getSubject();
 			$settings = get_module_settings(self::$module);
 			$cpanel = new Cpanel(FANTASTICO_USERNAME, FANTASTICO_PASSWORD);
-			myadmin_log(self::$module, 'info', "IP Change - (OLD:".$serviceClass->getIp().") (NEW:{$event['newip']})", __LINE__, __FILE__);
+			myadmin_log(self::$module, 'info', 'IP Change - (OLD:' .$serviceClass->getIp().") (NEW:{$event['newip']})", __LINE__, __FILE__);
 			$result = $cpanel->editIp($serviceClass->getIp(), $event['newip']);
 			if (isset($result['faultcode'])) {
 				myadmin_log(self::$module, 'error', 'Cpanel editIp('.$serviceClass->getIp().', '.$event['newip'].') returned Fault '.$result['faultcode'].': '.$result['fault'], __LINE__, __FILE__);

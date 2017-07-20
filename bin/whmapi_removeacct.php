@@ -46,6 +46,6 @@ if (count($updates) > 0) {
 	$query = [];
 	foreach ($updates as $key => $value)
 		$query[] = "website_{$key} = '".$db->real_escape($value)."'";
-	$query = "update website_masters set ".implode(', ', $query)." where website_id={$db->Record['website_id']}";
+	$query = 'update website_masters set ' .implode(', ', $query)." where website_id={$db->Record['website_id']}";
 	$db2->query($query, __LINE__, __FILE__);
 }
