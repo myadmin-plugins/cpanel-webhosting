@@ -236,7 +236,7 @@ class Plugin {
 				website_welcome_email($serviceClass->getId());
 				if (isset($extra['script']) && $extra['script'] > 0) {
 					$script = (int) $extra['script'];
-					include_once(__DIR__.'/../../../../include/webhosting/softaculous/sdk.php');
+					include_once __DIR__.'/../../../../include/webhosting/softaculous/sdk.php';
 					$userdata = $GLOBALS['tf']->accounts->read($serviceClass->getCustid());
 					$soft = new \Softaculous_SDK();
 					$soft->login = "https://{$username}:{$password}@{$serverdata[$settings['PREFIX'].'_name']}:2083/frontend/paper_lantern/softaculous/index.live.php";
@@ -248,7 +248,7 @@ class Plugin {
 					$data['admin_pass'] = $password;
 					$data['admin_email'] = $event['email'];
 					$data['admin_realname'] = (isset($userdata['name']) ? $userdata['name'] : $userdata['account_lid']);
-					list($data['admin_fname'], $data['admin_lname']) = (isset($userdata['name']) ? explode(' ', $userdata['name']) : explode('@', $userdata['account_lid']));
+					list($data['admin_fname'], $data['admin_lname']) = isset($userdata['name']) ? explode(' ', $userdata['name']) : explode('@', $userdata['account_lid']);
 					$data['softdb'] = $soft->scripts[$script]['softname'];
 					$data['dbusername'] = $soft->scripts[$script]['softname'];
 					$data['dbuserpass'] = $password;
