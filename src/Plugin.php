@@ -99,8 +99,7 @@ class Plugin {
 				'username' => $username,
 				'password' => $password,
 				'contactemail' => $event['email']
-			                               ]
-			);
+			]);
 			myadmin_log(self::$module, 'info', json_encode($options), __LINE__, __FILE__);
 			$response = $whm->xmlapi_query('createacct', $options);
 			request_log(self::$module, $serviceClass->getCustid(), __FUNCTION__, 'cpanel', 'createacct', $options, $response);
@@ -341,7 +340,7 @@ class Plugin {
 
 	/**
 	 * @param \Symfony\Component\EventDispatcher\GenericEvent $event
-	 * @return bool
+	 * @return boolean|null
 	 * @throws \Exception
 	 */
 	public static function getTerminate(GenericEvent $event) {
