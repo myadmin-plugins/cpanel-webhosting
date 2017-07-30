@@ -315,25 +315,27 @@ class Plugin {
 			myadmin_log(self::$module, 'info', 'Cpanel Deactivation', __LINE__, __FILE__);
 			$serviceClass = $event->getSubject();
 			$settings = get_module_settings(self::$module);
-			$serverdata = get_service_master($serviceClass->getServer(), self::$module);
-			$hash = $serverdata[$settings['PREFIX'].'_key'];
-			$ip = $serverdata[$settings['PREFIX'].'_ip'];
-			function_requirements('whm_api');
-			$user = 'root';
-			$whm = new \xmlapi($ip);
-			//$whm->set_debug('true');
-			$whm->set_port('2087');
-			$whm->set_protocol('https');
-			$whm->set_output('json');
-			$whm->set_auth_type('hash');
-			$whm->set_user($user);
-			$whm->set_hash($hash);
-			//$whm = whm_api('faith.interserver.net');
-			if (in_array('reseller', explode(',', $event['field1'])))
-				$response = json_decode($whm->suspendreseller($serviceClass->getUsername(), 'Canceled Service'), TRUE);
-			else
-				$response = json_decode($whm->suspendacct($serviceClass->getUsername(), 'Canceled Service'), TRUE);
-			myadmin_log(self::$module, 'info', json_encode($response), __LINE__, __FILE__);
+			if ($serviceClass->getServer() > 0) {
+				$serverdata = get_service_master($serviceClass->getServer(), self::$module);
+				$hash = $serverdata[$settings['PREFIX'].'_key'];
+				$ip = $serverdata[$settings['PREFIX'].'_ip'];
+				function_requirements('whm_api');
+				$user = 'root';
+				$whm = new \xmlapi($ip);
+				//$whm->set_debug('true');
+				$whm->set_port('2087');
+				$whm->set_protocol('https');
+				$whm->set_output('json');
+				$whm->set_auth_type('hash');
+				$whm->set_user($user);
+				$whm->set_hash($hash);
+				//$whm = whm_api('faith.interserver.net');
+				if (in_array('reseller', explode(',', $event['field1'])))
+					$response = json_decode($whm->suspendreseller($serviceClass->getUsername(), 'Canceled Service'), TRUE);
+				else
+					$response = json_decode($whm->suspendacct($serviceClass->getUsername(), 'Canceled Service'), TRUE);
+				myadmin_log(self::$module, 'info', json_encode($response), __LINE__, __FILE__);
+			}
 			$event->stopPropagation();
 		}
 	}
