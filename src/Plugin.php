@@ -434,7 +434,7 @@ class Plugin {
 				$menu->add_menu(self::$module.'api', 'whmadministration', 'Server Administration');
 				$menu->add_menu(self::$module.'api', 'whmservices', 'Services');
 				$menu->add_menu(self::$module.'api', 'whmssl', 'SSL Certs');
-				$menu->add_link(self::$module.'api', 'choice=none.whm_choose_server', 'icons/paper_content_pencil_48.png', 'Set What Server Your Working On.');
+				$menu->add_link(self::$module.'api', 'choice=none.whm_choose_server', 'images/icons/paper_content_pencil_48.png', 'Set What Server Your Working On.');
 
 				// Accounting
 				$menu->add_link('whmaccount', 'choice=none.whm_createacct', 'whm/createacct.gif', 'Create an Account');
