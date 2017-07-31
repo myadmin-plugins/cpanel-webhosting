@@ -311,7 +311,7 @@ class Plugin {
 	 * @throws \Exception
 	 */
 	public static function getDeactivate(GenericEvent $event) {
-		if ($event['category'] == get_service_define('WEB_CPANEL')) {
+		if (in_array($event['type'], [get_service_define('WEB_CPANEL'), get_service_define('WEB_WORDPRESS')])) {
 			myadmin_log(self::$module, 'info', 'Cpanel Deactivation', __LINE__, __FILE__);
 			$serviceClass = $event->getSubject();
 			$settings = get_module_settings(self::$module);
@@ -346,7 +346,7 @@ class Plugin {
 	 * @throws \Exception
 	 */
 	public static function getTerminate(GenericEvent $event) {
-		if ($event['category'] == get_service_define('WEB_CPANEL')) {
+		if (in_array($event['type'], [get_service_define('WEB_CPANEL'), get_service_define('WEB_WORDPRESS')])) {
 			myadmin_log(self::$module, 'info', 'Cpanel Termination', __LINE__, __FILE__);
 			$serviceClass = $event->getSubject();
 			$settings = get_module_settings(self::$module);
@@ -381,6 +381,7 @@ class Plugin {
 				} else
 					myadmin_log(self::$module, 'info', "Skipping Removing DNS entry for {$serviceClass->getHostname()} because other non deleted sites w/ the same hostname exist", __LINE__, __FILE__);
 			}
+			$event->stopPropagation();
 			if (trim($serviceClass->getUsername()) == '')
 				return TRUE;
 			elseif ($response->result[0]->status == 1)
@@ -389,7 +390,6 @@ class Plugin {
 				return TRUE;
 			else
 				return FALSE;
-			$event->stopPropagation();
 		}
 	}
 
