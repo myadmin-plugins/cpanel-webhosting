@@ -374,6 +374,7 @@ class Plugin {
 				myadmin_log(self::$module, 'info', "Skipping WHMAPI/Server Removal for {$serviceClass->getHostname()} because username is blank", __LINE__, __FILE__);
 			$dnsr = json_decode($whm->dumpzone($serviceClass->getHostname()));
 			if ($dnsr->result[0]->status == 1) {
+				$db = get_module_db(self::$module);
 				$db->query("select * from {$settings['TABLE']} where {$settings['PREFIX']}_hostname='{$serviceClass->getHostname()}' and {$settings['PREFIX']}_id != {$serviceClass->getId()} and {$settings['PREFIX']}_status = 'active'", __LINE__, __FILE__);
 				if ($db->num_rows() == 0) {
 					myadmin_log(self::$module, 'info', "Removing Hanging DNS entry for {$serviceClass->getHostname()}", __LINE__, __FILE__);
