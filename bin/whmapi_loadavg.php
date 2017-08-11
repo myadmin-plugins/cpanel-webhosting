@@ -2,8 +2,7 @@
 <?php
 /**
 * Webhosting Functionality
-* Last Changed: $LastChangedDate: 2015-03-10 23:06:42 -0400 (Tue, 10 Mar 2015) $
-* @author detain
+* @author Joe Huss <detain@interserver.net>
 * @copyright 2017
 * @package MyAdmin
 * @category Webhosting
