@@ -171,7 +171,7 @@ class Plugin {
 
 					$acls = json_decode($response3);
 					request_log(self::$module, $serviceClass->getCustid(), __FUNCTION__, 'cpanel', 'listacls', [], $response);
-					//myadmin_log(self::$module, 'info', json_encode($acls));
+					//myadmin_log(self::$module, 'info', json_encode($acls), __LINE__, __FILE__);
 					if (!isset($acls->acls->reseller)) {
 						$acl = [
 							'acl-add-pkg' => 1, // Allow the creation of packages.
