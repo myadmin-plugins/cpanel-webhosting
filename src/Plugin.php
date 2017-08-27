@@ -435,95 +435,95 @@ class Plugin {
 				$menu->add_menu(self::$module.'api', 'whmadministration', 'Server Administration');
 				$menu->add_menu(self::$module.'api', 'whmservices', 'Services');
 				$menu->add_menu(self::$module.'api', 'whmssl', 'SSL Certs');
-				$menu->add_link(self::$module.'api', 'choice=none.whm_choose_server', 'images/icons/paper_content_pencil_48.png', 'Set What Server Your Working On.');
+				$menu->add_link(self::$module.'api', 'choice=none.whm_choose_server', '/images/icons/paper_content_pencil_48.png', 'Set What Server Your Working On.');
 
 				// Accounting
-				$menu->add_link('whmaccount', 'choice=none.whm_createacct', 'whm/createacct.gif', 'Create an Account');
-				$menu->add_link('whmaccount', 'choice=none.whm_passwd', 'whm/passwd.gif', 'Change an Accounts Password');
-				$menu->add_link('whmaccount', 'choice=none.whm_limitbw', 'whm/limitbw.gif', 'Limit Bandwidth Usage (Transfer)');
-				$menu->add_link('whmaccount', 'choice=none.whm_listaccts', 'whm/listaccts.gif', 'List Accounts');
-				$menu->add_link('whmaccount', 'choice=none.whm_modifyacct', 'whm/modifyacct.gif', 'Modify an Account');
-				$menu->add_link('whmaccount', 'choice=none.whm_editquota', 'whm/editquota.gif', 'Edit Quota');
-				$menu->add_link('whmaccount', 'choice=none.whm_accountsummary', 'whm/accountsummary.gif', 'Show an Accounts Information');
-				$menu->add_link('whmaccount', 'choice=none.whm_suspendacct', 'whm/suspendacct.gif', 'Suspend an Account');
-				$menu->add_link('whmaccount', 'choice=none.whm_listsuspended', 'whm/listsuspended.gif', 'List Suspended Accounts');
-				$menu->add_link('whmaccount', 'choice=none.whm_removeacct', 'whm/removeacct.gif', 'Terminate an Account');
-				$menu->add_link('whmaccount', 'choice=none.whm_unsuspendacct', 'whm/unsuspendacct.gif', 'Unsuspend an Account');
-				$menu->add_link('whmaccount', 'choice=none.whm_changepackage', 'whm/changepackage.gif', 'Upgrade or Downgrade an Account');
-				$menu->add_link('whmaccount', 'choice=none.whm_myprivs', 'whm/createacct.gif', 'View Current Users Privileges');
-				$menu->add_link('whmaccount', 'choice=none.whm_domainuserdata', 'whm/createacct.gif', 'Obtain User Data for a Domain');
-				$menu->add_link('whmaccount', 'choice=none.whm_setsiteip', 'whm/createacct.gif', 'Change a Sites (or Users) IP Address');
-				$menu->add_link('whmaccount', 'choice=none.whm_restoreaccount', 'whm/createacct.gif', 'Restore an Account Backup');
+				$menu->add_link('whmaccount', 'choice=none.whm_createacct', '/images/whm/createacct.gif', 'Create an Account');
+				$menu->add_link('whmaccount', 'choice=none.whm_passwd', '/images/whm/passwd.gif', 'Change an Accounts Password');
+				$menu->add_link('whmaccount', 'choice=none.whm_limitbw', '/images/whm/limitbw.gif', 'Limit Bandwidth Usage (Transfer)');
+				$menu->add_link('whmaccount', 'choice=none.whm_listaccts', '/images/whm/listaccts.gif', 'List Accounts');
+				$menu->add_link('whmaccount', 'choice=none.whm_modifyacct', '/images/whm/modifyacct.gif', 'Modify an Account');
+				$menu->add_link('whmaccount', 'choice=none.whm_editquota', '/images/whm/editquota.gif', 'Edit Quota');
+				$menu->add_link('whmaccount', 'choice=none.whm_accountsummary', '/images/whm/accountsummary.gif', 'Show an Accounts Information');
+				$menu->add_link('whmaccount', 'choice=none.whm_suspendacct', '/images/whm/suspendacct.gif', 'Suspend an Account');
+				$menu->add_link('whmaccount', 'choice=none.whm_listsuspended', '/images/whm/listsuspended.gif', 'List Suspended Accounts');
+				$menu->add_link('whmaccount', 'choice=none.whm_removeacct', '/images/whm/removeacct.gif', 'Terminate an Account');
+				$menu->add_link('whmaccount', 'choice=none.whm_unsuspendacct', '/images/whm/unsuspendacct.gif', 'Unsuspend an Account');
+				$menu->add_link('whmaccount', 'choice=none.whm_changepackage', '/images/whm/changepackage.gif', 'Upgrade or Downgrade an Account');
+				$menu->add_link('whmaccount', 'choice=none.whm_myprivs', '/images/whm/createacct.gif', 'View Current Users Privileges');
+				$menu->add_link('whmaccount', 'choice=none.whm_domainuserdata', '/images/whm/createacct.gif', 'Obtain User Data for a Domain');
+				$menu->add_link('whmaccount', 'choice=none.whm_setsiteip', '/images/whm/createacct.gif', 'Change a Sites (or Users) IP Address');
+				$menu->add_link('whmaccount', 'choice=none.whm_restoreaccount', '/images/whm/createacct.gif', 'Restore an Account Backup');
 
 				// DNS
-				$menu->add_link('whmdns', 'choice=none.whm_adddns', 'whm/adddns.gif', 'Add a DNS Zone');
-				$menu->add_link('whmdns', 'choice=none.whm_addzonerecord', 'whm/addzonerecord.gif', 'Add a Zone Record');
-				$menu->add_link('whmdns', 'choice=none.whm_editzonerecord', 'whm/editzonerecord.gif', 'Edit a Zone Record');
-				//$menu->add_link('whmdns', 'choice=none.whm_getzonerecord', 'whm/getzonerecord.gif', 'Get a Zone Record');
-				//$menu->add_link('whmdns', 'choice=none.whm_killdns', 'whm/killdns.gif', 'Delete a DNS Zone');
-				$menu->add_link('whmdns', 'choice=none.whm_listzones', 'whm/listzones.gif', 'List All DNS Zones');
-				$menu->add_link('whmdns', 'choice=none.whm_dumpzone', 'whm/dumpzone.gif', 'List (Dump) 1 Zone');
-				$menu->add_link('whmdns', 'choice=none.whm_lookupnsip', 'whm/lookupnsip.gif', 'Look up a Nameservers IP Address');
-				//$menu->add_link('whmdns', 'choice=none.whm_removezonerecord', 'whm/removezonerecord.gif', 'Remove a DNS Zone Record');
-				//$menu->add_link('whmdns', 'choice=none.whm_resetzone', 'whm/resetzone.gif', 'Reset a DNS Zone');
-				//$menu->add_link('whmdns', 'choice=none.whm_resolvedomainname', 'whm/resolvedomainname.gif', 'Resolve an IP Address from a Domain');
-				$menu->add_link('whmdns', 'choice=none.whm_listmxs', 'whm/listmxs.gif', 'List a Domains MX Records');
-				$menu->add_link('whmdns', 'choice=none.whm_savemxs', 'whm/savemxs.gif', 'Create a new MX Record');
+				$menu->add_link('whmdns', 'choice=none.whm_adddns', '/images/whm/adddns.gif', 'Add a DNS Zone');
+				$menu->add_link('whmdns', 'choice=none.whm_addzonerecord', '/images/whm/adddns.gif', 'Add a Zone Record');
+				$menu->add_link('whmdns', 'choice=none.whm_editzonerecord', '/images/whm/editzonerecord.gif', 'Edit a Zone Record');
+				//$menu->add_link('whmdns', 'choice=none.whm_getzonerecord', '/images/whm/getzonerecord.gif', 'Get a Zone Record');
+				//$menu->add_link('whmdns', 'choice=none.whm_killdns', '/images/whm/killdns.gif', 'Delete a DNS Zone');
+				$menu->add_link('whmdns', 'choice=none.whm_listzones', '/images/whm/listzones.gif', 'List All DNS Zones');
+				$menu->add_link('whmdns', 'choice=none.whm_dumpzone', '/images/whm/listzones.gif', 'List (Dump) 1 Zone');
+				$menu->add_link('whmdns', 'choice=none.whm_lookupnsip', '/images/whm/listzones.gif', 'Look up a Nameservers IP Address');
+				//$menu->add_link('whmdns', 'choice=none.whm_removezonerecord', '/images/whm/removezonerecord.gif', 'Remove a DNS Zone Record');
+				//$menu->add_link('whmdns', 'choice=none.whm_resetzone', '/images/whm/resetzone.gif', 'Reset a DNS Zone');
+				//$menu->add_link('whmdns', 'choice=none.whm_resolvedomainname', '/images/whm/resolvedomainname.gif', 'Resolve an IP Address from a Domain');
+				$menu->add_link('whmdns', 'choice=none.whm_listmxs', '/images/whm/savemxs.gif', 'List a Domains MX Records');
+				$menu->add_link('whmdns', 'choice=none.whm_savemxs', '/images/whm/savemxs.gif', 'Create a new MX Record');
 
 				// Packages
-				//$menu->add_link('whmpackages', 'choice=none.whm_addpkg', 'whm/addpkg.gif', 'Add a Package');
-				//$menu->add_link('whmpackages', 'choice=none.whm_killpkg', 'whm/killpkg.gif', 'Delete a Package');
-				//$menu->add_link('whmpackages', 'choice=none.whm_editpkg', 'whm/editpkg.gif', 'Edit a Package');
-				$menu->add_link('whmpackages', 'choice=none.whm_listpkgs', 'whm/listpkgs.gif', 'List Packages');
-				$menu->add_link('whmpackages', 'choice=none.whm_getfeaturelist', 'whm/getfeaturelist.gif', 'List Available Features');
+				//$menu->add_link('whmpackages', 'choice=none.whm_addpkg', '/images/whm/addpkg.gif', 'Add a Package');
+				//$menu->add_link('whmpackages', 'choice=none.whm_killpkg', '/images/whm/killpkg.gif', 'Delete a Package');
+				//$menu->add_link('whmpackages', 'choice=none.whm_editpkg', '/images/whm/editpkg.gif', 'Edit a Package');
+				$menu->add_link('whmpackages', 'choice=none.whm_listpkgs', '/images/whm/listpkgs.gif', 'List Packages');
+				$menu->add_link('whmpackages', 'choice=none.whm_getfeaturelist', '/images/whm/getfeaturelist.gif', 'List Available Features');
 
 				// Resellers
-				$menu->add_link('whmresellers', 'choice=none.whm_setupreseller', 'whm/createacct.gif', 'Add Reseller Privileges');
-				$menu->add_link('whmresellers', 'choice=none.whm_saveacllist', 'whm/createacct.gif', 'Create a Reseller ACL List');
-				$menu->add_link('whmresellers', 'choice=none.whm_listacls', 'whm/createacct.gif', 'List Current Reseller ACL Lists');
-				$menu->add_link('whmresellers', 'choice=none.whm_listresellers', 'whm/listresellers.gif', 'List Reseller Accounts');
-				$menu->add_link('whmresellers', 'choice=none.whm_resellerstats', 'whm/createacct.gif', 'List Resellers Accounts Information');
-				$menu->add_link('whmresellers', 'choice=none.whm_unsetupreseller', 'whm/createacct.gif', 'Remove Reseller Privileges');
-				$menu->add_link('whmresellers', 'choice=none.whm_setacls', 'whm/createacct.gif', 'Set a Resellers ACL List');
-				$menu->add_link('whmresellers', 'choice=none.whm_terminatereseller', 'whm/createacct.gif', 'Terminate a Reseller');
-				$menu->add_link('whmresellers', 'choice=none.whm_setresellerips', 'whm/createacct.gif', 'Assign a Reseller IP Addresses');
-				$menu->add_link('whmresellers', 'choice=none.whm_setresellerlimits', 'whm/createacct.gif', 'Set Reseller Limits');
-				$menu->add_link('whmresellers', 'choice=none.whm_setresellermainip', 'whm/createacct.gif', 'Set up a Resellers Main IP Address');
-				$menu->add_link('whmresellers', 'choice=none.whm_setresellerpackagelimit', 'whm/createacct.gif', 'Define a Resellers Packages');
-				$menu->add_link('whmresellers', 'choice=none.whm_suspendreseller', 'whm/createacct.gif', 'Suspend a Resellers Account');
-				$menu->add_link('whmresellers', 'choice=none.whm_unsuspendreseller', 'whm/createacct.gif', 'Unsuspend a Resellers Account');
-				$menu->add_link('whmresellers', 'choice=none.whm_acctcounts', 'whm/createacct.gif', 'View Information about Accounts Owned by a Reseller');
-				$menu->add_link('whmresellers', 'choice=none.whm_setresellernameservers', 'whm/createacct.gif', 'Set a Resellers Nameservers');
+				$menu->add_link('whmresellers', 'choice=none.whm_setupreseller', '/images/whm/createacct.gif', 'Add Reseller Privileges');
+				$menu->add_link('whmresellers', 'choice=none.whm_saveacllist', '/images/whm/createacct.gif', 'Create a Reseller ACL List');
+				$menu->add_link('whmresellers', 'choice=none.whm_listacls', '/images/whm/createacct.gif', 'List Current Reseller ACL Lists');
+				$menu->add_link('whmresellers', 'choice=none.whm_listresellers', '/images/whm/listresellers.gif', 'List Reseller Accounts');
+				$menu->add_link('whmresellers', 'choice=none.whm_resellerstats', '/images/whm/createacct.gif', 'List Resellers Accounts Information');
+				$menu->add_link('whmresellers', 'choice=none.whm_unsetupreseller', '/images/whm/createacct.gif', 'Remove Reseller Privileges');
+				$menu->add_link('whmresellers', 'choice=none.whm_setacls', '/images/whm/createacct.gif', 'Set a Resellers ACL List');
+				$menu->add_link('whmresellers', 'choice=none.whm_terminatereseller', '/images/whm/createacct.gif', 'Terminate a Reseller');
+				$menu->add_link('whmresellers', 'choice=none.whm_setresellerips', '/images/whm/createacct.gif', 'Assign a Reseller IP Addresses');
+				$menu->add_link('whmresellers', 'choice=none.whm_setresellerlimits', '/images/whm/createacct.gif', 'Set Reseller Limits');
+				$menu->add_link('whmresellers', 'choice=none.whm_setresellermainip', '/images/whm/createacct.gif', 'Set up a Resellers Main IP Address');
+				$menu->add_link('whmresellers', 'choice=none.whm_setresellerpackagelimit', '/images/whm/createacct.gif', 'Define a Resellers Packages');
+				$menu->add_link('whmresellers', 'choice=none.whm_suspendreseller', '/images/whm/createacct.gif', 'Suspend a Resellers Account');
+				$menu->add_link('whmresellers', 'choice=none.whm_unsuspendreseller', '/images/whm/createacct.gif', 'Unsuspend a Resellers Account');
+				$menu->add_link('whmresellers', 'choice=none.whm_acctcounts', '/images/whm/createacct.gif', 'View Information about Accounts Owned by a Reseller');
+				$menu->add_link('whmresellers', 'choice=none.whm_setresellernameservers', '/images/whm/createacct.gif', 'Set a Resellers Nameservers');
 
 				// Information
-				$menu->add_link('whminformation', 'choice=none.whm_gethostname', 'whm/gethostname.gif', 'Display Server Hostname');
-				$menu->add_link('whminformation', 'choice=none.whm_version', 'whm/version.gif', 'Display cPanel &amp; WHM Version');
-				$menu->add_link('whminformation', 'choice=none.whm_loadavg', 'whm/loadavg.gif', 'Display the Servers Load Average');
-				$menu->add_link('whminformation', 'choice=none.whm_getdiskusage', 'whm/loadavg.gif', 'Display the Servers Disk Usage');
-				//$menu->add_link('whminformation', 'choice=none.whm_systemloadavg', 'whm/createacct.gif', 'Display the Servers Load Average (with Metadata)');
-				$menu->add_link('whminformation', 'choice=none.whm_getlanglist', 'whm/createacct.gif', 'View a List of Available Languages');
+				$menu->add_link('whminformation', 'choice=none.whm_gethostname', '/images/whm/gethostname.gif', 'Display Server Hostname');
+				$menu->add_link('whminformation', 'choice=none.whm_version', '/images/whm/version.gif', 'Display cPanel &amp; WHM Version');
+				$menu->add_link('whminformation', 'choice=none.whm_loadavg', '/images/whm/loadavg.gif', 'Display the Servers Load Average');
+				$menu->add_link('whminformation', 'choice=none.whm_getdiskusage', '/images/whm/loadavg.gif', 'Display the Servers Disk Usage');
+				//$menu->add_link('whminformation', 'choice=none.whm_systemloadavg', '/images/whm/createacct.gif', 'Display the Servers Load Average (with Metadata)');
+				$menu->add_link('whminformation', 'choice=none.whm_getlanglist', '/images/whm/createacct.gif', 'View a List of Available Languages');
 
 				// Adminsitration
-				$menu->add_link('whmadministration', 'choice=none.whm_reboot', 'whm/reboot.gif', 'Reboot the Server');
-				$menu->add_link('whmadministration', 'choice=none.whm_addip', 'whm/addip.gif', 'Add IP Address');
-				$menu->add_link('whmadministration', 'choice=none.whm_delip', 'whm/createacct.gif', 'Delete IP Address');
-				$menu->add_link('whmadministration', 'choice=none.whm_listips', 'whm/listips.gif', 'List IP Addresses');
-				$menu->add_link('whmadministration', 'choice=none.whm_sethostname', 'whm/createacct.gif', 'Set Hostname');
-				$menu->add_link('whmadministration', 'choice=none.whm_setresolvers', 'whm/createacct.gif', 'Set Resolvers');
-				//$menu->add_link('whmadministration', 'choice=none.whm_showbw', 'whm/createacct.gif', 'Show Bandwidth');
-				//$menu->add_link('whmadministration', 'choice=none.whm_nvset', 'whm/createacct.gif', 'Set a Non-Volatile Variable Value');
-				//$menu->add_link('whmadministration', 'choice=none.whm_nvget', 'whm/createacct.gif', 'Retrieve a Non-Volatile Variable Value');
+				$menu->add_link('whmadministration', 'choice=none.whm_reboot', '/images/whm/reboot.gif', 'Reboot the Server');
+				$menu->add_link('whmadministration', 'choice=none.whm_addip', '/images/whm/addip.gif', 'Add IP Address');
+				$menu->add_link('whmadministration', 'choice=none.whm_delip', '/images/whm/createacct.gif', 'Delete IP Address');
+				$menu->add_link('whmadministration', 'choice=none.whm_listips', '/images/whm/listips.gif', 'List IP Addresses');
+				$menu->add_link('whmadministration', 'choice=none.whm_sethostname', '/images/whm/createacct.gif', 'Set Hostname');
+				$menu->add_link('whmadministration', 'choice=none.whm_setresolvers', '/images/whm/createacct.gif', 'Set Resolvers');
+				//$menu->add_link('whmadministration', 'choice=none.whm_showbw', '/images/whm/createacct.gif', 'Show Bandwidth');
+				//$menu->add_link('whmadministration', 'choice=none.whm_nvset', '/images/whm/createacct.gif', 'Set a Non-Volatile Variable Value');
+				//$menu->add_link('whmadministration', 'choice=none.whm_nvget', '/images/whm/createacct.gif', 'Retrieve a Non-Volatile Variable Value');
 
 				// Services
-				$menu->add_link('whmservices', 'choice=none.whm_restartservice', 'whm/restartservice.gif', 'Restart Service');
-				$menu->add_link('whmservices', 'choice=none.whm_servicestatus', 'whm/servicestatus.gif', 'Service Status');
-				//$menu->add_link('whmservices', 'choice=none.whm_configureservice', 'whm/configureservice.gif', 'Configure a Service');
+				$menu->add_link('whmservices', 'choice=none.whm_restartservice', '/images/whm/restartservice.gif', 'Restart Service');
+				$menu->add_link('whmservices', 'choice=none.whm_servicestatus', '/images/whm/servicestatus.gif', 'Service Status');
+				//$menu->add_link('whmservices', 'choice=none.whm_configureservice', '/images/whm/configureservice.gif', 'Configure a Service');
 
 				// SSL
-				$menu->add_link('whmssl', 'choice=none.whm_fetchsslinfo', 'whm/fetchsslinfo.gif', 'Fetch SSL Certificate Information');
-				//$menu->add_link('whmssl', 'choice=none.whm_generatessl', 'whm/generatessl.gif', 'Generate an SSL Certificate');
-				//$menu->add_link('whmssl', 'choice=none.whm_installssl', 'whm/installssl.gif', 'Install an SSL Certificate');
-				$menu->add_link('whmssl', 'choice=none.whm_listcrts', 'whm/listcrts.gif', 'List Available SSL Certificates');
+				$menu->add_link('whmssl', 'choice=none.whm_fetchsslinfo', '/images/whm/fetchsslinfo.gif', 'Fetch SSL Certificate Information');
+				//$menu->add_link('whmssl', 'choice=none.whm_generatessl', '/images/whm/generatessl.gif', 'Generate an SSL Certificate');
+				//$menu->add_link('whmssl', 'choice=none.whm_installssl', '/images/whm/installssl.gif', 'Install an SSL Certificate');
+				$menu->add_link('whmssl', 'choice=none.whm_listcrts', '/images/whm/listcrts.gif', 'List Available SSL Certificates');
 			}
 		}
 	}
