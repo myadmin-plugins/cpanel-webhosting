@@ -533,8 +533,8 @@ class Plugin {
 	 */
 	public static function getRequirements(GenericEvent $event) {
 		$loader = $event->getSubject();
-		$loader->add_requirement('whm_get_accounts', '/webhosting/whmapi.functions.inc.php');
-		$loader->add_requirement('whm_api', '/webhosting/whmapi.functions.inc.php');
+		$loader->add_page_requirement('whm_get_accounts', '/webhosting/whmapi.functions.inc.php');
+		$loader->add_page_requirement('whm_api', '/webhosting/whmapi.functions.inc.php');
 		$loader->add_page_requirement('whm_choose_server', '/webhosting/whmapi.functions.inc.php');
 		$loader->add_page_requirement('whm_createacct', '/webhosting/whmapi.functions.inc.php');
 		$loader->add_page_requirement('whm_passwd', '/webhosting/whmapi.functions.inc.php');
