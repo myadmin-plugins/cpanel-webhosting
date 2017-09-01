@@ -426,7 +426,7 @@ class Plugin {
 		if ($GLOBALS['tf']->ima == 'admin') {
 			function_requirements('has_acl');
 			if (has_acl('module_config')) {
-				$menu->add_menu(self::$module, self::$module.'api', 'API', '//my.interserver.net/bower_components/webhostinghub-glyphs-icons/icons/development-16/Black/icon-braces.png');
+				$menu->add_menu(self::$module, self::$module.'api', 'API', '/bower_components/webhostinghub-glyphs-icons/icons/development-16/Black/icon-braces.png');
 				$menu->add_menu(self::$module.'api', 'whmaccount', 'Accounting');
 				$menu->add_menu(self::$module.'api', 'whmdns', 'DNS');
 				$menu->add_menu(self::$module.'api', 'whmpackages', 'Packages');
