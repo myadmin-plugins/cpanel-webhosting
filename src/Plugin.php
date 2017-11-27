@@ -105,22 +105,19 @@ class Plugin {
 			request_log(self::$module, $serviceClass->getCustid(), __FUNCTION__, 'cpanel', 'createacct', $options, $response);
 			myadmin_log(self::$module, 'info', 'Response: '.str_replace('\n', '', strip_tags($response)), __LINE__, __FILE__);
 			$response = json_decode($response);
-			if ($response->result[0]->statusmsg == 'Sorry, the password may not contain the username for security reasons.' || strpos('Sorry, the password you selected cannot be used', $response->result[0]->statusmsg) !== FALSE) {
-				$ousername = $username;
-				while ($response->result[0]->statusmsg == 'Sorry, the password may not contain the username for security reasons.' || strpos('Sorry, the password you selected cannot be used', $response->result[0]->statusmsg) !== FALSE) {
-					$username .= 'a';
-					$username = mb_substr($username, 1);
-					$options['username'] = $username;
-					myadmin_log(self::$module, 'info', "Trying Username {$options['username']}", __LINE__, __FILE__);
+			if (mb_substr($response->result[0]->statusmsg, 0, 19) == 'Sorry, the password') {
+				while (mb_substr($response->result[0]->statusmsg, 0, 19) == 'Sorry, the password') {
+					$password = generateRandomString(10, 2, 2, 2, 1);
+					$options['password'] = $password;
+					myadmin_log(self::$module, 'info', "Trying Password {$options['password']}", __LINE__, __FILE__);
 					$response = $whm->xmlapi_query('createacct', $options);
 					request_log(self::$module, $serviceClass->getCustid(), __FUNCTION__, 'cpanel', 'createacct', $options, $response);
-					myadmin_log(self::$module, 'info', "Response: {$response}", __LINE__, __FILE__);
+					myadmin_log(self::$module, 'info', "Response: $response", __LINE__, __FILE__);
 					$response = json_decode($response);
 				}
+				$GLOBALS['tf']->history->add($settings['PREFIX'], 'password', $serviceClass->getId(), $options['password']);
 			}
-
 			if ($response->result[0]->statusmsg == 'Sorry, a group for that username already exists.') {
-				$ousername = $username;
 				while ($response->result[0]->statusmsg == 'Sorry, a group for that username already exists.') {
 					$username .= 'a';
 					$username = mb_substr($username, 1);
@@ -133,7 +130,6 @@ class Plugin {
 				}
 			}
 			if (preg_match("/^.*This system already has an account named .{1,3}{$username}.{1,3}\.$/m", $response->result[0]->statusmsg) || preg_match('/^.*The name of another account on this server has the same initial/m', $response->result[0]->statusmsg)) {
-				$ousername = $username;
 				while (preg_match("/^.*This system already has an account named .{1,3}{$username}.{1,3}\.$/m", $response->result[0]->statusmsg) || preg_match('/^.*The name of another account on this server has the same initial/m', $response->result[0]->statusmsg)) {
 					$username .= 'a';
 					$username = mb_substr($username, 1);
@@ -144,17 +140,6 @@ class Plugin {
 					myadmin_log(self::$module, 'info', "Response: $response", __LINE__, __FILE__);
 					$response = json_decode($response);
 				}
-			}
-			if (mb_strpos($response->result[0]->statusmsg, 'Sorry, the password you selected cannot be used because it is too weak and would be too easy to crack.') !== FALSE) {
-				while (mb_strpos($response->result[0]->statusmsg, 'Sorry, the password you selected cannot be used because it is too weak and would be too easy to crack.') !== FALSE) {
-					$options['password'] .= '1';
-					myadmin_log(self::$module, 'info', "Trying Password {$options['password']}", __LINE__, __FILE__);
-					$response = $whm->xmlapi_query('createacct', $options);
-					request_log(self::$module, $serviceClass->getCustid(), __FUNCTION__, 'cpanel', 'createacct', $options, $response);
-					myadmin_log(self::$module, 'info', "Response: $response", __LINE__, __FILE__);
-					$response = json_decode($response);
-				}
-				$GLOBALS['tf']->history->add($settings['PREFIX'], 'password', $serviceClass->getId(), $options['password']);
 			}
 			if ($response->result[0]->status == 1) {
 				$ip = $response->result[0]->options->ip;
