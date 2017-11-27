@@ -105,9 +105,9 @@ class Plugin {
 			request_log(self::$module, $serviceClass->getCustid(), __FUNCTION__, 'cpanel', 'createacct', $options, $response);
 			myadmin_log(self::$module, 'info', 'Response: '.str_replace('\n', '', strip_tags($response)), __LINE__, __FILE__);
 			$response = json_decode($response);
-			if ($response->result[0]->statusmsg == 'Sorry, the password may not contain the username for security reasons.') {
+			if ($response->result[0]->statusmsg == 'Sorry, the password may not contain the username for security reasons.' || strpos('Sorry, the password you selected cannot be used', $response->result[0]->statusmsg) !== FALSE) {
 				$ousername = $username;
-				while ($response->result[0]->statusmsg == 'Sorry, the password may not contain the username for security reasons.') {
+				while ($response->result[0]->statusmsg == 'Sorry, the password may not contain the username for security reasons.' || strpos('Sorry, the password you selected cannot be used', $response->result[0]->statusmsg) !== FALSE) {
 					$username .= 'a';
 					$username = mb_substr($username, 1);
 					$options['username'] = $username;
