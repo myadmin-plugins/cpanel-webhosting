@@ -69,7 +69,7 @@ class Plugin {
 				$whm->set_auth_type('hash');
 				$whm->set_user($user);
 				$whm->set_hash($hash);
-			} catch(Exception $e) {
+			} catch(\Exception $e) {
 				$event['success'] = FALSE;
 				myadmin_log('cpanel', 'error', $e->getMessage(), __LINE__, __FILE__);
 				$event->stopPropagation();
@@ -110,7 +110,7 @@ class Plugin {
 			myadmin_log(self::$module, 'info', json_encode($options), __LINE__, __FILE__);
 			try {
 				$response = $whm->xmlapi_query('createacct', $options);
-			} catch(Exception $e) {
+			} catch(\Exception $e) {
 				$event['success'] = FALSE;
 				myadmin_log('cpanel', 'error', $e->getMessage(), __LINE__, __FILE__);
 				$event->stopPropagation();
