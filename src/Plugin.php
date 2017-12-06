@@ -60,14 +60,21 @@ class Plugin {
 			$username = get_new_webhosting_username($serviceClass->getId(), $hostname, $serviceClass->getServer());
 			function_requirements('whm_api');
 			$user = 'root';
-			$whm = new \xmlapi($ip);
-			//$whm->set_debug('true');
-			$whm->set_port('2087');
-			$whm->set_protocol('https');
-			$whm->set_output('json');
-			$whm->set_auth_type('hash');
-			$whm->set_user($user);
-			$whm->set_hash($hash);
+			try {
+				$whm = new \xmlapi($ip);
+				//$whm->set_debug('true');
+				$whm->set_port('2087');
+				$whm->set_protocol('https');
+				$whm->set_output('json');
+				$whm->set_auth_type('hash');
+				$whm->set_user($user);
+				$whm->set_hash($hash);
+			} catch(Exception $e) {
+				$event['success'] = FALSE;
+				myadmin_log('cpanel', 'error', $e->getMessage(), __LINE__, __FILE__);
+				$event->stopPropagation();
+				return;
+			}
 			//		$whm = whm_api('faith.interserver.net');
 			$options = [
 				'ip' => 'n',
@@ -101,7 +108,14 @@ class Plugin {
 				'contactemail' => $event['email']
 			]);
 			myadmin_log(self::$module, 'info', json_encode($options), __LINE__, __FILE__);
-			$response = $whm->xmlapi_query('createacct', $options);
+			try {
+				$response = $whm->xmlapi_query('createacct', $options);
+			} catch(Exception $e) {
+				$event['success'] = FALSE;
+				myadmin_log('cpanel', 'error', $e->getMessage(), __LINE__, __FILE__);
+				$event->stopPropagation();
+				return;
+			}
 			request_log(self::$module, $serviceClass->getCustid(), __FUNCTION__, 'cpanel', 'createacct', $options, $response);
 			myadmin_log(self::$module, 'info', 'Response: '.str_replace('\n', '', strip_tags($response)), __LINE__, __FILE__);
 			$response = json_decode($response);
