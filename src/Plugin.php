@@ -126,7 +126,7 @@ class Plugin {
 					myadmin_log(self::$module, 'info', "Trying Password {$options['password']}", __LINE__, __FILE__);
 					$response = $whm->xmlapi_query('createacct', $options);
 					request_log(self::$module, $serviceClass->getCustid(), __FUNCTION__, 'cpanel', 'createacct', $options, $response);
-					myadmin_log(self::$module, 'info', "Response: $response", __LINE__, __FILE__);
+					myadmin_log(self::$module, 'info', 'Response: '.str_replace('\n', "\n", $response), __LINE__, __FILE__);
 					$response = json_decode($response);
 				}
 				$GLOBALS['tf']->history->add($settings['PREFIX'], 'password', $serviceClass->getId(), $options['password']);
@@ -139,7 +139,7 @@ class Plugin {
 					myadmin_log(self::$module, 'info', 'Trying Username '.$options['username'], __LINE__, __FILE__);
 					$response = $whm->xmlapi_query('createacct', $options);
 					request_log(self::$module, $serviceClass->getCustid(), __FUNCTION__, 'cpanel', 'createacct', $options, $response);
-					myadmin_log(self::$module, 'info', "Response: $response", __LINE__, __FILE__);
+					myadmin_log(self::$module, 'info', 'Response: '.str_replace('\n', "\n", $response), __LINE__, __FILE__);
 					$response = json_decode($response);
 				}
 			}
@@ -151,7 +151,7 @@ class Plugin {
 					myadmin_log(self::$module, 'info', 'Trying Username '.$options['username'], __LINE__, __FILE__);
 					$response = $whm->xmlapi_query('createacct', $options);
 					request_log(self::$module, $serviceClass->getCustid(), __FUNCTION__, 'cpanel', 'createacct', $options, $response);
-					myadmin_log(self::$module, 'info', "Response: $response", __LINE__, __FILE__);
+					myadmin_log(self::$module, 'info', 'Response: '.str_replace('\n', "\n", $response), __LINE__, __FILE__);
 					$response = json_decode($response);
 				}
 			}
@@ -215,17 +215,17 @@ class Plugin {
 							'acl-upgrade-account' => 1, // Allow the reseller to upgrade and downgrade accounts.
 							'acllist' => 'reseller'
 						];
-						$result = $whm->saveacllist($acl);
-						myadmin_log(self::$module, 'info', $result, __LINE__, __FILE__);
-						request_log(self::$module, $serviceClass->getCustid(), __FUNCTION__, 'cpanel', 'saveacllist', $acl, $result);
+						$response = $whm->saveacllist($acl);
+						myadmin_log(self::$module, 'info', $response, __LINE__, __FILE__);
+						request_log(self::$module, $serviceClass->getCustid(), __FUNCTION__, 'cpanel', 'saveacllist', $acl, $response);
 						myadmin_log(self::$module, 'info', 'Reseller ACL Created', __LINE__, __FILE__);
 					} else {
 						myadmin_log(self::$module, 'info', 'Reseller ACL Exists', __LINE__, __FILE__);
 					}
 					$request = ['reseller' => $username, 'acllist' => 'reseller'];
-					$result = $whm->setacls($request);
-					myadmin_log(self::$module, 'info', $result, __LINE__, __FILE__);
-					request_log(self::$module, $serviceClass->getCustid(), __FUNCTION__, 'cpanel', 'setacls', $request, $result);
+					$response = $whm->setacls($request);
+					myadmin_log(self::$module, 'info', $response, __LINE__, __FILE__);
+					request_log(self::$module, $serviceClass->getCustid(), __FUNCTION__, 'cpanel', 'setacls', $request, $response);
 					myadmin_log(self::$module, 'info', 'Reseller assigned to ACL', __LINE__, __FILE__);
 				}
 				$db = get_module_db(self::$module);
@@ -257,15 +257,15 @@ class Plugin {
 					$data['store_address'] = (isset($userdata['address']) ? $userdata['address'] : '');
 					$data['site_desc'] = $soft->scripts[$script]['fullname'];
 					myadmin_log(self::$module, 'info', 'Installing '.$soft->scripts[$script]['fullname'], __LINE__, __FILE__);
-					//$result = myadmin_unstringify($soft->install($script, $data));
-					$result = json_decode($soft->install($script, $data), TRUE);
-					request_log(self::$module, $serviceClass->getCustid(), __FUNCTION__, 'softaculous', 'install', ['script' => $script, 'data' => $data], $result);
-					myadmin_log(self::$module, 'info', json_encode($result), __LINE__, __FILE__);
+					//$response = myadmin_unstringify($soft->install($script, $data));
+					$response = json_decode($soft->install($script, $data), TRUE);
+					request_log(self::$module, $serviceClass->getCustid(), __FUNCTION__, 'softaculous', 'install', ['script' => $script, 'data' => $data], $response);
+					myadmin_log(self::$module, 'info', str_replace('\n', "\n", json_encode($response)), __LINE__, __FILE__);
 				}
 				$response = add_dns_record(14426, 'wh'.$serviceClass->getId(), $ip, 'A', 86400, 0, TRUE);
-				myadmin_log(self::$module, 'info', 'Response: '.json_encode($response), __LINE__, __FILE__);
+				myadmin_log(self::$module, 'info', 'Response: '.str_replace('\n', "\n", json_encode($response)), __LINE__, __FILE__);
 				$response = $whm->park($options['username'], 'wh'.$serviceClass->getId().'.ispot.cc', '');
-				myadmin_log(self::$module, 'info', 'Response: '.json_encode($response), __LINE__, __FILE__);
+				myadmin_log(self::$module, 'info', 'Response: '.str_replace('\n', "\n", json_encode($response)), __LINE__, __FILE__);
 				$event['success'] = TRUE;
 			} else {
 				$event['success'] = FALSE;
@@ -300,7 +300,7 @@ class Plugin {
 				$response = json_decode($whm->unsuspendreseller($serviceClass->getUsername()), TRUE);
 			else
 				$response = json_decode($whm->unsuspendacct($serviceClass->getUsername()), TRUE);
-			myadmin_log(self::$module, 'info', json_encode($response), __LINE__, __FILE__);
+			myadmin_log(self::$module, 'info', str_replace('\n', "\n", json_encode($response)), __LINE__, __FILE__);
 			$event->stopPropagation();
 		}
 	}
@@ -333,7 +333,7 @@ class Plugin {
 					$response = json_decode($whm->suspendreseller($serviceClass->getUsername(), 'Canceled Service'), TRUE);
 				else
 					$response = json_decode($whm->suspendacct($serviceClass->getUsername(), 'Canceled Service'), TRUE);
-				myadmin_log(self::$module, 'info', json_encode($response), __LINE__, __FILE__);
+				myadmin_log(self::$module, 'info', str_replace('\n', "\n", json_encode($response)), __LINE__, __FILE__);
 			}
 			$event->stopPropagation();
 		}
@@ -368,7 +368,7 @@ class Plugin {
 					$response = json_decode($whm->terminatereseller($serviceClass->getUsername(), TRUE));
 				else
 					$response = json_decode($whm->removeacct($serviceClass->getUsername(), FALSE));
-				myadmin_log(self::$module, 'info', json_encode($response), __LINE__, __FILE__);
+				myadmin_log(self::$module, 'info', str_replace('\n', "\n", json_encode($response)), __LINE__, __FILE__);
 			} else
 				myadmin_log(self::$module, 'info', "Skipping WHMAPI/Server Removal for {$serviceClass->getHostname()} because username is blank", __LINE__, __FILE__);
 			$dnsr = json_decode($whm->dumpzone($serviceClass->getHostname()));
@@ -402,11 +402,11 @@ class Plugin {
 			$settings = get_module_settings(self::$module);
 			$cpanel = new Cpanel(FANTASTICO_USERNAME, FANTASTICO_PASSWORD);
 			myadmin_log(self::$module, 'info', 'IP Change - (OLD:'.$serviceClass->getIp().") (NEW:{$event['newip']})", __LINE__, __FILE__);
-			$result = $cpanel->editIp($serviceClass->getIp(), $event['newip']);
-			if (isset($result['faultcode'])) {
-				myadmin_log(self::$module, 'error', 'Cpanel editIp('.$serviceClass->getIp().', '.$event['newip'].') returned Fault '.$result['faultcode'].': '.$result['fault'], __LINE__, __FILE__);
+			$response = $cpanel->editIp($serviceClass->getIp(), $event['newip']);
+			if (isset($response['faultcode'])) {
+				myadmin_log(self::$module, 'error', 'Cpanel editIp('.$serviceClass->getIp().', '.$event['newip'].') returned Fault '.$response['faultcode'].': '.$response['fault'], __LINE__, __FILE__);
 				$event['status'] = 'error';
-				$event['status_text'] = 'Error Code '.$result['faultcode'].': '.$result['fault'];
+				$event['status_text'] = 'Error Code '.$response['faultcode'].': '.$response['fault'];
 			} else {
 				$GLOBALS['tf']->history->add($settings['TABLE'], 'change_ip', $event['newip'], $serviceClass->getIp());
 				$serviceClass->set_ip($event['newip'])->save();
