@@ -112,27 +112,27 @@ class Plugin {
 				$response = $whm->xmlapi_query('createacct', $options);
 			} catch(\Exception $e) {
 				$event['success'] = FALSE;
-				myadmin_log('cpanel', 'error', $e->getMessage(), __LINE__, __FILE__);
+				myadmin_log('cpanel', 'error', 'Caught Exception from initial createacct call: '.$e->getMessage(), __LINE__, __FILE__);
 				$event->stopPropagation();
 				return;
 			}
 			request_log(self::$module, $serviceClass->getCustid(), __FUNCTION__, 'cpanel', 'createacct', $options, $response);
 			myadmin_log(self::$module, 'info', 'Response: '.str_replace('\n', '', strip_tags($response)), __LINE__, __FILE__);
-			$response = json_decode($response);
-			if (mb_substr($response->result[0]->statusmsg, 0, 19) == 'Sorry, the password') {
-				while (mb_substr($response->result[0]->statusmsg, 0, 19) == 'Sorry, the password') {
+			$response = json_decode($response, TRUE);
+			if (mb_substr($response['result'][0]['statusmsg'], 0, 19) == 'Sorry, the password') {
+				while (mb_substr($response['result'][0]['statusmsg'], 0, 19) == 'Sorry, the password') {
 					$password = generateRandomString(10, 2, 2, 2, 1);
 					$options['password'] = $password;
 					myadmin_log(self::$module, 'info', "Trying Password {$options['password']}", __LINE__, __FILE__);
 					$response = $whm->xmlapi_query('createacct', $options);
 					request_log(self::$module, $serviceClass->getCustid(), __FUNCTION__, 'cpanel', 'createacct', $options, $response);
 					myadmin_log(self::$module, 'info', 'Response: '.str_replace('\n', "\n", $response), __LINE__, __FILE__);
-					$response = json_decode($response);
+					$response = json_decode($response, TRUE);
 				}
 				$GLOBALS['tf']->history->add($settings['PREFIX'], 'password', $serviceClass->getId(), $options['password']);
 			}
-			if ($response->result[0]->statusmsg == 'Sorry, a group for that username already exists.') {
-				while ($response->result[0]->statusmsg == 'Sorry, a group for that username already exists.') {
+			if ($response['result'][0]['statusmsg'] == 'Sorry, a group for that username already exists.') {
+				while ($response['result'][0]['statusmsg'] == 'Sorry, a group for that username already exists.') {
 					$username .= 'a';
 					$username = mb_substr($username, 1);
 					$options['username'] = $username;
@@ -140,11 +140,11 @@ class Plugin {
 					$response = $whm->xmlapi_query('createacct', $options);
 					request_log(self::$module, $serviceClass->getCustid(), __FUNCTION__, 'cpanel', 'createacct', $options, $response);
 					myadmin_log(self::$module, 'info', 'Response: '.str_replace('\n', "\n", $response), __LINE__, __FILE__);
-					$response = json_decode($response);
+					$response = json_decode($response, TRUE);
 				}
 			}
-			if (preg_match("/^.*This system already has an account named .{1,3}{$username}.{1,3}\.$/m", $response->result[0]->statusmsg) || preg_match('/^.*The name of another account on this server has the same initial/m', $response->result[0]->statusmsg)) {
-				while (preg_match("/^.*This system already has an account named .{1,3}{$username}.{1,3}\.$/m", $response->result[0]->statusmsg) || preg_match('/^.*The name of another account on this server has the same initial/m', $response->result[0]->statusmsg)) {
+			if (preg_match("/^.*This system already has an account named .{1,3}{$username}.{1,3}\.$/m", $response['result'][0]['statusmsg']) || preg_match('/^.*The name of another account on this server has the same initial/m', $response['result'][0]['statusmsg'])) {
+				while (preg_match("/^.*This system already has an account named .{1,3}{$username}.{1,3}\.$/m", $response['result'][0]['statusmsg']) || preg_match('/^.*The name of another account on this server has the same initial/m', $response['result'][0]['statusmsg'])) {
 					$username .= 'a';
 					$username = mb_substr($username, 1);
 					$options['username'] = $username;
@@ -152,11 +152,12 @@ class Plugin {
 					$response = $whm->xmlapi_query('createacct', $options);
 					request_log(self::$module, $serviceClass->getCustid(), __FUNCTION__, 'cpanel', 'createacct', $options, $response);
 					myadmin_log(self::$module, 'info', 'Response: '.str_replace('\n', "\n", $response), __LINE__, __FILE__);
-					$response = json_decode($response);
+					$response = json_decode($response, TRUE);
 				}
 			}
-			if ($response->result[0]->status == 1) {
-				$ip = $response->result[0]->options->ip;
+			if ($response['result'][0]['status'] == 1) {
+				$event['success'] = TRUE;
+				$ip = $response['result'][0]->options->ip;
 				if (isset($options['bwlimit']) && $options['bwlimit'] != 'unlimited') {
 					$response3 = $whm->limitbw($username, $options['bwlimit']);
 					request_log(self::$module, $serviceClass->getCustid(), __FUNCTION__, 'cpanel', 'limitbw', ['username' => $username, 'options' => $options['bwlimit']], $response3);
@@ -168,10 +169,10 @@ class Plugin {
 					myadmin_log(self::$module, 'info', "Response: {$response2}", __LINE__, __FILE__);
 					$response3 = $whm->listacls();
 
-					$acls = json_decode($response3);
+					$acls = json_decode($response3, TRUE);
 					request_log(self::$module, $serviceClass->getCustid(), __FUNCTION__, 'cpanel', 'listacls', [], $response);
 					//myadmin_log(self::$module, 'info', json_encode($acls), __LINE__, __FILE__);
-					if (!isset($acls->acls->reseller)) {
+					if (!isset($acls['acls']['reseller'])) {
 						$acl = [
 							'acl-add-pkg' => 1, // Allow the creation of packages.
 							'acl-add-pkg-ip' => 1, // Allow the creation of packages with dedicated IPs.
@@ -216,7 +217,7 @@ class Plugin {
 							'acllist' => 'reseller'
 						];
 						$response = $whm->saveacllist($acl);
-						myadmin_log(self::$module, 'info', $response, __LINE__, __FILE__);
+						myadmin_log(self::$module, 'info', str_replace('\n', "\n", json_encode($response)), __LINE__, __FILE__);
 						request_log(self::$module, $serviceClass->getCustid(), __FUNCTION__, 'cpanel', 'saveacllist', $acl, $response);
 						myadmin_log(self::$module, 'info', 'Reseller ACL Created', __LINE__, __FILE__);
 					} else {
@@ -224,13 +225,13 @@ class Plugin {
 					}
 					$request = ['reseller' => $username, 'acllist' => 'reseller'];
 					$response = $whm->setacls($request);
-					myadmin_log(self::$module, 'info', $response, __LINE__, __FILE__);
+					myadmin_log(self::$module, 'info', str_replace('\n', "\n", json_encode($response)), __LINE__, __FILE__);
 					request_log(self::$module, $serviceClass->getCustid(), __FUNCTION__, 'cpanel', 'setacls', $request, $response);
 					myadmin_log(self::$module, 'info', 'Reseller assigned to ACL', __LINE__, __FILE__);
 				}
 				$db = get_module_db(self::$module);
 				$username = $db->real_escape($username);
-				$db->query("update {$settings['TABLE']} set {$settings['PREFIX']}_ip='$ip', {$settings['PREFIX']}_username='$username' where {$settings['PREFIX']}_id='{$serviceClass->getId()}'", __LINE__, __FILE__);
+				$db->query("update {$settings['TABLE']} set {$settings['PREFIX']}_ip='{$ip}', {$settings['PREFIX']}_username='{$username}' where {$settings['PREFIX']}_id='{$serviceClass->getId()}'", __LINE__, __FILE__);
 				website_welcome_email($serviceClass->getId());
 				if (isset($extra['script']) && $extra['script'] > 0) {
 					$script = (int) $extra['script'];
@@ -268,6 +269,7 @@ class Plugin {
 				myadmin_log(self::$module, 'info', 'Response: '.str_replace('\n', "\n", json_encode($response)), __LINE__, __FILE__);
 				$event['success'] = TRUE;
 			} else {
+				myadmin_log(self::$module, 'warning', 'Returning With Setup Failed from Response: '.str_replace('\n', "\n", json_encode($response)), __LINE__, __FILE__);
 				$event['success'] = FALSE;
 			}
 			$event->stopPropagation();
@@ -365,14 +367,14 @@ class Plugin {
 			//$whm = whm_api('faith.interserver.net');
 			if (trim($serviceClass->getUsername()) != '') {
 				if (in_array('reseller', explode(',', $event['field1'])))
-					$response = json_decode($whm->terminatereseller($serviceClass->getUsername(), TRUE));
+					$response = json_decode($whm->terminatereseller($serviceClass->getUsername(), TRUE), TRUE);
 				else
-					$response = json_decode($whm->removeacct($serviceClass->getUsername(), FALSE));
+					$response = json_decode($whm->removeacct($serviceClass->getUsername(), FALSE), TRUE);
 				myadmin_log(self::$module, 'info', str_replace('\n', "\n", json_encode($response)), __LINE__, __FILE__);
 			} else
 				myadmin_log(self::$module, 'info', "Skipping WHMAPI/Server Removal for {$serviceClass->getHostname()} because username is blank", __LINE__, __FILE__);
-			$dnsr = json_decode($whm->dumpzone($serviceClass->getHostname()));
-			if ($dnsr->result[0]->status == 1) {
+			$dnsr = json_decode($whm->dumpzone($serviceClass->getHostname()), TRUE);
+			if ($dnsr['result'][0]['status'] == 1) {
 				$db = get_module_db(self::$module);
 				$db->query("select * from {$settings['TABLE']} where {$settings['PREFIX']}_hostname='{$serviceClass->getHostname()}' and {$settings['PREFIX']}_id != {$serviceClass->getId()} and {$settings['PREFIX']}_status = 'active'", __LINE__, __FILE__);
 				if ($db->num_rows() == 0) {
@@ -384,9 +386,9 @@ class Plugin {
 			$event->stopPropagation();
 			if (trim($serviceClass->getUsername()) == '')
 				return TRUE;
-			elseif ($response->result[0]->status == 1)
+			elseif ($response['result'][0]['status'] == 1)
 				return TRUE;
-			elseif ($response->result[0]->statusmsg == "System user {$serviceClass->getUsername()} does not exist!")
+			elseif ($response['result'][0]['statusmsg'] == "System user {$serviceClass->getUsername()} does not exist!")
 				return TRUE;
 			else
 				return FALSE;
