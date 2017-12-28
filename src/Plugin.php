@@ -157,7 +157,7 @@ class Plugin {
 			}
 			if ($response['result'][0]['status'] == 1) {
 				$event['success'] = TRUE;
-				$ip = $response['result'][0]->options->ip;
+				$ip = $response['result'][0]['options']['ip'];
 				if (isset($options['bwlimit']) && $options['bwlimit'] != 'unlimited') {
 					$response3 = $whm->limitbw($username, $options['bwlimit']);
 					request_log(self::$module, $serviceClass->getCustid(), __FUNCTION__, 'cpanel', 'limitbw', ['username' => $username, 'options' => $options['bwlimit']], $response3);
