@@ -31,7 +31,7 @@ switch ($db->Record['website_type']) {
 	default:
 		try {
 			$whm = whm_api($db->Record['website_id']);
-			$response = json_decode($whm->listresellers());
+			$response = json_decode($whm->listresellers(), TRUE);
 			print_r($response);
 		} catch (Exception $e) {
 			$msg = "Caught Exception Processing {$db->Record['website_name']}: ".$e->getMessage();
