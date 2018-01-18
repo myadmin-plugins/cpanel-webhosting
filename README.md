@@ -24,5 +24,5 @@ composer require detain/myadmin-cpanel-webhosting
 
 ## License
 
-The Cpanel Webhosting Class class is licensed under the LGPL-v2 license.
+The Cpanel Webhosting Class class is licensed under the LGPL-v2.1 license.
 
