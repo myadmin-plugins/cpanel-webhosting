@@ -1,40 +1,41 @@
 {
-    "name": "detain/myadmin-cpanel-webhosting",
-    "type": "myadmin-plugin",
-    "description": "Cpanel Webhosting Class",
-    "keywords": [
-        "cpanel",
-        "administration",
-        "license"
-    ],
-    "license": "LGPL-2.1-or-later",
-    "authors": [
-        {
-            "name": "Joe Huss",
-            "homepage": "https:\/\/my.interserver.net\/"
-        }
-    ],
-    "config": {
-        "bin-dir": "vendor\/bin",
-        "minimum-stability": "dev"
-    },
-    "require": {
-        "php": ">=5.0.0",
-        "ext-soap": "*",
-        "symfony/event-dispatcher": "*",
-        "detain/myadmin-plugin-installer": "dev-master",
-        "roave/security-advisories": "dev-master"
-    },
-    "require-dev": {
-        "phpunit/phpunit": "*",
-        "vlucas/phpdotenv": "*",
-        "codeclimate/php-test-reporter": "dev-master",
-        "satooshi/php-coveralls": "*",
-        "codacy/coverage": "dev-master"
-    },
-    "autoload": {
-        "psr-4": {
-            "Detain\\MyAdminCpanel\\": "src/"
-        }
-    }
+	"name": "detain/myadmin-cpanel-webhosting",
+	"type": "myadmin-plugin",
+	"description": "Cpanel Webhosting Class",
+	"keywords": [
+		"cpanel",
+		"administration",
+		"license"
+	],
+	"license": "LGPL-2.1-or-later",
+	"authors": [
+		{
+			"name": "Joe Huss",
+			"homepage": "https:\/\/my.interserver.net\/"
+		}
+	],
+	"config": {
+		"bin-dir": "vendor\/bin",
+		"minimum-stability": "dev"
+	},
+	"require": {
+		"php": ">=5.0.0",
+		"ext-soap": "*",
+		"symfony/event-dispatcher": "*",
+		"detain/myadmin-plugin-installer": "dev-master",
+		"roave/security-advisories": "dev-master"
+	},
+	"require-dev": {
+		"phpunit/phpunit": "*",
+		"phpunit/phpunit-mock-objects": "*",
+		"vlucas/phpdotenv": "*",
+		"codeclimate/php-test-reporter": "dev-master",
+		"satooshi/php-coveralls": "*",
+		"codacy/coverage": "dev-master"
+	},
+	"autoload": {
+		"psr-4": {
+			"Detain\\MyAdminCpanel\\": "src/"
+		}
+	}
 }
