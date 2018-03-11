@@ -331,10 +331,15 @@ class Plugin {
 				$whm->set_user($user);
 				$whm->set_hash($hash);
 				//$whm = whm_api('faith.interserver.net');
-				if (in_array('reseller', explode(',', $event['field1'])))
-					$response = json_decode($whm->suspendreseller($serviceClass->getUsername(), 'Canceled Service'), TRUE);
-				else
-					$response = json_decode($whm->suspendacct($serviceClass->getUsername(), 'Canceled Service'), TRUE);
+				try {
+					if (in_array('reseller', explode(',', $event['field1'])))
+						$response = json_decode($whm->suspendreseller($serviceClass->getUsername(), 'Canceled Service'), TRUE);
+					else
+						$response = json_decode($whm->suspendacct($serviceClass->getUsername(), 'Canceled Service'), TRUE);
+				} catch (Exception $e) {
+					myadmin_log('cpanel', 'error', 'suspendacct('.$serviceClass->getUsername().') tossed exception '.$e->getMessage(), __LINE__, __FILE__);
+					add_output('Caught exception: '.$e->getMessage().'<br>');
+				}
 				myadmin_log(self::$module, 'info', str_replace('\n', "\n", json_encode($response)), __LINE__, __FILE__);
 			}
 			$event->stopPropagation();
