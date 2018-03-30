@@ -336,7 +336,7 @@ class Plugin {
 						$response = json_decode($whm->suspendreseller($serviceClass->getUsername(), 'Canceled Service'), TRUE);
 					else
 						$response = json_decode($whm->suspendacct($serviceClass->getUsername(), 'Canceled Service'), TRUE);
-				} catch (Exception $e) {
+				} catch (\Exception $e) {
 					myadmin_log('cpanel', 'error', 'suspendacct('.$serviceClass->getUsername().') tossed exception '.$e->getMessage(), __LINE__, __FILE__);
 					add_output('Caught exception: '.$e->getMessage().'<br>');
 				}
