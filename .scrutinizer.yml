@@ -10,6 +10,7 @@ build:
             - ~/.composer/cache
             - tmp/
             - vendor/
+            - composer.lock
     dependencies:
         override:
             - composer self-update
