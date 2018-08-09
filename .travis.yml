@@ -1,6 +1,6 @@
 env:
   global:
-    - GIT_COMMITTED_AT=$(if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then git log -1 --pretty=format:%ct; else git log -1 --skip 1 --pretty=format:%ct; fi)
+    - GIT_COMMITTED_AT="$(if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then git log -1 --pretty=format:%ct; else git log -1 --skip 1 --pretty=format:%ct; fi)"
 language: php
 os: linux
 dist: trusty
@@ -24,10 +24,10 @@ before_script:
   - phpenv config-rm xdebug.ini
   - phpenv rehash
   - travis_retry composer self-update
-  - travis_retry composer update --with-dependencies --no-interaction --dev --prefer-dist
+  - travis_retry composer install --no-interaction --dev --prefer-dist --ansi
 script: 
-  - if [ "$TRAVIS_PHP_VERSION" = "7.0" ]; then phpdbg -qrr vendor/bin/phpunit --bootstrap tests/bootstrap.php tests/ -v --coverage-clover coverage.xml --whitelist src/; fi;
-  - if [ "$TRAVIS_PHP_VERSION" != "7.0" ]; then vendor/bin/phpunit --bootstrap tests/bootstrap.php tests/ -v; fi
+  - if [ "$TRAVIS_PHP_VERSION" = "7.0" ]; then phpdbg -qrr vendor/bin/phpunit --bootstrap vendor/autoload.php tests/ -v --coverage-clover coverage.xml --whitelist src/; fi;
+  - if [ "$TRAVIS_PHP_VERSION" != "7.0" ]; then vendor/bin/phpunit --bootstrap vendor/autoload.php tests/ -v; fi
 after_success:
   - if [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ "$TRAVIS_PHP_VERSION" == "7.0" ]; then travis_retry vendor/bin/test-reporter --coverage-report=coverage.xml; fi
   - if [ "$TRAVIS_PHP_VERSION" = "7.0" ]; then travis_retry bash <(curl -s https://codecov.io/bash); fi;
