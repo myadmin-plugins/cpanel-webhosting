@@ -10,8 +10,8 @@ use Symfony\Component\EventDispatcher\GenericEvent;
  *
  * @package Detain\MyAdminCpanel
  */
-class Plugin {
-
+class Plugin
+{
 	public static $name = 'CPanel Webhosting';
 	public static $description = 'web-based control panel makes site management a piece of cake. Empower your customers and offer them the ability to administer every facet of their website using simple, point-and-click software.  More info at https://cpanel.com/';
 	public static $help = '';
@@ -21,13 +21,15 @@ class Plugin {
 	/**
 	 * Plugin constructor.
 	 */
-	public function __construct() {
+	public function __construct()
+	{
 	}
 
 	/**
 	 * @return array
 	 */
-	public static function getHooks() {
+	public static function getHooks()
+	{
 		return [
 			self::$module.'.settings' => [__CLASS__, 'getSettings'],
 			self::$module.'.activate' => [__CLASS__, 'getActivate'],
@@ -43,19 +45,21 @@ class Plugin {
 	 * @param \Symfony\Component\EventDispatcher\GenericEvent $event
 	 * @throws \Exception
 	 */
-	public static function getActivate(GenericEvent $event) {
+	public static function getActivate(GenericEvent $event)
+	{
 		if ($event['category'] == get_service_define('WEB_CPANEL')) {
 			myadmin_log(self::$module, 'info', 'Cpanel Activation', __LINE__, __FILE__);
 			$serviceClass = $event->getSubject();
-			$serviceTypes = run_event('get_service_types', FALSE, self::$module);
+			$serviceTypes = run_event('get_service_types', false, self::$module);
 			$settings = get_module_settings(self::$module);
 			$extra = run_event('parse_service_extra', $serviceClass->getExtra(), self::$module);
 			$serverdata = get_service_master($serviceClass->getServer(), self::$module);
 			$hash = $serverdata[$settings['PREFIX'].'_key'];
 			$ip = $serverdata[$settings['PREFIX'].'_ip'];
 			$hostname = $serviceClass->getHostname();
-			if (trim($hostname) == '')
+			if (trim($hostname) == '') {
 				$hostname = $serviceClass->getId().'.server.com';
+			}
 			$password = website_get_password($serviceClass->getId());
 			$username = get_new_webhosting_username($serviceClass->getId(), $hostname, $serviceClass->getServer());
 			function_requirements('whm_api');
@@ -70,7 +74,7 @@ class Plugin {
 				$whm->set_user($user);
 				$whm->set_hash($hash);
 			} catch (\Exception $e) {
-				$event['success'] = FALSE;
+				$event['success'] = false;
 				myadmin_log('cpanel', 'error', $e->getMessage(), __LINE__, __FILE__);
 				$event->stopPropagation();
 				return;
@@ -87,18 +91,20 @@ class Plugin {
 				'maxlst' => 0,
 				'maxsub' => 'unlimited'
 			];
-			if (in_array('reseller', explode(',', $event['field1'])))
-				$reseller = TRUE;
-			else
-				$reseller = FALSE;
+			if (in_array('reseller', explode(',', $event['field1']))) {
+				$reseller = true;
+			} else {
+				$reseller = false;
+			}
 			if ($serviceTypes[$serviceClass->getType()]['services_field2'] != '') {
 				$fields = explode(',', $serviceTypes[$serviceClass->getType()]['services_field2']);
 				foreach ($fields as $field) {
 					list($key, $value) = explode('=', $field);
-					if ($key == 'script')
+					if ($key == 'script') {
 						$extra[$key] = $value;
-					else
+					} else {
 						$options[$key] = $value;
+					}
 				}
 			}
 			$options = array_merge($options, [
@@ -111,14 +117,14 @@ class Plugin {
 			try {
 				$response = $whm->xmlapi_query('createacct', $options);
 			} catch (\Exception $e) {
-				$event['success'] = FALSE;
+				$event['success'] = false;
 				myadmin_log('cpanel', 'error', 'Caught Exception from initial createacct call: '.$e->getMessage(), __LINE__, __FILE__);
 				$event->stopPropagation();
 				return;
 			}
 			request_log(self::$module, $serviceClass->getCustid(), __FUNCTION__, 'cpanel', 'createacct', $options, $response);
 			myadmin_log(self::$module, 'info', 'Response: '.str_replace('\n', '', strip_tags($response)), __LINE__, __FILE__);
-			$response = json_decode($response, TRUE);
+			$response = json_decode($response, true);
 			if (mb_substr($response['result'][0]['statusmsg'], 0, 19) == 'Sorry, the password') {
 				while (mb_substr($response['result'][0]['statusmsg'], 0, 19) == 'Sorry, the password') {
 					$password = generateRandomString(10, 2, 2, 2, 1);
@@ -127,7 +133,7 @@ class Plugin {
 					$response = $whm->xmlapi_query('createacct', $options);
 					request_log(self::$module, $serviceClass->getCustid(), __FUNCTION__, 'cpanel', 'createacct', $options, $response);
 					myadmin_log(self::$module, 'info', 'Response: '.str_replace('\n', "\n", $response), __LINE__, __FILE__);
-					$response = json_decode($response, TRUE);
+					$response = json_decode($response, true);
 				}
 				$GLOBALS['tf']->history->add($settings['PREFIX'], 'password', $serviceClass->getId(), $options['password']);
 			}
@@ -140,7 +146,7 @@ class Plugin {
 					$response = $whm->xmlapi_query('createacct', $options);
 					request_log(self::$module, $serviceClass->getCustid(), __FUNCTION__, 'cpanel', 'createacct', $options, $response);
 					myadmin_log(self::$module, 'info', 'Response: '.str_replace('\n', "\n", $response), __LINE__, __FILE__);
-					$response = json_decode($response, TRUE);
+					$response = json_decode($response, true);
 				}
 			}
 			if (preg_match("/^.*This system already has an account named .{1,3}{$username}.{1,3}\.$/m", $response['result'][0]['statusmsg']) || preg_match('/^.*The name of another account on this server has the same initial/m', $response['result'][0]['statusmsg'])) {
@@ -152,24 +158,24 @@ class Plugin {
 					$response = $whm->xmlapi_query('createacct', $options);
 					request_log(self::$module, $serviceClass->getCustid(), __FUNCTION__, 'cpanel', 'createacct', $options, $response);
 					myadmin_log(self::$module, 'info', 'Response: '.str_replace('\n', "\n", $response), __LINE__, __FILE__);
-					$response = json_decode($response, TRUE);
+					$response = json_decode($response, true);
 				}
 			}
 			if ($response['result'][0]['status'] == 1) {
-				$event['success'] = TRUE;
+				$event['success'] = true;
 				$ip = $response['result'][0]['options']['ip'];
 				if (isset($options['bwlimit']) && $options['bwlimit'] != 'unlimited') {
 					$response3 = $whm->limitbw($username, $options['bwlimit']);
 					request_log(self::$module, $serviceClass->getCustid(), __FUNCTION__, 'cpanel', 'limitbw', ['username' => $username, 'options' => $options['bwlimit']], $response3);
 					myadmin_log(self::$module, 'info', 'Response: '.str_replace('\n', "\n", strip_tags($response3)), __LINE__, __FILE__);
 				}
-				if ($reseller === TRUE) {
-					$response2 = $whm->setupreseller($username, FALSE);
+				if ($reseller === true) {
+					$response2 = $whm->setupreseller($username, false);
 					request_log(self::$module, $serviceClass->getCustid(), __FUNCTION__, 'cpanel', 'setupreseller', ['username' => $username], $response2);
 					myadmin_log(self::$module, 'info', "Response: {$response2}", __LINE__, __FILE__);
 					$response3 = $whm->listacls();
 
-					$acls = json_decode($response3, TRUE);
+					$acls = json_decode($response3, true);
 					request_log(self::$module, $serviceClass->getCustid(), __FUNCTION__, 'cpanel', 'listacls', [], $response);
 					//myadmin_log(self::$module, 'info', json_encode($acls), __LINE__, __FILE__);
 					if (!isset($acls['acls']['reseller'])) {
@@ -259,18 +265,18 @@ class Plugin {
 					$data['site_desc'] = $soft->scripts[$script]['fullname'];
 					myadmin_log(self::$module, 'info', 'Installing '.$soft->scripts[$script]['fullname'], __LINE__, __FILE__);
 					//$response = myadmin_unstringify($soft->install($script, $data));
-					$response = json_decode($soft->install($script, $data), TRUE);
+					$response = json_decode($soft->install($script, $data), true);
 					request_log(self::$module, $serviceClass->getCustid(), __FUNCTION__, 'softaculous', 'install', ['script' => $script, 'data' => $data], $response);
 					myadmin_log(self::$module, 'info', str_replace('\n', "\n", json_encode($response)), __LINE__, __FILE__);
 				}
-				$response = add_dns_record(14426, 'wh'.$serviceClass->getId(), $ip, 'A', 86400, 0, TRUE);
+				$response = add_dns_record(14426, 'wh'.$serviceClass->getId(), $ip, 'A', 86400, 0, true);
 				myadmin_log(self::$module, 'info', 'Response: '.str_replace('\n', "\n", json_encode($response)), __LINE__, __FILE__);
 				$response = $whm->park($options['username'], 'wh'.$serviceClass->getId().'.ispot.cc', '');
 				myadmin_log(self::$module, 'info', 'Response: '.str_replace('\n', "\n", json_encode($response)), __LINE__, __FILE__);
-				$event['success'] = TRUE;
+				$event['success'] = true;
 			} else {
 				myadmin_log(self::$module, 'warning', 'Returning With Setup Failed from Response: '.str_replace('\n', "\n", json_encode($response)), __LINE__, __FILE__);
-				$event['success'] = FALSE;
+				$event['success'] = false;
 			}
 			$event->stopPropagation();
 		}
@@ -280,7 +286,8 @@ class Plugin {
 	 * @param \Symfony\Component\EventDispatcher\GenericEvent $event
 	 * @throws \Exception
 	 */
-	public static function getReactivate(GenericEvent $event) {
+	public static function getReactivate(GenericEvent $event)
+	{
 		if ($event['category'] == get_service_define('WEB_CPANEL')) {
 			$serviceClass = $event->getSubject();
 			$settings = get_module_settings(self::$module);
@@ -298,10 +305,11 @@ class Plugin {
 			$whm->set_user($user);
 			$whm->set_hash($hash);
 			//$whm = whm_api('faith.interserver.net');
-			if (in_array('reseller', explode(',', $event['field1'])))
-				$response = json_decode($whm->unsuspendreseller($serviceClass->getUsername()), TRUE);
-			else
-				$response = json_decode($whm->unsuspendacct($serviceClass->getUsername()), TRUE);
+			if (in_array('reseller', explode(',', $event['field1']))) {
+				$response = json_decode($whm->unsuspendreseller($serviceClass->getUsername()), true);
+			} else {
+				$response = json_decode($whm->unsuspendacct($serviceClass->getUsername()), true);
+			}
 			myadmin_log(self::$module, 'info', str_replace('\n', "\n", json_encode($response)), __LINE__, __FILE__);
 			$event->stopPropagation();
 		}
@@ -311,7 +319,8 @@ class Plugin {
 	 * @param \Symfony\Component\EventDispatcher\GenericEvent $event
 	 * @throws \Exception
 	 */
-	public static function getDeactivate(GenericEvent $event) {
+	public static function getDeactivate(GenericEvent $event)
+	{
 		if (in_array($event['type'], [get_service_define('WEB_CPANEL'), get_service_define('WEB_WORDPRESS')])) {
 			myadmin_log(self::$module, 'info', 'Cpanel Deactivation', __LINE__, __FILE__);
 			$serviceClass = $event->getSubject();
@@ -332,10 +341,11 @@ class Plugin {
 				$whm->set_hash($hash);
 				//$whm = whm_api('faith.interserver.net');
 				try {
-					if (in_array('reseller', explode(',', $event['field1'])))
-						$response = json_decode($whm->suspendreseller($serviceClass->getUsername(), 'Canceled Service'), TRUE);
-					else
-						$response = json_decode($whm->suspendacct($serviceClass->getUsername(), 'Canceled Service'), TRUE);
+					if (in_array('reseller', explode(',', $event['field1']))) {
+						$response = json_decode($whm->suspendreseller($serviceClass->getUsername(), 'Canceled Service'), true);
+					} else {
+						$response = json_decode($whm->suspendacct($serviceClass->getUsername(), 'Canceled Service'), true);
+					}
 				} catch (\Exception $e) {
 					myadmin_log('cpanel', 'error', 'suspendacct('.$serviceClass->getUsername().') tossed exception '.$e->getMessage(), __LINE__, __FILE__);
 					add_output('Caught exception: '.$e->getMessage().'<br>');
@@ -351,7 +361,8 @@ class Plugin {
 	 * @return boolean|null
 	 * @throws \Exception
 	 */
-	public static function getTerminate(GenericEvent $event) {
+	public static function getTerminate(GenericEvent $event)
+	{
 		if (in_array($event['type'], [get_service_define('WEB_CPANEL'), get_service_define('WEB_WORDPRESS')])) {
 			myadmin_log(self::$module, 'info', 'Cpanel Termination', __LINE__, __FILE__);
 			$serviceClass = $event->getSubject();
@@ -371,39 +382,44 @@ class Plugin {
 			$whm->set_hash($hash);
 			//$whm = whm_api('faith.interserver.net');
 			if (trim($serviceClass->getUsername()) != '') {
-				if (in_array('reseller', explode(',', $event['field1'])))
-					$response = json_decode($whm->terminatereseller($serviceClass->getUsername(), TRUE), TRUE);
-				else
-					$response = json_decode($whm->removeacct($serviceClass->getUsername(), FALSE), TRUE);
+				if (in_array('reseller', explode(',', $event['field1']))) {
+					$response = json_decode($whm->terminatereseller($serviceClass->getUsername(), true), true);
+				} else {
+					$response = json_decode($whm->removeacct($serviceClass->getUsername(), false), true);
+				}
 				myadmin_log(self::$module, 'info', str_replace('\n', "\n", json_encode($response)), __LINE__, __FILE__);
-			} else
+			} else {
 				myadmin_log(self::$module, 'info', "Skipping WHMAPI/Server Removal for {$serviceClass->getHostname()} because username is blank", __LINE__, __FILE__);
-			$dnsr = json_decode($whm->dumpzone($serviceClass->getHostname()), TRUE);
+			}
+			$dnsr = json_decode($whm->dumpzone($serviceClass->getHostname()), true);
 			if ($dnsr['result'][0]['status'] == 1) {
 				$db = get_module_db(self::$module);
 				$db->query("select * from {$settings['TABLE']} where {$settings['PREFIX']}_hostname='{$serviceClass->getHostname()}' and {$settings['PREFIX']}_id != {$serviceClass->getId()} and {$settings['PREFIX']}_status = 'active'", __LINE__, __FILE__);
 				if ($db->num_rows() == 0) {
 					myadmin_log(self::$module, 'info', "Removing Hanging DNS entry for {$serviceClass->getHostname()}", __LINE__, __FILE__);
 					$whm->killdns($serviceClass->getHostname());
-				} else
+				} else {
 					myadmin_log(self::$module, 'info', "Skipping Removing DNS entry for {$serviceClass->getHostname()} because other non deleted sites w/ the same hostname exist", __LINE__, __FILE__);
+				}
 			}
 			$event->stopPropagation();
-			if (trim($serviceClass->getUsername()) == '')
-				return TRUE;
-			elseif ($response['result'][0]['status'] == 1)
-				return TRUE;
-			elseif ($response['result'][0]['statusmsg'] == "System user {$serviceClass->getUsername()} does not exist!")
-				return TRUE;
-			else
-				return FALSE;
+			if (trim($serviceClass->getUsername()) == '') {
+				return true;
+			} elseif ($response['result'][0]['status'] == 1) {
+				return true;
+			} elseif ($response['result'][0]['statusmsg'] == "System user {$serviceClass->getUsername()} does not exist!") {
+				return true;
+			} else {
+				return false;
+			}
 		}
 	}
 
 	/**
 	 * @param \Symfony\Component\EventDispatcher\GenericEvent $event
 	 */
-	public static function getChangeIp(GenericEvent $event) {
+	public static function getChangeIp(GenericEvent $event)
+	{
 		if ($event['category'] == get_service_define('WEB_CPANEL')) {
 			$serviceClass = $event->getSubject();
 			$settings = get_module_settings(self::$module);
@@ -427,7 +443,8 @@ class Plugin {
 	/**
 	 * @param \Symfony\Component\EventDispatcher\GenericEvent $event
 	 */
-	public static function getMenu(GenericEvent $event) {
+	public static function getMenu(GenericEvent $event)
+	{
 		$menu = $event->getSubject();
 		if ($GLOBALS['tf']->ima == 'admin') {
 			function_requirements('has_acl');
@@ -537,7 +554,8 @@ class Plugin {
 	/**
 	 * @param \Symfony\Component\EventDispatcher\GenericEvent $event
 	 */
-	public static function getRequirements(GenericEvent $event) {
+	public static function getRequirements(GenericEvent $event)
+	{
 		$loader = $event->getSubject();
 		$loader->add_page_requirement('whm_get_accounts', '/webhosting/whmapi.functions.inc.php');
 		$loader->add_page_requirement('whm_api', '/webhosting/whmapi.functions.inc.php');
@@ -619,7 +637,8 @@ class Plugin {
 	/**
 	 * @param \Symfony\Component\EventDispatcher\GenericEvent $event
 	 */
-	public static function getSettings(GenericEvent $event) {
+	public static function getSettings(GenericEvent $event)
+	{
 		$settings = $event->getSubject();
 		$settings->add_select_master(self::$module, 'Default Servers', self::$module, 'new_website_cpanel_server', 'Default CPanel Setup Server', NEW_WEBSITE_CPANEL_SERVER, get_service_define('WEB_CPANEL'));
 		$settings->add_select_master(self::$module, 'Default Servers', self::$module, 'new_website_wordpress_server', 'Default WordPress Setup Server', NEW_WEBSITE_WORDPRESS_SERVER, get_service_define('WEB_WORDPRESS'));
@@ -676,5 +695,4 @@ class Plugin {
 		$settings->add_dropdown_setting(self::$module, 'Reseller ACLs', 'cpanel_package_defaults_reseller_acl_upgrade_account', 'Reseller ACL Upgrade Account', 'Allow the reseller to upgrade and downgrade Accounts.', (defined('CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_UPGRADE_ACCOUNT') ? CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_UPGRADE_ACCOUNT : 1), ['0', '1'], ['No', 'Yes']);
 		$settings->add_text_setting(self::$module, 'Reseller ACLs', 'cpanel_package_defaults_reseller_acllist', 'CPanel Package Defaults Reseller - ACL List', '', (defined('CPANEL_PACKAGE_DEFAULTS_RESELLER_ACLLIST') ? CPANEL_PACKAGE_DEFAULTS_RESELLER_ACLLIST : 'reseller'));
 	}
-
 }
