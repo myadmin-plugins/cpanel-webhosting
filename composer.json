@@ -1,5 +1,5 @@
 {
-	"name": "detain/cpanel-webhosting",
+	"name": "detain/myadmin-cpanel-webhosting",
 	"type": "myadmin-plugin",
 	"description": "Cpanel Webhosting Class",
 	"keywords": [
