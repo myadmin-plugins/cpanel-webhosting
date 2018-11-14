@@ -471,95 +471,95 @@ class Plugin
 				$menu->add_menu(self::$module.'api', 'whmadministration', 'Server Administration');
 				$menu->add_menu(self::$module.'api', 'whmservices', 'Services');
 				$menu->add_menu(self::$module.'api', 'whmssl', 'SSL Certs');
-				$menu->add_link(self::$module.'api', 'choice=none.whm_choose_server', '/images/icons/paper_content_pencil_48.png', 'Set What Server Your Working On.');
+				$menu->add_link(self::$module.'api', 'choice=none.whm_choose_server', '/images/icons/paper_content_pencil_48.png', __('Set What Server Your Working On.'));
 
 				// Accounting
-				$menu->add_link('whmaccount', 'choice=none.whm_createacct', '/images/whm/createacct.gif', 'Create an Account');
-				$menu->add_link('whmaccount', 'choice=none.whm_passwd', '/images/whm/passwd.gif', 'Change an Accounts Password');
-				$menu->add_link('whmaccount', 'choice=none.whm_limitbw', '/images/whm/limitbw.gif', 'Limit Bandwidth Usage (Transfer)');
-				$menu->add_link('whmaccount', 'choice=none.whm_listaccts', '/images/whm/listaccts.gif', 'List Accounts');
-				$menu->add_link('whmaccount', 'choice=none.whm_modifyacct', '/images/whm/modifyacct.gif', 'Modify an Account');
-				$menu->add_link('whmaccount', 'choice=none.whm_editquota', '/images/whm/editquota.gif', 'Edit Quota');
-				$menu->add_link('whmaccount', 'choice=none.whm_accountsummary', '/images/whm/accountsummary.gif', 'Show an Accounts Information');
-				$menu->add_link('whmaccount', 'choice=none.whm_suspendacct', '/images/whm/suspendacct.gif', 'Suspend an Account');
-				$menu->add_link('whmaccount', 'choice=none.whm_listsuspended', '/images/whm/listsuspended.gif', 'List Suspended Accounts');
-				$menu->add_link('whmaccount', 'choice=none.whm_removeacct', '/images/whm/removeacct.gif', 'Terminate an Account');
-				$menu->add_link('whmaccount', 'choice=none.whm_unsuspendacct', '/images/whm/unsuspendacct.gif', 'Unsuspend an Account');
-				$menu->add_link('whmaccount', 'choice=none.whm_changepackage', '/images/whm/changepackage.gif', 'Upgrade or Downgrade an Account');
-				$menu->add_link('whmaccount', 'choice=none.whm_myprivs', '/images/whm/createacct.gif', 'View Current Users Privileges');
-				$menu->add_link('whmaccount', 'choice=none.whm_domainuserdata', '/images/whm/createacct.gif', 'Obtain User Data for a Domain');
-				$menu->add_link('whmaccount', 'choice=none.whm_setsiteip', '/images/whm/createacct.gif', 'Change a Sites (or Users) IP Address');
-				$menu->add_link('whmaccount', 'choice=none.whm_restoreaccount', '/images/whm/createacct.gif', 'Restore an Account Backup');
+				$menu->add_link('whmaccount', 'choice=none.whm_createacct', '/images/whm/createacct.gif', __('Create an Account'));
+				$menu->add_link('whmaccount', 'choice=none.whm_passwd', '/images/whm/passwd.gif', __('Change an Accounts Password'));
+				$menu->add_link('whmaccount', 'choice=none.whm_limitbw', '/images/whm/limitbw.gif', __('Limit Bandwidth Usage (Transfer)'));
+				$menu->add_link('whmaccount', 'choice=none.whm_listaccts', '/images/whm/listaccts.gif', __('List Accounts'));
+				$menu->add_link('whmaccount', 'choice=none.whm_modifyacct', '/images/whm/modifyacct.gif', __('Modify an Account'));
+				$menu->add_link('whmaccount', 'choice=none.whm_editquota', '/images/whm/editquota.gif', __('Edit Quota'));
+				$menu->add_link('whmaccount', 'choice=none.whm_accountsummary', '/images/whm/accountsummary.gif', __('Show an Accounts Information'));
+				$menu->add_link('whmaccount', 'choice=none.whm_suspendacct', '/images/whm/suspendacct.gif', __('Suspend an Account'));
+				$menu->add_link('whmaccount', 'choice=none.whm_listsuspended', '/images/whm/listsuspended.gif', __('List Suspended Accounts'));
+				$menu->add_link('whmaccount', 'choice=none.whm_removeacct', '/images/whm/removeacct.gif', __('Terminate an Account'));
+				$menu->add_link('whmaccount', 'choice=none.whm_unsuspendacct', '/images/whm/unsuspendacct.gif', __('Unsuspend an Account'));
+				$menu->add_link('whmaccount', 'choice=none.whm_changepackage', '/images/whm/changepackage.gif', __('Upgrade or Downgrade an Account'));
+				$menu->add_link('whmaccount', 'choice=none.whm_myprivs', '/images/whm/createacct.gif', __('View Current Users Privileges'));
+				$menu->add_link('whmaccount', 'choice=none.whm_domainuserdata', '/images/whm/createacct.gif', __('Obtain User Data for a Domain'));
+				$menu->add_link('whmaccount', 'choice=none.whm_setsiteip', '/images/whm/createacct.gif', __('Change a Sites (or Users) IP Address'));
+				$menu->add_link('whmaccount', 'choice=none.whm_restoreaccount', '/images/whm/createacct.gif', __('Restore an Account Backup'));
 
 				// DNS
-				$menu->add_link('whmdns', 'choice=none.whm_adddns', '/images/whm/adddns.gif', 'Add a DNS Zone');
-				$menu->add_link('whmdns', 'choice=none.whm_addzonerecord', '/images/whm/adddns.gif', 'Add a Zone Record');
-				$menu->add_link('whmdns', 'choice=none.whm_editzonerecord', '/images/whm/editzonerecord.gif', 'Edit a Zone Record');
-				//$menu->add_link('whmdns', 'choice=none.whm_getzonerecord', '/images/whm/getzonerecord.gif', 'Get a Zone Record');
-				//$menu->add_link('whmdns', 'choice=none.whm_killdns', '/images/whm/killdns.gif', 'Delete a DNS Zone');
-				$menu->add_link('whmdns', 'choice=none.whm_listzones', '/images/whm/listzones.gif', 'List All DNS Zones');
-				$menu->add_link('whmdns', 'choice=none.whm_dumpzone', '/images/whm/listzones.gif', 'List (Dump) 1 Zone');
-				$menu->add_link('whmdns', 'choice=none.whm_lookupnsip', '/images/whm/listzones.gif', 'Look up a Nameservers IP Address');
-				//$menu->add_link('whmdns', 'choice=none.whm_removezonerecord', '/images/whm/removezonerecord.gif', 'Remove a DNS Zone Record');
-				//$menu->add_link('whmdns', 'choice=none.whm_resetzone', '/images/whm/resetzone.gif', 'Reset a DNS Zone');
-				//$menu->add_link('whmdns', 'choice=none.whm_resolvedomainname', '/images/whm/resolvedomainname.gif', 'Resolve an IP Address from a Domain');
-				$menu->add_link('whmdns', 'choice=none.whm_listmxs', '/images/whm/savemxs.gif', 'List a Domains MX Records');
-				$menu->add_link('whmdns', 'choice=none.whm_savemxs', '/images/whm/savemxs.gif', 'Create a new MX Record');
+				$menu->add_link('whmdns', 'choice=none.whm_adddns', '/images/whm/adddns.gif', __('Add a DNS Zone'));
+				$menu->add_link('whmdns', 'choice=none.whm_addzonerecord', '/images/whm/adddns.gif', __('Add a Zone Record'));
+				$menu->add_link('whmdns', 'choice=none.whm_editzonerecord', '/images/whm/editzonerecord.gif', __('Edit a Zone Record'));
+				//$menu->add_link('whmdns', 'choice=none.whm_getzonerecord', '/images/whm/getzonerecord.gif', __('Get a Zone Record'));
+				//$menu->add_link('whmdns', 'choice=none.whm_killdns', '/images/whm/killdns.gif', __('Delete a DNS Zone'));
+				$menu->add_link('whmdns', 'choice=none.whm_listzones', '/images/whm/listzones.gif', __('List All DNS Zones'));
+				$menu->add_link('whmdns', 'choice=none.whm_dumpzone', '/images/whm/listzones.gif', __('List (Dump) 1 Zone'));
+				$menu->add_link('whmdns', 'choice=none.whm_lookupnsip', '/images/whm/listzones.gif', __('Look up a Nameservers IP Address'));
+				//$menu->add_link('whmdns', 'choice=none.whm_removezonerecord', '/images/whm/removezonerecord.gif', __('Remove a DNS Zone Record'));
+				//$menu->add_link('whmdns', 'choice=none.whm_resetzone', '/images/whm/resetzone.gif', __('Reset a DNS Zone'));
+				//$menu->add_link('whmdns', 'choice=none.whm_resolvedomainname', '/images/whm/resolvedomainname.gif', __('Resolve an IP Address from a Domain'));
+				$menu->add_link('whmdns', 'choice=none.whm_listmxs', '/images/whm/savemxs.gif', __('List a Domains MX Records'));
+				$menu->add_link('whmdns', 'choice=none.whm_savemxs', '/images/whm/savemxs.gif', __('Create a new MX Record'));
 
 				// Packages
-				//$menu->add_link('whmpackages', 'choice=none.whm_addpkg', '/images/whm/addpkg.gif', 'Add a Package');
-				//$menu->add_link('whmpackages', 'choice=none.whm_killpkg', '/images/whm/killpkg.gif', 'Delete a Package');
-				//$menu->add_link('whmpackages', 'choice=none.whm_editpkg', '/images/whm/editpkg.gif', 'Edit a Package');
-				$menu->add_link('whmpackages', 'choice=none.whm_listpkgs', '/images/whm/listpkgs.gif', 'List Packages');
-				$menu->add_link('whmpackages', 'choice=none.whm_getfeaturelist', '/images/whm/getfeaturelist.gif', 'List Available Features');
+				//$menu->add_link('whmpackages', 'choice=none.whm_addpkg', '/images/whm/addpkg.gif', __('Add a Package'));
+				//$menu->add_link('whmpackages', 'choice=none.whm_killpkg', '/images/whm/killpkg.gif', __('Delete a Package'));
+				//$menu->add_link('whmpackages', 'choice=none.whm_editpkg', '/images/whm/editpkg.gif', __('Edit a Package'));
+				$menu->add_link('whmpackages', 'choice=none.whm_listpkgs', '/images/whm/listpkgs.gif', __('List Packages'));
+				$menu->add_link('whmpackages', 'choice=none.whm_getfeaturelist', '/images/whm/getfeaturelist.gif', __('List Available Features'));
 
 				// Resellers
-				$menu->add_link('whmresellers', 'choice=none.whm_setupreseller', '/images/whm/createacct.gif', 'Add Reseller Privileges');
-				$menu->add_link('whmresellers', 'choice=none.whm_saveacllist', '/images/whm/createacct.gif', 'Create a Reseller ACL List');
-				$menu->add_link('whmresellers', 'choice=none.whm_listacls', '/images/whm/createacct.gif', 'List Current Reseller ACL Lists');
-				$menu->add_link('whmresellers', 'choice=none.whm_listresellers', '/images/whm/listresellers.gif', 'List Reseller Accounts');
-				$menu->add_link('whmresellers', 'choice=none.whm_resellerstats', '/images/whm/createacct.gif', 'List Resellers Accounts Information');
-				$menu->add_link('whmresellers', 'choice=none.whm_unsetupreseller', '/images/whm/createacct.gif', 'Remove Reseller Privileges');
-				$menu->add_link('whmresellers', 'choice=none.whm_setacls', '/images/whm/createacct.gif', 'Set a Resellers ACL List');
-				$menu->add_link('whmresellers', 'choice=none.whm_terminatereseller', '/images/whm/createacct.gif', 'Terminate a Reseller');
-				$menu->add_link('whmresellers', 'choice=none.whm_setresellerips', '/images/whm/createacct.gif', 'Assign a Reseller IP Addresses');
-				$menu->add_link('whmresellers', 'choice=none.whm_setresellerlimits', '/images/whm/createacct.gif', 'Set Reseller Limits');
-				$menu->add_link('whmresellers', 'choice=none.whm_setresellermainip', '/images/whm/createacct.gif', 'Set up a Resellers Main IP Address');
-				$menu->add_link('whmresellers', 'choice=none.whm_setresellerpackagelimit', '/images/whm/createacct.gif', 'Define a Resellers Packages');
-				$menu->add_link('whmresellers', 'choice=none.whm_suspendreseller', '/images/whm/createacct.gif', 'Suspend a Resellers Account');
-				$menu->add_link('whmresellers', 'choice=none.whm_unsuspendreseller', '/images/whm/createacct.gif', 'Unsuspend a Resellers Account');
-				$menu->add_link('whmresellers', 'choice=none.whm_acctcounts', '/images/whm/createacct.gif', 'View Information about Accounts Owned by a Reseller');
-				$menu->add_link('whmresellers', 'choice=none.whm_setresellernameservers', '/images/whm/createacct.gif', 'Set a Resellers Nameservers');
+				$menu->add_link('whmresellers', 'choice=none.whm_setupreseller', '/images/whm/createacct.gif', __('Add Reseller Privileges'));
+				$menu->add_link('whmresellers', 'choice=none.whm_saveacllist', '/images/whm/createacct.gif', __('Create a Reseller ACL List'));
+				$menu->add_link('whmresellers', 'choice=none.whm_listacls', '/images/whm/createacct.gif', __('List Current Reseller ACL Lists'));
+				$menu->add_link('whmresellers', 'choice=none.whm_listresellers', '/images/whm/listresellers.gif', __('List Reseller Accounts'));
+				$menu->add_link('whmresellers', 'choice=none.whm_resellerstats', '/images/whm/createacct.gif', __('List Resellers Accounts Information'));
+				$menu->add_link('whmresellers', 'choice=none.whm_unsetupreseller', '/images/whm/createacct.gif', __('Remove Reseller Privileges'));
+				$menu->add_link('whmresellers', 'choice=none.whm_setacls', '/images/whm/createacct.gif', __('Set a Resellers ACL List'));
+				$menu->add_link('whmresellers', 'choice=none.whm_terminatereseller', '/images/whm/createacct.gif', __('Terminate a Reseller'));
+				$menu->add_link('whmresellers', 'choice=none.whm_setresellerips', '/images/whm/createacct.gif', __('Assign a Reseller IP Addresses'));
+				$menu->add_link('whmresellers', 'choice=none.whm_setresellerlimits', '/images/whm/createacct.gif', __('Set Reseller Limits'));
+				$menu->add_link('whmresellers', 'choice=none.whm_setresellermainip', '/images/whm/createacct.gif', __('Set up a Resellers Main IP Address'));
+				$menu->add_link('whmresellers', 'choice=none.whm_setresellerpackagelimit', '/images/whm/createacct.gif', __('Define a Resellers Packages'));
+				$menu->add_link('whmresellers', 'choice=none.whm_suspendreseller', '/images/whm/createacct.gif', __('Suspend a Resellers Account'));
+				$menu->add_link('whmresellers', 'choice=none.whm_unsuspendreseller', '/images/whm/createacct.gif', __('Unsuspend a Resellers Account'));
+				$menu->add_link('whmresellers', 'choice=none.whm_acctcounts', '/images/whm/createacct.gif', __('View Information about Accounts Owned by a Reseller'));
+				$menu->add_link('whmresellers', 'choice=none.whm_setresellernameservers', '/images/whm/createacct.gif', __('Set a Resellers Nameservers'));
 
 				// Information
-				$menu->add_link('whminformation', 'choice=none.whm_gethostname', '/images/whm/gethostname.gif', 'Display Server Hostname');
-				$menu->add_link('whminformation', 'choice=none.whm_version', '/images/whm/version.gif', 'Display cPanel &amp; WHM Version');
-				$menu->add_link('whminformation', 'choice=none.whm_loadavg', '/images/whm/loadavg.gif', 'Display the Servers Load Average');
-				$menu->add_link('whminformation', 'choice=none.whm_getdiskusage', '/images/whm/loadavg.gif', 'Display the Servers Disk Usage');
-				//$menu->add_link('whminformation', 'choice=none.whm_systemloadavg', '/images/whm/createacct.gif', 'Display the Servers Load Average (with Metadata)');
-				$menu->add_link('whminformation', 'choice=none.whm_getlanglist', '/images/whm/createacct.gif', 'View a List of Available Languages');
+				$menu->add_link('whminformation', 'choice=none.whm_gethostname', '/images/whm/gethostname.gif', __('Display Server Hostname'));
+				$menu->add_link('whminformation', 'choice=none.whm_version', '/images/whm/version.gif', __('Display cPanel &amp; WHM Version'));
+				$menu->add_link('whminformation', 'choice=none.whm_loadavg', '/images/whm/loadavg.gif', __('Display the Servers Load Average'));
+				$menu->add_link('whminformation', 'choice=none.whm_getdiskusage', '/images/whm/loadavg.gif', __('Display the Servers Disk Usage'));
+				//$menu->add_link('whminformation', 'choice=none.whm_systemloadavg', '/images/whm/createacct.gif', __('Display the Servers Load Average (with Metadata)'));
+				$menu->add_link('whminformation', 'choice=none.whm_getlanglist', '/images/whm/createacct.gif', __('View a List of Available Languages'));
 
 				// Adminsitration
-				$menu->add_link('whmadministration', 'choice=none.whm_reboot', '/images/whm/reboot.gif', 'Reboot the Server');
-				$menu->add_link('whmadministration', 'choice=none.whm_addip', '/images/whm/addip.gif', 'Add IP Address');
-				$menu->add_link('whmadministration', 'choice=none.whm_delip', '/images/whm/createacct.gif', 'Delete IP Address');
-				$menu->add_link('whmadministration', 'choice=none.whm_listips', '/images/whm/listips.gif', 'List IP Addresses');
-				$menu->add_link('whmadministration', 'choice=none.whm_sethostname', '/images/whm/createacct.gif', 'Set Hostname');
-				$menu->add_link('whmadministration', 'choice=none.whm_setresolvers', '/images/whm/createacct.gif', 'Set Resolvers');
-				//$menu->add_link('whmadministration', 'choice=none.whm_showbw', '/images/whm/createacct.gif', 'Show Bandwidth');
-				//$menu->add_link('whmadministration', 'choice=none.whm_nvset', '/images/whm/createacct.gif', 'Set a Non-Volatile Variable Value');
-				//$menu->add_link('whmadministration', 'choice=none.whm_nvget', '/images/whm/createacct.gif', 'Retrieve a Non-Volatile Variable Value');
+				$menu->add_link('whmadministration', 'choice=none.whm_reboot', '/images/whm/reboot.gif', __('Reboot the Server'));
+				$menu->add_link('whmadministration', 'choice=none.whm_addip', '/images/whm/addip.gif', __('Add IP Address'));
+				$menu->add_link('whmadministration', 'choice=none.whm_delip', '/images/whm/createacct.gif', __('Delete IP Address'));
+				$menu->add_link('whmadministration', 'choice=none.whm_listips', '/images/whm/listips.gif', __('List IP Addresses'));
+				$menu->add_link('whmadministration', 'choice=none.whm_sethostname', '/images/whm/createacct.gif', __('Set Hostname'));
+				$menu->add_link('whmadministration', 'choice=none.whm_setresolvers', '/images/whm/createacct.gif', __('Set Resolvers'));
+				//$menu->add_link('whmadministration', 'choice=none.whm_showbw', '/images/whm/createacct.gif', __('Show Bandwidth'));
+				//$menu->add_link('whmadministration', 'choice=none.whm_nvset', '/images/whm/createacct.gif', __('Set a Non-Volatile Variable Value'));
+				//$menu->add_link('whmadministration', 'choice=none.whm_nvget', '/images/whm/createacct.gif', __('Retrieve a Non-Volatile Variable Value'));
 
 				// Services
-				$menu->add_link('whmservices', 'choice=none.whm_restartservice', '/images/whm/restartservice.gif', 'Restart Service');
-				$menu->add_link('whmservices', 'choice=none.whm_servicestatus', '/images/whm/servicestatus.gif', 'Service Status');
-				//$menu->add_link('whmservices', 'choice=none.whm_configureservice', '/images/whm/configureservice.gif', 'Configure a Service');
+				$menu->add_link('whmservices', 'choice=none.whm_restartservice', '/images/whm/restartservice.gif', __('Restart Service'));
+				$menu->add_link('whmservices', 'choice=none.whm_servicestatus', '/images/whm/servicestatus.gif', __('Service Status'));
+				//$menu->add_link('whmservices', 'choice=none.whm_configureservice', '/images/whm/configureservice.gif', __('Configure a Service'));
 
 				// SSL
-				$menu->add_link('whmssl', 'choice=none.whm_fetchsslinfo', '/images/whm/fetchsslinfo.gif', 'Fetch SSL Certificate Information');
-				//$menu->add_link('whmssl', 'choice=none.whm_generatessl', '/images/whm/generatessl.gif', 'Generate an SSL Certificate');
-				//$menu->add_link('whmssl', 'choice=none.whm_installssl', '/images/whm/installssl.gif', 'Install an SSL Certificate');
-				$menu->add_link('whmssl', 'choice=none.whm_listcrts', '/images/whm/listcrts.gif', 'List Available SSL Certificates');
+				$menu->add_link('whmssl', 'choice=none.whm_fetchsslinfo', '/images/whm/fetchsslinfo.gif', __('Fetch SSL Certificate Information'));
+				//$menu->add_link('whmssl', 'choice=none.whm_generatessl', '/images/whm/generatessl.gif', __('Generate an SSL Certificate'));
+				//$menu->add_link('whmssl', 'choice=none.whm_installssl', '/images/whm/installssl.gif', __('Install an SSL Certificate'));
+				$menu->add_link('whmssl', 'choice=none.whm_listcrts', '/images/whm/listcrts.gif', __('List Available SSL Certificates'));
 			}
 		}
 	}
@@ -569,7 +569,10 @@ class Plugin
 	 */
 	public static function getRequirements(GenericEvent $event)
 	{
-		$loader = $event->getSubject();
+        /**
+         * @var \MyAdmin\Plugins\Loader $this->loader
+         */
+        $loader = $event->getSubject();
         $loader->add_requirement('api_auto_cpanel_login','/../vendor/detain/myadmin-cpanel-webhosting/src/api.php');
 		$loader->add_page_requirement('whm_get_accounts', '/webhosting/whmapi.functions.inc.php');
 		$loader->add_page_requirement('whm_api', '/webhosting/whmapi.functions.inc.php');
@@ -651,62 +654,65 @@ class Plugin
 	/**
 	 * @param \Symfony\Component\EventDispatcher\GenericEvent $event
 	 */
-	public static function getSettings(GenericEvent $event)
-	{
-		$settings = $event->getSubject();
-		$settings->add_select_master(self::$module, 'Default Servers', self::$module, 'new_website_cpanel_server', 'Default CPanel Setup Server', NEW_WEBSITE_CPANEL_SERVER, get_service_define('WEB_CPANEL'));
-		$settings->add_select_master(self::$module, 'Default Servers', self::$module, 'new_website_wordpress_server', 'Default WordPress Setup Server', NEW_WEBSITE_WORDPRESS_SERVER, get_service_define('WEB_WORDPRESS'));
-		$settings->add_dropdown_setting(self::$module, 'Out of Stock', 'outofstock_webhosting_cpanel', 'Out Of Stock CPanel Webhosting', 'Enable/Disable Sales Of This Type', $settings->get_setting('OUTOFSTOCK_WEBHOSTING_CPANEL'), ['0', '1'], ['No', 'Yes']);
-		$settings->add_dropdown_setting(self::$module, 'Out of Stock', 'outofstock_webhosting_wordpress', 'Out Of Stock WordPress Managed Webhosting', 'Enable/Disable Sales Of This Type', $settings->get_setting('OUTOFSTOCK_WEBHOSTING_WORDPRESS'), ['0', '1'], ['No', 'Yes']);
-		$settings->add_dropdown_setting(self::$module, 'CPanel Defaults', 'cpanel_package_defaults_ip', 'CPanel Package Defaults - IP', 'Enable/Disable Dedicated IP for new Sites', $settings->get_setting('CPANEL_PACKAGE_DEFAULTS_IP'), ['n', 'y'], ['No', 'Yes']);
-		$settings->add_dropdown_setting(self::$module, 'CPanel Defaults', 'cpanel_package_defaults_cgi', 'CPanel Package Defaults - CGI', 'Enable/Disable CGI Access', $settings->get_setting('CPANEL_PACKAGE_DEFAULTS_CGI'), ['0', '1'], ['No', 'Yes']);
-		$settings->add_dropdown_setting(self::$module, 'CPanel Defaults', 'cpanel_package_defaults_frontpage', 'CPanel Package Defaults - Frontpage', 'Enable/Disable Frontpage Extensions', $settings->get_setting('CPANEL_PACKAGE_DEFAULTS_FRONTPAGE'), ['0', '1'], ['No', 'Yes']);
-		$settings->add_dropdown_setting(self::$module, 'CPanel Defaults', 'cpanel_package_defaults_hasshell', 'CPanel Package Defaults - Shell', 'Enable/Disable Shell', $settings->get_setting('CPANEL_PACKAGE_DEFAULTS_HASSHELL'), ['0', '1'], ['No', 'Yes']);
-		$settings->add_text_setting(self::$module, 'CPanel Defaults', 'cpanel_package_defaults_cpmod', 'CPanel Package Defaults - CP Mod', '', $settings->get_setting('CPANEL_PACKAGE_DEFAULTS_CPMOD'));
-		$settings->add_text_setting(self::$module, 'CPanel Defaults', 'cpanel_package_defaults_maxsql', 'CPanel Package Defaults - Max SQL', '', $settings->get_setting('CPANEL_PACKAGE_DEFAULTS_MAXSQL'));
-		$settings->add_text_setting(self::$module, 'CPanel Defaults', 'cpanel_package_defaults_maxpop', 'CPanel Package Defaults - Max POP3', '', $settings->get_setting('CPANEL_PACKAGE_DEFAULTS_MAXPOP'));
-		$settings->add_text_setting(self::$module, 'CPanel Defaults', 'cpanel_package_defaults_maxlst', 'CPanel Package Defaults - Max Mailing Lists', '', $settings->get_setting('CPANEL_PACKAGE_DEFAULTS_MAXLST'));
-		$settings->add_text_setting(self::$module, 'CPanel Defaults', 'cpanel_package_defaults_maxsub', 'CPanel Package Defaults - Max Subdomains', '', $settings->get_setting('CPANEL_PACKAGE_DEFAULTS_MAXSUB'));
-		$settings->add_dropdown_setting(self::$module, 'Reseller ACLs', 'cpanel_package_defaults_reseller_acl_add_pkg', 'Reseller ACL Add PKG', 'Allow the creation of packages.', (defined('CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_ADD_PKG') ? CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_ADD_PKG : 1), ['0', '1'], ['No', 'Yes']);
-		$settings->add_dropdown_setting(self::$module, 'Reseller ACLs', 'cpanel_package_defaults_reseller_acl_add_pkg_ip', 'Reseller ACL Add PKG IP', 'Allow the creation of packages with dedicated IPs.', (defined('CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_ADD_PKG_IP') ? CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_ADD_PKG_IP : 1), ['0', '1'], ['No', 'Yes']);
-		$settings->add_dropdown_setting(self::$module, 'Reseller ACLs', 'cpanel_package_defaults_reseller_acl_add_pkg_shell', 'Reseller ACL Add PKG Shell', 'Allow the creation of packages with Shell access.', (defined('CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_ADD_PKG_SHELL') ? CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_ADD_PKG_SHELL : 1), ['0', '1'], ['No', 'Yes']);
-		$settings->add_dropdown_setting(self::$module, 'Reseller ACLs', 'cpanel_package_defaults_reseller_acl_all', 'Reseller ACL All', 'All features.', (defined('CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_ALL') ? CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_ALL : 0), ['0', '1'], ['No', 'Yes']);
-		$settings->add_dropdown_setting(self::$module, 'Reseller ACLs', 'cpanel_package_defaults_reseller_acl_allow_addoncreate', 'Reseller ACL Allow Addoncreate', 'Allow the creation of packages with unlimited Addon domains.', (defined('CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_ALLOW_ADDONCREATE') ? CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_ALLOW_ADDONCREATE : 0), ['0', '1'], ['No', 'Yes']);
-		$settings->add_dropdown_setting(self::$module, 'Reseller ACLs', 'cpanel_package_defaults_reseller_acl_allow_parkedcreate', 'Reseller ACL Allow Parkedcreate', 'Allow the creation of packages with parked domains.', (defined('CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_ALLOW_PARKEDCREATE') ? CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_ALLOW_PARKEDCREATE : 1), ['0', '1'], ['No', 'Yes']);
-		$settings->add_dropdown_setting(self::$module, 'Reseller ACLs', 'cpanel_package_defaults_reseller_acl_allow_unlimited_disk_pkgs', 'Reseller ACL Allow Unlimited Disk PKGs', 'Allow the creation of packages with Unlimited Disk space.', (defined('CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_ALLOW_UNLIMITED_DISK_PKGS') ? CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_ALLOW_UNLIMITED_DISK_PKGS : 0), ['0', '1'], ['No', 'Yes']);
-		$settings->add_dropdown_setting(self::$module, 'Reseller ACLs', 'cpanel_package_defaults_reseller_acl_allow_unlimited_pkgs', 'Reseller ACL Allow Unlimited PKGs', 'Allow the creation of packages with Unlimited bandwidth.', (defined('CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_ALLOW_UNLIMITED_PKGS') ? CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_ALLOW_UNLIMITED_PKGS : 0), ['0', '1'], ['No', 'Yes']);
-		$settings->add_dropdown_setting(self::$module, 'Reseller ACLs', 'cpanel_package_defaults_reseller_acl_clustering', 'Reseller ACL Clustering', 'Enable Clustering.', (defined('CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_CLUSTERING') ? CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_CLUSTERING : 0), ['0', '1'], ['No', 'Yes']);
-		$settings->add_dropdown_setting(self::$module, 'Reseller ACLs', 'cpanel_package_defaults_reseller_acl_create_acct', 'Reseller ACL Create Acct', 'Allow the reseller to Create a new Account.', (defined('CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_CREATE_ACCT') ? CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_CREATE_ACCT : 1), ['0', '1'], ['No', 'Yes']);
-		$settings->add_dropdown_setting(self::$module, 'Reseller ACLs', 'cpanel_package_defaults_reseller_acl_create_dns', 'Reseller ACL Create DNS', 'Allow the reseller to Add DNS zones.', (defined('CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_CREATE_DNS') ? CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_CREATE_DNS : 1), ['0', '1'], ['No', 'Yes']);
-		$settings->add_dropdown_setting(self::$module, 'Reseller ACLs', 'cpanel_package_defaults_reseller_acl_demo_setup', 'Reseller ACL Demo Setup', 'Allow the reseller to turn an Account into a Demo Account.', (defined('CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_DEMO_SETUP') ? CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_DEMO_SETUP : 0), ['0', '1'], ['No', 'Yes']);
-		$settings->add_dropdown_setting(self::$module, 'Reseller ACLs', 'cpanel_package_defaults_reseller_acl_disallow_shell', 'Reseller ACL Disallow Shell', 'Never Allow creation of Accounts with Shell access.', (defined('CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_DISALLOW_SHELL') ? CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_DISALLOW_SHELL : 0), ['0', '1'], ['No', 'Yes']);
-		$settings->add_dropdown_setting(self::$module, 'Reseller ACLs', 'cpanel_package_defaults_reseller_acl_edit_account', 'Reseller ACL Edit Account', 'Allow the reseller to modify an Account.', (defined('CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_EDIT_ACCOUNT') ? CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_EDIT_ACCOUNT : 1), ['0', '1'], ['No', 'Yes']);
-		$settings->add_dropdown_setting(self::$module, 'Reseller ACLs', 'cpanel_package_defaults_reseller_acl_edit_dns', 'Reseller ACL Edit DNS', 'Allow editing of DNS zones.', (defined('CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_EDIT_DNS') ? CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_EDIT_DNS : 1), ['0', '1'], ['No', 'Yes']);
-		$settings->add_dropdown_setting(self::$module, 'Reseller ACLs', 'cpanel_package_defaults_reseller_acl_edit_mx', 'Reseller ACL Edit MX', 'Allow editing of MX entries,', (defined('CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_EDIT_MX') ? CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_EDIT_MX : 0), ['0', '1'], ['No', 'Yes']);
-		$settings->add_dropdown_setting(self::$module, 'Reseller ACLs', 'cpanel_package_defaults_reseller_acl_edit_pkg', 'Reseller ACL Edit PKG', 'Allow editing of packages.', (defined('CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_EDIT_PKG') ? CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_EDIT_PKG : 1), ['0', '1'], ['No', 'Yes']);
-		$settings->add_dropdown_setting(self::$module, 'Reseller ACLs', 'cpanel_package_defaults_reseller_acl_frontpage', 'Reseller ACL FrontPage', 'Allow the reseller to install and uninstall FrontPage extensions.', (defined('CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_FRONTPAGE') ? CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_FRONTPAGE : 0), ['0', '1'], ['No', 'Yes']);
-		$settings->add_dropdown_setting(self::$module, 'Reseller ACLs', 'cpanel_package_defaults_reseller_acl_kill_acct', 'Reseller ACL Kill Acct', 'Allow termination of Accounts.', (defined('CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_KILL_ACCT') ? CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_KILL_ACCT : 1), ['0', '1'], ['No', 'Yes']);
-		$settings->add_dropdown_setting(self::$module, 'Reseller ACLs', 'cpanel_package_defaults_reseller_acl_kill_dns', 'Reseller ACL Kill DNS', 'Allow the reseller to remove DNS entries.', (defined('CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_KILL_DNS') ? CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_KILL_DNS : 0), ['0', '1'], ['No', 'Yes']);
-		$settings->add_dropdown_setting(self::$module, 'Reseller ACLs', 'cpanel_package_defaults_reseller_acl_limit_bandwidth', 'Reseller ACL Limit bandwidth', 'Allow the reseller to modify bandiwdth Limits.   Warning: This will Allow the reseller to circumvent package bandwidth Limits, if you are not using resource Limits!', (defined('CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_LIMIT_BANDWIDTH') ? CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_LIMIT_BANDWIDTH : 1), ['0', '1'], ['No', 'Yes']);
-		$settings->add_dropdown_setting(self::$module, 'Reseller ACLs', 'cpanel_package_defaults_reseller_acl_list_accts', 'Reseller ACL List Accts', 'Allow the reseller to list his or her Accounts.', (defined('CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_LIST_ACCTS') ? CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_LIST_ACCTS : 1), ['0', '1'], ['No', 'Yes']);
-		$settings->add_dropdown_setting(self::$module, 'Reseller ACLs', 'cpanel_package_defaults_reseller_acl_mailcheck', 'Reseller ACL Mailcheck', 'Allow the reseller to access the WHM Mail Troubleshooter.', (defined('CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_MAILCHECK') ? CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_MAILCHECK : 1), ['0', '1'], ['No', 'Yes']);
-		$settings->add_dropdown_setting(self::$module, 'Reseller ACLs', 'cpanel_package_defaults_reseller_acl_mod_subdomains', 'Reseller ACL Mod SubDomains', 'Allow the reseller to enable and disable SubDomains.', (defined('CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_MOD_SUBDOMAINS') ? CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_MOD_SUBDOMAINS : 1), ['0', '1'], ['No', 'Yes']);
-		$settings->add_dropdown_setting(self::$module, 'Reseller ACLs', 'cpanel_package_defaults_reseller_acl_news', 'Reseller ACL News', 'Allow the reseller to modify cPanel/WHM news.', (defined('CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_NEWS') ? CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_NEWS : 1), ['0', '1'], ['No', 'Yes']);
-		$settings->add_dropdown_setting(self::$module, 'Reseller ACLs', 'cpanel_package_defaults_reseller_acl_onlyselfandglobalpkgs', 'Reseller ACL Onlyselfandglobalpkgs', 'Prevent the creation of Accounts with packages that are neither global nor owned by this user.', (defined('CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_ONLYSELFANDGLOBALPKGS') ? CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_ONLYSELFANDGLOBALPKGS : 1), ['0', '1'], ['No', 'Yes']);
-		$settings->add_dropdown_setting(self::$module, 'Reseller ACLs', 'cpanel_package_defaults_reseller_acl_park_dns', 'Reseller ACL Park DNS', 'Allow the reseller to park domains.', (defined('CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_PARK_DNS') ? CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_PARK_DNS : 1), ['0', '1'], ['No', 'Yes']);
-		$settings->add_dropdown_setting(self::$module, 'Reseller ACLs', 'cpanel_package_defaults_reseller_acl_passwd', 'Reseller ACL Passwd', 'Allow the reseller to modify Passwords.', (defined('CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_PASSWD') ? CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_PASSWD : 1), ['0', '1'], ['No', 'Yes']);
-		$settings->add_dropdown_setting(self::$module, 'Reseller ACLs', 'cpanel_package_defaults_reseller_acl_quota', 'Reseller ACL Quota', 'Allow the reseller to modify Disk Quotas.   Warning: This will Allow resellers to circumvent package Limits for Disk space, if you are not using resource Limits!', (defined('CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_QUOTA') ? CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_QUOTA : 1), ['0', '1'], ['No', 'Yes']);
-		$settings->add_dropdown_setting(self::$module, 'Reseller ACLs', 'cpanel_package_defaults_reseller_acl_rearrange_accts', 'Reseller ACL Rearrange Accts', 'Allow the reseller to rearrange Accounts.', (defined('CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_REARRANGE_ACCTS') ? CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_REARRANGE_ACCTS : 0), ['0', '1'], ['No', 'Yes']);
-		$settings->add_dropdown_setting(self::$module, 'Reseller ACLs', 'cpanel_package_defaults_reseller_acl_res_cart', 'Reseller ACL Res Cart', 'Allow the reseller to reset the shopping Cart.', (defined('CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_RES_CART') ? CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_RES_CART : 0), ['0', '1'], ['No', 'Yes']);
-		$settings->add_dropdown_setting(self::$module, 'Reseller ACLs', 'cpanel_package_defaults_reseller_acl_status', 'Reseller ACL Status', 'Allow the reseller to view the Service Status feature in WHM.', (defined('CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_STATUS') ? CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_STATUS : 0), ['0', '1'], ['No', 'Yes']);
-		$settings->add_dropdown_setting(self::$module, 'Reseller ACLs', 'cpanel_package_defaults_reseller_acl_resftp', 'Reseller ACL Resftp', 'Allow the reseller to synchronize FTP Passwords.', (defined('CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_RESFTP') ? CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_RESFTP : 0), ['0', '1'], ['No', 'Yes']);
-		$settings->add_dropdown_setting(self::$module, 'Reseller ACLs', 'cpanel_package_defaults_reseller_acl_restart', 'Reseller ACL Restart', 'Allow the reseller to restart services.', (defined('CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_RESTART') ? CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_RESTART : 0), ['0', '1'], ['No', 'Yes']);
-		$settings->add_dropdown_setting(self::$module, 'Reseller ACLs', 'cpanel_package_defaults_reseller_acl_show_bandwidth', 'Reseller ACL Show bandwidth', 'Allow the reseller to view Accounts bandwidth usage.', (defined('CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_SHOW_BANDWIDTH') ? CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_SHOW_BANDWIDTH : 1), ['0', '1'], ['No', 'Yes']);
-		$settings->add_dropdown_setting(self::$module, 'Reseller ACLs', 'cpanel_package_defaults_reseller_acl_ssl', 'Reseller ACL SSL', 'Allow the reseller to access the SSL Manager.', (defined('CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_SSL') ? CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_SSL : 0), ['0', '1'], ['No', 'Yes']);
-		$settings->add_dropdown_setting(self::$module, 'Reseller ACLs', 'cpanel_package_defaults_reseller_acl_ssl_gencrt', 'Reseller ACL SSL gencrt', 'Allow the reseller to access the SSL CSR/CRT generator.', (defined('CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_SSL_GENCRT') ? CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_SSL_GENCRT : 1), ['0', '1'], ['No', 'Yes']);
-		$settings->add_dropdown_setting(self::$module, 'Reseller ACLs', 'cpanel_package_defaults_reseller_acl_stats', 'Reseller ACL Stats', 'Allow the reseller to view Account Statistics.', (defined('CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_STATS') ? CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_STATS : 1), ['0', '1'], ['No', 'Yes']);
-		$settings->add_dropdown_setting(self::$module, 'Reseller ACLs', 'cpanel_package_defaults_reseller_acl_suspend_acct', 'Reseller ACL Suspend Acct', 'Allow the reseller to Suspend Accounts.', (defined('CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_SUSPEND_ACCT') ? CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_SUSPEND_ACCT : 1), ['0', '1'], ['No', 'Yes']);
-		$settings->add_dropdown_setting(self::$module, 'Reseller ACLs', 'cpanel_package_defaults_reseller_acl_upgrade_account', 'Reseller ACL Upgrade Account', 'Allow the reseller to upgrade and downgrade Accounts.', (defined('CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_UPGRADE_ACCOUNT') ? CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_UPGRADE_ACCOUNT : 1), ['0', '1'], ['No', 'Yes']);
-		$settings->add_text_setting(self::$module, 'Reseller ACLs', 'cpanel_package_defaults_reseller_acllist', 'CPanel Package Defaults Reseller - ACL List', '', (defined('CPANEL_PACKAGE_DEFAULTS_RESELLER_ACLLIST') ? CPANEL_PACKAGE_DEFAULTS_RESELLER_ACLLIST : 'reseller'));
+    public static function getSettings(GenericEvent $event)
+    {
+        /**
+         * @var \MyAdmin\Settings $settings
+         **/
+        $settings = $event->getSubject();
+		$settings->add_select_master(__(self::$module), __('Default Servers'), self::$module, 'new_website_cpanel_server', __('Default CPanel Setup Server'), NEW_WEBSITE_CPANEL_SERVER, get_service_define('WEB_CPANEL'));
+		$settings->add_select_master(__(self::$module), __('Default Servers'), self::$module, 'new_website_wordpress_server', __('Default WordPress Setup Server'), NEW_WEBSITE_WORDPRESS_SERVER, get_service_define('WEB_WORDPRESS'));
+		$settings->add_dropdown_setting(self::$module, __('Out of Stock'), 'outofstock_webhosting_cpanel', __('Out Of Stock CPanel Webhosting'), __('Enable/Disable Sales Of This Type'), $settings->get_setting('OUTOFSTOCK_WEBHOSTING_CPANEL'), ['0', '1'], ['No', 'Yes']);
+		$settings->add_dropdown_setting(self::$module, __('Out of Stock'), 'outofstock_webhosting_wordpress', __('Out Of Stock WordPress Managed Webhosting'), __('Enable/Disable Sales Of This Type'), $settings->get_setting('OUTOFSTOCK_WEBHOSTING_WORDPRESS'), ['0', '1'], ['No', 'Yes']);
+		$settings->add_dropdown_setting(self::$module, __('CPanel Defaults'), 'cpanel_package_defaults_ip', __('CPanel Package Defaults - IP'), __('Enable/Disable Dedicated IP for new Sites'), $settings->get_setting('CPANEL_PACKAGE_DEFAULTS_IP'), ['n', 'y'], ['No', 'Yes']);
+		$settings->add_dropdown_setting(self::$module, __('CPanel Defaults'), 'cpanel_package_defaults_cgi', __('CPanel Package Defaults - CGI'), __('Enable/Disable CGI Access'), $settings->get_setting('CPANEL_PACKAGE_DEFAULTS_CGI'), ['0', '1'], ['No', 'Yes']);
+		$settings->add_dropdown_setting(self::$module, __('CPanel Defaults'), 'cpanel_package_defaults_frontpage', __('CPanel Package Defaults - Frontpage'), __('Enable/Disable Frontpage Extensions'), $settings->get_setting('CPANEL_PACKAGE_DEFAULTS_FRONTPAGE'), ['0', '1'], ['No', 'Yes']);
+		$settings->add_dropdown_setting(self::$module, __('CPanel Defaults'), 'cpanel_package_defaults_hasshell', __('CPanel Package Defaults - Shell'), __('Enable/Disable Shell'), $settings->get_setting('CPANEL_PACKAGE_DEFAULTS_HASSHELL'), ['0', '1'], ['No', 'Yes']);
+		$settings->add_text_setting(self::$module, __('CPanel Defaults'), 'cpanel_package_defaults_cpmod', __('CPanel Package Defaults - CP Mod'), '', $settings->get_setting('CPANEL_PACKAGE_DEFAULTS_CPMOD'));
+		$settings->add_text_setting(self::$module, __('CPanel Defaults'), 'cpanel_package_defaults_maxsql', __('CPanel Package Defaults - Max SQL'), '', $settings->get_setting('CPANEL_PACKAGE_DEFAULTS_MAXSQL'));
+		$settings->add_text_setting(self::$module, __('CPanel Defaults'), 'cpanel_package_defaults_maxpop', __('CPanel Package Defaults - Max POP3'), '', $settings->get_setting('CPANEL_PACKAGE_DEFAULTS_MAXPOP'));
+		$settings->add_text_setting(self::$module, __('CPanel Defaults'), 'cpanel_package_defaults_maxlst', __('CPanel Package Defaults - Max Mailing Lists'), '', $settings->get_setting('CPANEL_PACKAGE_DEFAULTS_MAXLST'));
+		$settings->add_text_setting(self::$module, __('CPanel Defaults'), 'cpanel_package_defaults_maxsub', __('CPanel Package Defaults - Max Subdomains'), '', $settings->get_setting('CPANEL_PACKAGE_DEFAULTS_MAXSUB'));
+		$settings->add_dropdown_setting(self::$module, __('Reseller ACLs'), 'cpanel_package_defaults_reseller_acl_add_pkg', __('Reseller ACL Add PKG'), __('Allow the creation of packages.'), (defined('CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_ADD_PKG') ? CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_ADD_PKG : 1), ['0', '1'], ['No', 'Yes']);
+		$settings->add_dropdown_setting(self::$module, __('Reseller ACLs'), 'cpanel_package_defaults_reseller_acl_add_pkg_ip', __('Reseller ACL Add PKG IP'), __('Allow the creation of packages with dedicated IPs.'), (defined('CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_ADD_PKG_IP') ? CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_ADD_PKG_IP : 1), ['0', '1'], ['No', 'Yes']);
+		$settings->add_dropdown_setting(self::$module, __('Reseller ACLs'), 'cpanel_package_defaults_reseller_acl_add_pkg_shell', __('Reseller ACL Add PKG Shell'), __('Allow the creation of packages with Shell access.'), (defined('CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_ADD_PKG_SHELL') ? CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_ADD_PKG_SHELL : 1), ['0', '1'], ['No', 'Yes']);
+		$settings->add_dropdown_setting(self::$module, __('Reseller ACLs'), 'cpanel_package_defaults_reseller_acl_all', __('Reseller ACL All'), __('All features.'), (defined('CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_ALL') ? CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_ALL : 0), ['0', '1'], ['No', 'Yes']);
+		$settings->add_dropdown_setting(self::$module, __('Reseller ACLs'), 'cpanel_package_defaults_reseller_acl_allow_addoncreate', __('Reseller ACL Allow Addoncreate'), __('Allow the creation of packages with unlimited Addon domains.'), (defined('CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_ALLOW_ADDONCREATE') ? CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_ALLOW_ADDONCREATE : 0), ['0', '1'], ['No', 'Yes']);
+		$settings->add_dropdown_setting(self::$module, __('Reseller ACLs'), 'cpanel_package_defaults_reseller_acl_allow_parkedcreate', __('Reseller ACL Allow Parkedcreate'), __('Allow the creation of packages with parked domains.'), (defined('CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_ALLOW_PARKEDCREATE') ? CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_ALLOW_PARKEDCREATE : 1), ['0', '1'], ['No', 'Yes']);
+		$settings->add_dropdown_setting(self::$module, __('Reseller ACLs'), 'cpanel_package_defaults_reseller_acl_allow_unlimited_disk_pkgs', __('Reseller ACL Allow Unlimited Disk PKGs'), __('Allow the creation of packages with Unlimited Disk space.'), (defined('CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_ALLOW_UNLIMITED_DISK_PKGS') ? CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_ALLOW_UNLIMITED_DISK_PKGS : 0), ['0', '1'], ['No', 'Yes']);
+		$settings->add_dropdown_setting(self::$module, __('Reseller ACLs'), 'cpanel_package_defaults_reseller_acl_allow_unlimited_pkgs', __('Reseller ACL Allow Unlimited PKGs'), __('Allow the creation of packages with Unlimited bandwidth.'), (defined('CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_ALLOW_UNLIMITED_PKGS') ? CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_ALLOW_UNLIMITED_PKGS : 0), ['0', '1'], ['No', 'Yes']);
+		$settings->add_dropdown_setting(self::$module, __('Reseller ACLs'), 'cpanel_package_defaults_reseller_acl_clustering', __('Reseller ACL Clustering'), __('Enable Clustering.'), (defined('CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_CLUSTERING') ? CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_CLUSTERING : 0), ['0', '1'], ['No', 'Yes']);
+		$settings->add_dropdown_setting(self::$module, __('Reseller ACLs'), 'cpanel_package_defaults_reseller_acl_create_acct', __('Reseller ACL Create Acct'), __('Allow the reseller to Create a new Account.'), (defined('CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_CREATE_ACCT') ? CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_CREATE_ACCT : 1), ['0', '1'], ['No', 'Yes']);
+		$settings->add_dropdown_setting(self::$module, __('Reseller ACLs'), 'cpanel_package_defaults_reseller_acl_create_dns', __('Reseller ACL Create DNS'), __('Allow the reseller to Add DNS zones.'), (defined('CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_CREATE_DNS') ? CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_CREATE_DNS : 1), ['0', '1'], ['No', 'Yes']);
+		$settings->add_dropdown_setting(self::$module, __('Reseller ACLs'), 'cpanel_package_defaults_reseller_acl_demo_setup', __('Reseller ACL Demo Setup'), __('Allow the reseller to turn an Account into a Demo Account.'), (defined('CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_DEMO_SETUP') ? CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_DEMO_SETUP : 0), ['0', '1'], ['No', 'Yes']);
+		$settings->add_dropdown_setting(self::$module, __('Reseller ACLs'), 'cpanel_package_defaults_reseller_acl_disallow_shell', __('Reseller ACL Disallow Shell'), __('Never Allow creation of Accounts with Shell access.'), (defined('CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_DISALLOW_SHELL') ? CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_DISALLOW_SHELL : 0), ['0', '1'], ['No', 'Yes']);
+		$settings->add_dropdown_setting(self::$module, __('Reseller ACLs'), 'cpanel_package_defaults_reseller_acl_edit_account', __('Reseller ACL Edit Account'), __('Allow the reseller to modify an Account.'), (defined('CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_EDIT_ACCOUNT') ? CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_EDIT_ACCOUNT : 1), ['0', '1'], ['No', 'Yes']);
+		$settings->add_dropdown_setting(self::$module, __('Reseller ACLs'), 'cpanel_package_defaults_reseller_acl_edit_dns', __('Reseller ACL Edit DNS'), __('Allow editing of DNS zones.'), (defined('CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_EDIT_DNS') ? CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_EDIT_DNS : 1), ['0', '1'], ['No', 'Yes']);
+		$settings->add_dropdown_setting(self::$module, __('Reseller ACLs'), 'cpanel_package_defaults_reseller_acl_edit_mx', __('Reseller ACL Edit MX'), __('Allow editing of MX entries'), (defined('CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_EDIT_MX') ? CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_EDIT_MX : 0), ['0', '1'], ['No', 'Yes']);
+		$settings->add_dropdown_setting(self::$module, __('Reseller ACLs'), 'cpanel_package_defaults_reseller_acl_edit_pkg', __('Reseller ACL Edit PKG'), __('Allow editing of packages.'), (defined('CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_EDIT_PKG') ? CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_EDIT_PKG : 1), ['0', '1'], ['No', 'Yes']);
+		$settings->add_dropdown_setting(self::$module, __('Reseller ACLs'), 'cpanel_package_defaults_reseller_acl_frontpage', __('Reseller ACL FrontPage'), __('Allow the reseller to install and uninstall FrontPage extensions.'), (defined('CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_FRONTPAGE') ? CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_FRONTPAGE : 0), ['0', '1'], ['No', 'Yes']);
+		$settings->add_dropdown_setting(self::$module, __('Reseller ACLs'), 'cpanel_package_defaults_reseller_acl_kill_acct', __('Reseller ACL Kill Acct'), __('Allow termination of Accounts.'), (defined('CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_KILL_ACCT') ? CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_KILL_ACCT : 1), ['0', '1'], ['No', 'Yes']);
+		$settings->add_dropdown_setting(self::$module, __('Reseller ACLs'), 'cpanel_package_defaults_reseller_acl_kill_dns', __('Reseller ACL Kill DNS'), __('Allow the reseller to remove DNS entries.'), (defined('CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_KILL_DNS') ? CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_KILL_DNS : 0), ['0', '1'], ['No', 'Yes']);
+		$settings->add_dropdown_setting(self::$module, __('Reseller ACLs'), 'cpanel_package_defaults_reseller_acl_limit_bandwidth', __('Reseller ACL Limit bandwidth'), __('Allow the reseller to modify bandiwdth Limits.   Warning: This will Allow the reseller to circumvent package bandwidth Limits, if you are not using resource Limits!'), (defined('CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_LIMIT_BANDWIDTH') ? CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_LIMIT_BANDWIDTH : 1), ['0', '1'], ['No', 'Yes']);
+		$settings->add_dropdown_setting(self::$module, __('Reseller ACLs'), 'cpanel_package_defaults_reseller_acl_list_accts', __('Reseller ACL List Accts'), __('Allow the reseller to list his or her Accounts.'), (defined('CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_LIST_ACCTS') ? CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_LIST_ACCTS : 1), ['0', '1'], ['No', 'Yes']);
+		$settings->add_dropdown_setting(self::$module, __('Reseller ACLs'), 'cpanel_package_defaults_reseller_acl_mailcheck', __('Reseller ACL Mailcheck'), __('Allow the reseller to access the WHM Mail Troubleshooter.'), (defined('CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_MAILCHECK') ? CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_MAILCHECK : 1), ['0', '1'], ['No', 'Yes']);
+		$settings->add_dropdown_setting(self::$module, __('Reseller ACLs'), 'cpanel_package_defaults_reseller_acl_mod_subdomains', __('Reseller ACL Mod SubDomains'), __('Allow the reseller to enable and disable SubDomains.'), (defined('CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_MOD_SUBDOMAINS') ? CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_MOD_SUBDOMAINS : 1), ['0', '1'], ['No', 'Yes']);
+		$settings->add_dropdown_setting(self::$module, __('Reseller ACLs'), 'cpanel_package_defaults_reseller_acl_news', __('Reseller ACL News'), __('Allow the reseller to modify cPanel/WHM news.'), (defined('CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_NEWS') ? CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_NEWS : 1), ['0', '1'], ['No', 'Yes']);
+		$settings->add_dropdown_setting(self::$module, __('Reseller ACLs'), 'cpanel_package_defaults_reseller_acl_onlyselfandglobalpkgs', __('Reseller ACL Onlyselfandglobalpkgs'), __('Prevent the creation of Accounts with packages that are neither global nor owned by this user.'), (defined('CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_ONLYSELFANDGLOBALPKGS') ? CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_ONLYSELFANDGLOBALPKGS : 1), ['0', '1'], ['No', 'Yes']);
+		$settings->add_dropdown_setting(self::$module, __('Reseller ACLs'), 'cpanel_package_defaults_reseller_acl_park_dns', __('Reseller ACL Park DNS'), __('Allow the reseller to park domains.'), (defined('CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_PARK_DNS') ? CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_PARK_DNS : 1), ['0', '1'], ['No', 'Yes']);
+		$settings->add_dropdown_setting(self::$module, __('Reseller ACLs'), 'cpanel_package_defaults_reseller_acl_passwd', __('Reseller ACL Passwd'), __('Allow the reseller to modify Passwords.'), (defined('CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_PASSWD') ? CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_PASSWD : 1), ['0', '1'], ['No', 'Yes']);
+		$settings->add_dropdown_setting(self::$module, __('Reseller ACLs'), 'cpanel_package_defaults_reseller_acl_quota', __('Reseller ACL Quota'), __('Allow the reseller to modify Disk Quotas.   Warning: This will Allow resellers to circumvent package Limits for Disk space, if you are not using resource Limits!'), (defined('CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_QUOTA') ? CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_QUOTA : 1), ['0', '1'], ['No', 'Yes']);
+		$settings->add_dropdown_setting(self::$module, __('Reseller ACLs'), 'cpanel_package_defaults_reseller_acl_rearrange_accts', __('Reseller ACL Rearrange Accts'), __('Allow the reseller to rearrange Accounts.'), (defined('CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_REARRANGE_ACCTS') ? CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_REARRANGE_ACCTS : 0), ['0', '1'], ['No', 'Yes']);
+		$settings->add_dropdown_setting(self::$module, __('Reseller ACLs'), 'cpanel_package_defaults_reseller_acl_res_cart', __('Reseller ACL Res Cart'), __('Allow the reseller to reset the shopping Cart.'), (defined('CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_RES_CART') ? CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_RES_CART : 0), ['0', '1'], ['No', 'Yes']);
+		$settings->add_dropdown_setting(self::$module, __('Reseller ACLs'), 'cpanel_package_defaults_reseller_acl_status', __('Reseller ACL Status'), __('Allow the reseller to view the Service Status feature in WHM.'), (defined('CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_STATUS') ? CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_STATUS : 0), ['0', '1'], ['No', 'Yes']);
+		$settings->add_dropdown_setting(self::$module, __('Reseller ACLs'), 'cpanel_package_defaults_reseller_acl_resftp', __('Reseller ACL Resftp'), __('Allow the reseller to synchronize FTP Passwords.'), (defined('CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_RESFTP') ? CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_RESFTP : 0), ['0', '1'], ['No', 'Yes']);
+		$settings->add_dropdown_setting(self::$module, __('Reseller ACLs'), 'cpanel_package_defaults_reseller_acl_restart', __('Reseller ACL Restart'), __('Allow the reseller to restart services.'), (defined('CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_RESTART') ? CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_RESTART : 0), ['0', '1'], ['No', 'Yes']);
+		$settings->add_dropdown_setting(self::$module, __('Reseller ACLs'), 'cpanel_package_defaults_reseller_acl_show_bandwidth', __('Reseller ACL Show bandwidth'), __('Allow the reseller to view Accounts bandwidth usage.'), (defined('CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_SHOW_BANDWIDTH') ? CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_SHOW_BANDWIDTH : 1), ['0', '1'], ['No', 'Yes']);
+		$settings->add_dropdown_setting(self::$module, __('Reseller ACLs'), 'cpanel_package_defaults_reseller_acl_ssl', __('Reseller ACL SSL'), __('Allow the reseller to access the SSL Manager.'), (defined('CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_SSL') ? CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_SSL : 0), ['0', '1'], ['No', 'Yes']);
+		$settings->add_dropdown_setting(self::$module, __('Reseller ACLs'), 'cpanel_package_defaults_reseller_acl_ssl_gencrt', __('Reseller ACL SSL gencrt'), __('Allow the reseller to access the SSL CSR/CRT generator.'), (defined('CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_SSL_GENCRT') ? CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_SSL_GENCRT : 1), ['0', '1'], ['No', 'Yes']);
+		$settings->add_dropdown_setting(self::$module, __('Reseller ACLs'), 'cpanel_package_defaults_reseller_acl_stats', __('Reseller ACL Stats'), __('Allow the reseller to view Account Statistics.'), (defined('CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_STATS') ? CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_STATS : 1), ['0', '1'], ['No', 'Yes']);
+		$settings->add_dropdown_setting(self::$module, __('Reseller ACLs'), 'cpanel_package_defaults_reseller_acl_suspend_acct', __('Reseller ACL Suspend Acct'), __('Allow the reseller to Suspend Accounts.'), (defined('CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_SUSPEND_ACCT') ? CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_SUSPEND_ACCT : 1), ['0', '1'], ['No', 'Yes']);
+		$settings->add_dropdown_setting(self::$module, __('Reseller ACLs'), 'cpanel_package_defaults_reseller_acl_upgrade_account', __('Reseller ACL Upgrade Account'), __('Allow the reseller to upgrade and downgrade Accounts.'), (defined('CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_UPGRADE_ACCOUNT') ? CPANEL_PACKAGE_DEFAULTS_RESELLER_ACL_UPGRADE_ACCOUNT : 1), ['0', '1'], ['No', 'Yes']);
+		$settings->add_text_setting(self::$module, __('Reseller ACLs'), 'cpanel_package_defaults_reseller_acllist', __('CPanel Package Defaults Reseller - ACL List'), '', (defined('CPANEL_PACKAGE_DEFAULTS_RESELLER_ACLLIST') ? CPANEL_PACKAGE_DEFAULTS_RESELLER_ACLLIST : 'reseller'));
 	}
 }
