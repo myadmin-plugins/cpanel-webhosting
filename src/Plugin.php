@@ -660,10 +660,12 @@ class Plugin
          * @var \MyAdmin\Settings $settings
          **/
         $settings = $event->getSubject();
+        $settings->setTarget('module');
 		$settings->add_select_master(_(self::$module), _('Default Servers'), self::$module, 'new_website_cpanel_server', _('Default CPanel Setup Server'), NEW_WEBSITE_CPANEL_SERVER, get_service_define('WEB_CPANEL'));
 		$settings->add_select_master(_(self::$module), _('Default Servers'), self::$module, 'new_website_wordpress_server', _('Default WordPress Setup Server'), NEW_WEBSITE_WORDPRESS_SERVER, get_service_define('WEB_WORDPRESS'));
 		$settings->add_dropdown_setting(self::$module, _('Out of Stock'), 'outofstock_webhosting_cpanel', _('Out Of Stock CPanel Webhosting'), _('Enable/Disable Sales Of This Type'), $settings->get_setting('OUTOFSTOCK_WEBHOSTING_CPANEL'), ['0', '1'], ['No', 'Yes']);
 		$settings->add_dropdown_setting(self::$module, _('Out of Stock'), 'outofstock_webhosting_wordpress', _('Out Of Stock WordPress Managed Webhosting'), _('Enable/Disable Sales Of This Type'), $settings->get_setting('OUTOFSTOCK_WEBHOSTING_WORDPRESS'), ['0', '1'], ['No', 'Yes']);
+        $settings->setTarget('global');
 		$settings->add_dropdown_setting(self::$module, _('CPanel Defaults'), 'cpanel_package_defaults_ip', _('CPanel Package Defaults - IP'), _('Enable/Disable Dedicated IP for new Sites'), $settings->get_setting('CPANEL_PACKAGE_DEFAULTS_IP'), ['n', 'y'], ['No', 'Yes']);
 		$settings->add_dropdown_setting(self::$module, _('CPanel Defaults'), 'cpanel_package_defaults_cgi', _('CPanel Package Defaults - CGI'), _('Enable/Disable CGI Access'), $settings->get_setting('CPANEL_PACKAGE_DEFAULTS_CGI'), ['0', '1'], ['No', 'Yes']);
 		$settings->add_dropdown_setting(self::$module, _('CPanel Defaults'), 'cpanel_package_defaults_frontpage', _('CPanel Package Defaults - Frontpage'), _('Enable/Disable Frontpage Extensions'), $settings->get_setting('CPANEL_PACKAGE_DEFAULTS_FRONTPAGE'), ['0', '1'], ['No', 'Yes']);
