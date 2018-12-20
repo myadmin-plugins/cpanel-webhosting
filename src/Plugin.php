@@ -282,6 +282,7 @@ class Plugin
 					request_log(self::$module, $serviceClass->getCustid(), __FUNCTION__, 'softaculous', 'install', ['script' => $script, 'data' => $data], $response);
 					myadmin_log(self::$module, 'info', str_replace('\n', "\n", json_encode($response)), __LINE__, __FILE__);
 				}
+				function_requirements('add_dns_record');
 				$response = add_dns_record(14426, 'wh'.$serviceClass->getId(), $ip, 'A', 86400, 0, true);
 				myadmin_log(self::$module, 'info', 'Response: '.str_replace('\n', "\n", json_encode($response)), __LINE__, __FILE__);
 				$response = $whm->park($options['username'], 'wh'.$serviceClass->getId().'.ispot.cc', '');
