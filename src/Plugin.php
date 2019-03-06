@@ -61,8 +61,8 @@ class Plugin
 	public static function getActivate(GenericEvent $event)
 	{
 		if ($event['category'] == get_service_define('WEB_CPANEL')) {
-			myadmin_log(self::$module, 'info', 'Cpanel Activation', __LINE__, __FILE__);
-			$serviceClass = $event->getSubject();
+            $serviceClass = $event->getSubject();
+			myadmin_log(self::$module, 'info', 'Cpanel Activation', __LINE__, __FILE__, self::$module, $serviceClass->getId());
 			$serviceTypes = run_event('get_service_types', false, self::$module);
 			$settings = get_module_settings(self::$module);
 			$extra = run_event('parse_service_extra', $serviceClass->getExtra(), self::$module);
@@ -336,8 +336,8 @@ class Plugin
 	public static function getDeactivate(GenericEvent $event)
 	{
 		if (in_array($event['type'], [get_service_define('WEB_CPANEL'), get_service_define('WEB_WORDPRESS')])) {
-			myadmin_log(self::$module, 'info', 'Cpanel Deactivation', __LINE__, __FILE__);
-			$serviceClass = $event->getSubject();
+            $serviceClass = $event->getSubject();
+			myadmin_log(self::$module, 'info', 'Cpanel Deactivation', __LINE__, __FILE__, self::$module, $serviceClass->getId());
 			$settings = get_module_settings(self::$module);
 			if ($serviceClass->getServer() > 0) {
 				$serverdata = get_service_master($serviceClass->getServer(), self::$module);
@@ -379,7 +379,7 @@ class Plugin
 	{
 		if (in_array($event['type'], [get_service_define('WEB_CPANEL'), get_service_define('WEB_WORDPRESS')])) {
             $serviceClass = $event->getSubject();
-			myadmin_log(self::$module, 'info', 'Cpanel Termination', __LINE__, __FILE__);
+			myadmin_log(self::$module, 'info', 'Cpanel Termination', __LINE__, __FILE__, self::$module, $serviceClass->getId());
 			$settings = get_module_settings(self::$module);
 			$serverdata = get_service_master($serviceClass->getServer(), self::$module);
 			$hash = $serverdata[$settings['PREFIX'].'_key'];
