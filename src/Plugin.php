@@ -378,8 +378,8 @@ class Plugin
 	public static function getTerminate(GenericEvent $event)
 	{
 		if (in_array($event['type'], [get_service_define('WEB_CPANEL'), get_service_define('WEB_WORDPRESS')])) {
+            $serviceClass = $event->getSubject();
 			myadmin_log(self::$module, 'info', 'Cpanel Termination', __LINE__, __FILE__);
-			$serviceClass = $event->getSubject();
 			$settings = get_module_settings(self::$module);
 			$serverdata = get_service_master($serviceClass->getServer(), self::$module);
 			$hash = $serverdata[$settings['PREFIX'].'_key'];
@@ -441,7 +441,7 @@ class Plugin
 			myadmin_log(self::$module, 'info', 'IP Change - (OLD:'.$serviceClass->getIp().") (NEW:{$event['newip']})", __LINE__, __FILE__, self::$module, $serviceClass->getId());
 			$response = $cpanel->editIp($serviceClass->getIp(), $event['newip']);
 			if (isset($response['faultcode'])) {
-				myadmin_log(self::$module, 'error', 'Cpanel editIp('.$serviceClass->getIp().', '.$event['newip'].') returned Fault '.$response['faultcode'].': '.$response['fault'], __LINE__, __FILE__, self::$module);
+				myadmin_log(self::$module, 'error', 'Cpanel editIp('.$serviceClass->getIp().', '.$event['newip'].') returned Fault '.$response['faultcode'].': '.$response['fault'], __LINE__, __FILE__, self::$module, $serviceClass->getId());
 				$event['status'] = 'error';
 				$event['status_text'] = 'Error Code '.$response['faultcode'].': '.$response['fault'];
 			} else {
