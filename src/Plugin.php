@@ -88,7 +88,7 @@ class Plugin
 				$whm->set_hash($hash);
 			} catch (\Exception $e) {
 				$event['success'] = false;
-				myadmin_log('cpanel', 'error', $e->getMessage(), __LINE__, __FILE__);
+				myadmin_log('cpanel', 'error', $e->getMessage(), __LINE__, __FILE__, self::$module, $serviceClass->getId());
 				$event->stopPropagation();
 				return;
 			}
@@ -126,26 +126,26 @@ class Plugin
 				'password' => $password,
 				'contactemail' => $event['email']
 			]);
-			myadmin_log(self::$module, 'info', json_encode($options), __LINE__, __FILE__);
+			myadmin_log(self::$module, 'info', json_encode($options), __LINE__, __FILE__, self::$module, $serviceClass->getId());
 			try {
 				$response = $whm->xmlapi_query('createacct', $options);
 			} catch (\Exception $e) {
 				$event['success'] = false;
-				myadmin_log('cpanel', 'error', 'Caught Exception from initial createacct call: '.$e->getMessage(), __LINE__, __FILE__);
+				myadmin_log('cpanel', 'error', 'Caught Exception from initial createacct call: '.$e->getMessage(), __LINE__, __FILE__, self::$module, $serviceClass->getId());
 				$event->stopPropagation();
 				return;
 			}
 			request_log(self::$module, $serviceClass->getCustid(), __FUNCTION__, 'cpanel', 'createacct', $options, $response);
-			myadmin_log(self::$module, 'info', 'Response: '.str_replace('\n', '', strip_tags($response)), __LINE__, __FILE__);
+			myadmin_log(self::$module, 'info', 'Response: '.str_replace('\n', '', strip_tags($response)), __LINE__, __FILE__, self::$module, $serviceClass->getId());
 			$response = json_decode($response, true);
 			if (mb_substr($response['result'][0]['statusmsg'], 0, 19) == 'Sorry, the password') {
 				while (mb_substr($response['result'][0]['statusmsg'], 0, 19) == 'Sorry, the password') {
 					$password = generateRandomString(10, 2, 2, 2, 1);
 					$options['password'] = $password;
-					myadmin_log(self::$module, 'info', "Trying Password {$options['password']}", __LINE__, __FILE__);
+					myadmin_log(self::$module, 'info', "Trying Password {$options['password']}", __LINE__, __FILE__, self::$module, $serviceClass->getId());
 					$response = $whm->xmlapi_query('createacct', $options);
 					request_log(self::$module, $serviceClass->getCustid(), __FUNCTION__, 'cpanel', 'createacct', $options, $response);
-					myadmin_log(self::$module, 'info', 'Response: '.str_replace('\n', "\n", $response), __LINE__, __FILE__);
+					myadmin_log(self::$module, 'info', 'Response: '.str_replace('\n', "\n", $response), __LINE__, __FILE__, self::$module, $serviceClass->getId());
 					$response = json_decode($response, true);
 				}
 				$GLOBALS['tf']->history->add($settings['PREFIX'], 'password', $serviceClass->getId(), $options['password']);
@@ -155,10 +155,10 @@ class Plugin
 					$username .= 'a';
 					$username = mb_substr($username, 1);
 					$options['username'] = $username;
-					myadmin_log(self::$module, 'info', 'Trying Username '.$options['username'], __LINE__, __FILE__);
+					myadmin_log(self::$module, 'info', 'Trying Username '.$options['username'], __LINE__, __FILE__, self::$module, $serviceClass->getId());
 					$response = $whm->xmlapi_query('createacct', $options);
 					request_log(self::$module, $serviceClass->getCustid(), __FUNCTION__, 'cpanel', 'createacct', $options, $response);
-					myadmin_log(self::$module, 'info', 'Response: '.str_replace('\n', "\n", $response), __LINE__, __FILE__);
+					myadmin_log(self::$module, 'info', 'Response: '.str_replace('\n', "\n", $response), __LINE__, __FILE__, self::$module, $serviceClass->getId());
 					$response = json_decode($response, true);
 				}
 			}
@@ -167,10 +167,10 @@ class Plugin
 					$username .= 'a';
 					$username = mb_substr($username, 1);
 					$options['username'] = $username;
-					myadmin_log(self::$module, 'info', 'Trying Username '.$options['username'], __LINE__, __FILE__);
+					myadmin_log(self::$module, 'info', 'Trying Username '.$options['username'], __LINE__, __FILE__, self::$module, $serviceClass->getId());
 					$response = $whm->xmlapi_query('createacct', $options);
 					request_log(self::$module, $serviceClass->getCustid(), __FUNCTION__, 'cpanel', 'createacct', $options, $response);
-					myadmin_log(self::$module, 'info', 'Response: '.str_replace('\n', "\n", $response), __LINE__, __FILE__);
+					myadmin_log(self::$module, 'info', 'Response: '.str_replace('\n', "\n", $response), __LINE__, __FILE__, self::$module, $serviceClass->getId());
 					$response = json_decode($response, true);
 				}
 			}
@@ -180,17 +180,17 @@ class Plugin
 				if (isset($options['bwlimit']) && $options['bwlimit'] != 'unlimited') {
 					$response3 = $whm->limitbw($username, $options['bwlimit']);
 					request_log(self::$module, $serviceClass->getCustid(), __FUNCTION__, 'cpanel', 'limitbw', ['username' => $username, 'options' => $options['bwlimit']], $response3);
-					myadmin_log(self::$module, 'info', 'Response: '.str_replace('\n', "\n", strip_tags($response3)), __LINE__, __FILE__);
+					myadmin_log(self::$module, 'info', 'Response: '.str_replace('\n', "\n", strip_tags($response3)), __LINE__, __FILE__, self::$module, $serviceClass->getId());
 				}
 				if ($reseller === true) {
 					$response2 = $whm->setupreseller($username, false);
 					request_log(self::$module, $serviceClass->getCustid(), __FUNCTION__, 'cpanel', 'setupreseller', ['username' => $username], $response2);
-					myadmin_log(self::$module, 'info', "Response: {$response2}", __LINE__, __FILE__);
+					myadmin_log(self::$module, 'info', "Response: {$response2}", __LINE__, __FILE__, self::$module, $serviceClass->getId());
 					$response3 = $whm->listacls();
 
 					$acls = json_decode($response3, true);
 					request_log(self::$module, $serviceClass->getCustid(), __FUNCTION__, 'cpanel', 'listacls', [], $response);
-					//myadmin_log(self::$module, 'info', json_encode($acls), __LINE__, __FILE__);
+					//myadmin_log(self::$module, 'info', json_encode($acls), __LINE__, __FILE__, self::$module, $serviceClass->getId());
 					if (!isset($acls['acls']['reseller'])) {
 						$acl = [
 							'acl-add-pkg' => 1, // Allow the creation of packages.
@@ -236,17 +236,17 @@ class Plugin
 							'acllist' => 'reseller'
 						];
 						$response = $whm->saveacllist($acl);
-						myadmin_log(self::$module, 'info', str_replace('\n', "\n", json_encode($response)), __LINE__, __FILE__);
+						myadmin_log(self::$module, 'info', str_replace('\n', "\n", json_encode($response)), __LINE__, __FILE__, self::$module, $serviceClass->getId());
 						request_log(self::$module, $serviceClass->getCustid(), __FUNCTION__, 'cpanel', 'saveacllist', $acl, $response);
-						myadmin_log(self::$module, 'info', 'Reseller ACL Created', __LINE__, __FILE__);
+						myadmin_log(self::$module, 'info', 'Reseller ACL Created', __LINE__, __FILE__, self::$module, $serviceClass->getId());
 					} else {
-						myadmin_log(self::$module, 'info', 'Reseller ACL Exists', __LINE__, __FILE__);
+						myadmin_log(self::$module, 'info', 'Reseller ACL Exists', __LINE__, __FILE__, self::$module, $serviceClass->getId());
 					}
 					$request = ['reseller' => $username, 'acllist' => 'reseller'];
 					$response = $whm->setacls($request);
-					myadmin_log(self::$module, 'info', str_replace('\n', "\n", json_encode($response)), __LINE__, __FILE__);
+					myadmin_log(self::$module, 'info', str_replace('\n', "\n", json_encode($response)), __LINE__, __FILE__, self::$module, $serviceClass->getId());
 					request_log(self::$module, $serviceClass->getCustid(), __FUNCTION__, 'cpanel', 'setacls', $request, $response);
-					myadmin_log(self::$module, 'info', 'Reseller assigned to ACL', __LINE__, __FILE__);
+					myadmin_log(self::$module, 'info', 'Reseller assigned to ACL', __LINE__, __FILE__, self::$module, $serviceClass->getId());
 				}
 				$db = get_module_db(self::$module);
 				$username = $db->real_escape($username);
@@ -276,20 +276,20 @@ class Plugin
 					$data['store_owner'] = $userdata['account_lid'];
 					$data['store_address'] = (isset($userdata['address']) ? $userdata['address'] : '');
 					$data['site_desc'] = $soft->scripts[$script]['fullname'];
-					myadmin_log(self::$module, 'info', 'Installing '.$soft->scripts[$script]['fullname'], __LINE__, __FILE__);
+					myadmin_log(self::$module, 'info', 'Installing '.$soft->scripts[$script]['fullname'], __LINE__, __FILE__, self::$module, $serviceClass->getId());
 					//$response = myadmin_unstringify($soft->install($script, $data));
 					$response = json_decode($soft->install($script, $data), true);
 					request_log(self::$module, $serviceClass->getCustid(), __FUNCTION__, 'softaculous', 'install', ['script' => $script, 'data' => $data], $response);
-					myadmin_log(self::$module, 'info', str_replace('\n', "\n", json_encode($response)), __LINE__, __FILE__);
+					myadmin_log(self::$module, 'info', str_replace('\n', "\n", json_encode($response)), __LINE__, __FILE__, self::$module, $serviceClass->getId());
 				}
 				function_requirements('add_dns_record');
 				$response = add_dns_record(14426, 'wh'.$serviceClass->getId(), $ip, 'A', 86400, 0, true);
-				myadmin_log(self::$module, 'info', 'Response: '.str_replace('\n', "\n", json_encode($response)), __LINE__, __FILE__);
+				myadmin_log(self::$module, 'info', 'Response: '.str_replace('\n', "\n", json_encode($response)), __LINE__, __FILE__, self::$module, $serviceClass->getId());
 				$response = $whm->park($options['username'], 'wh'.$serviceClass->getId().'.ispot.cc', '');
-				myadmin_log(self::$module, 'info', 'Response: '.str_replace('\n', "\n", json_encode($response)), __LINE__, __FILE__);
+				myadmin_log(self::$module, 'info', 'Response: '.str_replace('\n', "\n", json_encode($response)), __LINE__, __FILE__, self::$module, $serviceClass->getId());
 				$event['success'] = true;
 			} else {
-				myadmin_log(self::$module, 'warning', 'Returning With Setup Failed from Response: '.str_replace('\n', "\n", json_encode($response)), __LINE__, __FILE__);
+				myadmin_log(self::$module, 'warning', 'Returning With Setup Failed from Response: '.str_replace('\n', "\n", json_encode($response)), __LINE__, __FILE__, self::$module, $serviceClass->getId());
 				$event['success'] = false;
 			}
 			$event->stopPropagation();
@@ -324,7 +324,7 @@ class Plugin
 			} else {
 				$response = json_decode($whm->unsuspendacct($serviceClass->getUsername()), true);
 			}
-			myadmin_log(self::$module, 'info', str_replace('\n', "\n", json_encode($response)), __LINE__, __FILE__);
+			myadmin_log(self::$module, 'info', str_replace('\n', "\n", json_encode($response)), __LINE__, __FILE__, self::$module, $serviceClass->getId());
 			$event->stopPropagation();
 		}
 	}
@@ -361,10 +361,10 @@ class Plugin
 						$response = json_decode($whm->suspendacct($serviceClass->getUsername(), 'Canceled Service'), true);
 					}
 				} catch (\Exception $e) {
-					myadmin_log('cpanel', 'error', 'suspendacct('.$serviceClass->getUsername().') tossed exception '.$e->getMessage(), __LINE__, __FILE__);
+					myadmin_log('cpanel', 'error', 'suspendacct('.$serviceClass->getUsername().') tossed exception '.$e->getMessage(), __LINE__, __FILE__, self::$module, $serviceClass->getId());
 					add_output('Caught exception: '.$e->getMessage().'<br>');
 				}
-				myadmin_log(self::$module, 'info', str_replace('\n', "\n", json_encode($response)), __LINE__, __FILE__);
+				myadmin_log(self::$module, 'info', str_replace('\n', "\n", json_encode($response)), __LINE__, __FILE__, self::$module, $serviceClass->getId());
 			}
 			$event->stopPropagation();
 		}
@@ -401,19 +401,19 @@ class Plugin
 				} else {
 					$response = json_decode($whm->removeacct($serviceClass->getUsername(), false), true);
 				}
-				myadmin_log(self::$module, 'info', str_replace('\n', "\n", json_encode($response)), __LINE__, __FILE__);
+				myadmin_log(self::$module, 'info', str_replace('\n', "\n", json_encode($response)), __LINE__, __FILE__, self::$module, $serviceClass->getId());
 			} else {
-				myadmin_log(self::$module, 'info', "Skipping WHMAPI/Server Removal for {$serviceClass->getHostname()} because username is blank", __LINE__, __FILE__);
+				myadmin_log(self::$module, 'info', "Skipping WHMAPI/Server Removal for {$serviceClass->getHostname()} because username is blank", __LINE__, __FILE__, self::$module, $serviceClass->getId());
 			}
 			$dnsr = json_decode($whm->dumpzone($serviceClass->getHostname()), true);
 			if ($dnsr['result'][0]['status'] == 1) {
 				$db = get_module_db(self::$module);
 				$db->query("select * from {$settings['TABLE']} where {$settings['PREFIX']}_hostname='{$serviceClass->getHostname()}' and {$settings['PREFIX']}_id != {$serviceClass->getId()} and {$settings['PREFIX']}_status = 'active'", __LINE__, __FILE__);
 				if ($db->num_rows() == 0) {
-					myadmin_log(self::$module, 'info', "Removing Hanging DNS entry for {$serviceClass->getHostname()}", __LINE__, __FILE__);
+					myadmin_log(self::$module, 'info', "Removing Hanging DNS entry for {$serviceClass->getHostname()}", __LINE__, __FILE__, self::$module, $serviceClass->getId());
 					$whm->killdns($serviceClass->getHostname());
 				} else {
-					myadmin_log(self::$module, 'info', "Skipping Removing DNS entry for {$serviceClass->getHostname()} because other non deleted sites w/ the same hostname exist", __LINE__, __FILE__);
+					myadmin_log(self::$module, 'info', "Skipping Removing DNS entry for {$serviceClass->getHostname()} because other non deleted sites w/ the same hostname exist", __LINE__, __FILE__, self::$module, $serviceClass->getId());
 				}
 			}
 			$event->stopPropagation();
@@ -438,7 +438,7 @@ class Plugin
 			$serviceClass = $event->getSubject();
 			$settings = get_module_settings(self::$module);
 			$cpanel = new Cpanel(FANTASTICO_USERNAME, FANTASTICO_PASSWORD);
-			myadmin_log(self::$module, 'info', 'IP Change - (OLD:'.$serviceClass->getIp().") (NEW:{$event['newip']})", __LINE__, __FILE__);
+			myadmin_log(self::$module, 'info', 'IP Change - (OLD:'.$serviceClass->getIp().") (NEW:{$event['newip']})", __LINE__, __FILE__, self::$module, $serviceClass->getId());
 			$response = $cpanel->editIp($serviceClass->getIp(), $event['newip']);
 			if (isset($response['faultcode'])) {
 				myadmin_log(self::$module, 'error', 'Cpanel editIp('.$serviceClass->getIp().', '.$event['newip'].') returned Fault '.$response['faultcode'].': '.$response['fault'], __LINE__, __FILE__, self::$module);
