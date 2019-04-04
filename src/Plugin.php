@@ -36,23 +36,23 @@ class Plugin
 			self::$module.'.reactivate' => [__CLASS__, 'getReactivate'],
 			self::$module.'.deactivate' => [__CLASS__, 'getDeactivate'],
 			self::$module.'.terminate' => [__CLASS__, 'getTerminate'],
-            'api.register' => [__CLASS__, 'apiRegister'],
-            'function.requirements' => [__CLASS__, 'getRequirements'],
+			'api.register' => [__CLASS__, 'apiRegister'],
+			'function.requirements' => [__CLASS__, 'getRequirements'],
 			'ui.menu' => [__CLASS__, 'getMenu']
 		];
 	}
-    
-    /**
-     * @param \Symfony\Component\EventDispatcher\GenericEvent $event
-     */
-    public static function apiRegister(GenericEvent $event)
-    {
-        /**
-         * @var \ServiceHandler $subject
-         */
-        //$subject = $event->getSubject();
-        api_register('api_auto_cpanel_login', ['id' => 'int'], ['return' => 'result_status'], 'Logs into cpanel for the given website id and returns a unique logged-in url.  The status will be "ok" if successful, or "error" if there was any problems status_text will contain a description of the problem if any.');
-    }    
+	
+	/**
+	 * @param \Symfony\Component\EventDispatcher\GenericEvent $event
+	 */
+	public static function apiRegister(GenericEvent $event)
+	{
+		/**
+		 * @var \ServiceHandler $subject
+		 */
+		//$subject = $event->getSubject();
+		api_register('api_auto_cpanel_login', ['id' => 'int'], ['return' => 'result_status'], 'Logs into cpanel for the given website id and returns a unique logged-in url.  The status will be "ok" if successful, or "error" if there was any problems status_text will contain a description of the problem if any.');
+	}
 
 	/**
 	 * @param \Symfony\Component\EventDispatcher\GenericEvent $event
@@ -61,7 +61,7 @@ class Plugin
 	public static function getActivate(GenericEvent $event)
 	{
 		if ($event['category'] == get_service_define('WEB_CPANEL')) {
-            $serviceClass = $event->getSubject();
+			$serviceClass = $event->getSubject();
 			myadmin_log(self::$module, 'info', 'Cpanel Activation', __LINE__, __FILE__, self::$module, $serviceClass->getId());
 			$serviceTypes = run_event('get_service_types', false, self::$module);
 			$settings = get_module_settings(self::$module);
@@ -336,7 +336,7 @@ class Plugin
 	public static function getDeactivate(GenericEvent $event)
 	{
 		if (in_array($event['type'], [get_service_define('WEB_CPANEL'), get_service_define('WEB_WORDPRESS')])) {
-            $serviceClass = $event->getSubject();
+			$serviceClass = $event->getSubject();
 			myadmin_log(self::$module, 'info', 'Cpanel Deactivation', __LINE__, __FILE__, self::$module, $serviceClass->getId());
 			$settings = get_module_settings(self::$module);
 			if ($serviceClass->getServer() > 0) {
@@ -378,7 +378,7 @@ class Plugin
 	public static function getTerminate(GenericEvent $event)
 	{
 		if (in_array($event['type'], [get_service_define('WEB_CPANEL'), get_service_define('WEB_WORDPRESS')])) {
-            $serviceClass = $event->getSubject();
+			$serviceClass = $event->getSubject();
 			myadmin_log(self::$module, 'info', 'Cpanel Termination', __LINE__, __FILE__, self::$module, $serviceClass->getId());
 			$settings = get_module_settings(self::$module);
 			$serverdata = get_service_master($serviceClass->getServer(), self::$module);
@@ -570,11 +570,11 @@ class Plugin
 	 */
 	public static function getRequirements(GenericEvent $event)
 	{
-        /**
-         * @var \MyAdmin\Plugins\Loader $this->loader
-         */
-        $loader = $event->getSubject();
-        $loader->add_requirement('api_auto_cpanel_login','/../vendor/detain/myadmin-cpanel-webhosting/src/api.php');
+		/**
+		 * @var \MyAdmin\Plugins\Loader $this->loader
+		 */
+		$loader = $event->getSubject();
+		$loader->add_requirement('api_auto_cpanel_login', '/../vendor/detain/myadmin-cpanel-webhosting/src/api.php');
 		$loader->add_page_requirement('whm_get_accounts', '/webhosting/whmapi.functions.inc.php');
 		$loader->add_page_requirement('whm_api', '/webhosting/whmapi.functions.inc.php');
 		$loader->add_page_requirement('whm_choose_server', '/webhosting/whmapi.functions.inc.php');
@@ -655,18 +655,18 @@ class Plugin
 	/**
 	 * @param \Symfony\Component\EventDispatcher\GenericEvent $event
 	 */
-    public static function getSettings(GenericEvent $event)
-    {
-        /**
-         * @var \MyAdmin\Settings $settings
-         **/
-        $settings = $event->getSubject();
-        $settings->setTarget('module');
+	public static function getSettings(GenericEvent $event)
+	{
+		/**
+		 * @var \MyAdmin\Settings $settings
+		 **/
+		$settings = $event->getSubject();
+		$settings->setTarget('module');
 		$settings->add_select_master(_(self::$module), _('Default Servers'), self::$module, 'new_website_cpanel_server', _('Default CPanel Setup Server'), NEW_WEBSITE_CPANEL_SERVER, get_service_define('WEB_CPANEL'));
 		$settings->add_select_master(_(self::$module), _('Default Servers'), self::$module, 'new_website_wordpress_server', _('Default WordPress Setup Server'), NEW_WEBSITE_WORDPRESS_SERVER, get_service_define('WEB_WORDPRESS'));
 		$settings->add_dropdown_setting(self::$module, _('Out of Stock'), 'outofstock_webhosting_cpanel', _('Out Of Stock CPanel Webhosting'), _('Enable/Disable Sales Of This Type'), $settings->get_setting('OUTOFSTOCK_WEBHOSTING_CPANEL'), ['0', '1'], ['No', 'Yes']);
 		$settings->add_dropdown_setting(self::$module, _('Out of Stock'), 'outofstock_webhosting_wordpress', _('Out Of Stock WordPress Managed Webhosting'), _('Enable/Disable Sales Of This Type'), $settings->get_setting('OUTOFSTOCK_WEBHOSTING_WORDPRESS'), ['0', '1'], ['No', 'Yes']);
-        $settings->setTarget('global');
+		$settings->setTarget('global');
 		$settings->add_dropdown_setting(self::$module, _('CPanel Defaults'), 'cpanel_package_defaults_ip', _('CPanel Package Defaults - IP'), _('Enable/Disable Dedicated IP for new Sites'), $settings->get_setting('CPANEL_PACKAGE_DEFAULTS_IP'), ['n', 'y'], ['No', 'Yes']);
 		$settings->add_dropdown_setting(self::$module, _('CPanel Defaults'), 'cpanel_package_defaults_cgi', _('CPanel Package Defaults - CGI'), _('Enable/Disable CGI Access'), $settings->get_setting('CPANEL_PACKAGE_DEFAULTS_CGI'), ['0', '1'], ['No', 'Yes']);
 		$settings->add_dropdown_setting(self::$module, _('CPanel Defaults'), 'cpanel_package_defaults_frontpage', _('CPanel Package Defaults - Frontpage'), _('Enable/Disable Frontpage Extensions'), $settings->get_setting('CPANEL_PACKAGE_DEFAULTS_FRONTPAGE'), ['0', '1'], ['No', 'Yes']);

@@ -62,4 +62,3 @@ function api_auto_cpanel_login($id)
 	$return['status_text'] = 'Sorry! something went wrong, couldn\'t able to connect to cPanel!';
 	return $return;
 }
-
