@@ -109,12 +109,15 @@ class Plugin
 			} else {
 				$reseller = false;
 			}
+            $account_limit = 100;
 			if ($serviceTypes[$serviceClass->getType()]['services_field2'] != '') {
 				$fields = explode(',', $serviceTypes[$serviceClass->getType()]['services_field2']);
 				foreach ($fields as $field) {
 					list($key, $value) = explode('=', $field);
 					if ($key == 'script') {
 						$extra[$key] = $value;
+                    } elseif ($key == 'account_limit') {
+                        $account_limit = $value;
 					} else {
 						$options[$key] = $value;
 					}
@@ -247,6 +250,11 @@ class Plugin
 					myadmin_log(self::$module, 'info', str_replace('\n', "\n", json_encode($response)), __LINE__, __FILE__, self::$module, $serviceClass->getId());
 					request_log(self::$module, $serviceClass->getCustid(), __FUNCTION__, 'cpanel', 'setacls', $request, $response);
 					myadmin_log(self::$module, 'info', 'Reseller assigned to ACL', __LINE__, __FILE__, self::$module, $serviceClass->getId());
+                    $whm->setresellerlimits([
+                        'user' => $username,
+                        'enable_account_limit' => 1,
+                        'account_limit' => $account_limit,
+                    ]);
 				}
 				$db = get_module_db(self::$module);
 				$username = $db->real_escape($username);
