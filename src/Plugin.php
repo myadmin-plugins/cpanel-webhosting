@@ -109,15 +109,15 @@ class Plugin
 			} else {
 				$reseller = false;
 			}
-            $account_limit = 100;
+			$account_limit = 100;
 			if ($serviceTypes[$serviceClass->getType()]['services_field2'] != '') {
 				$fields = explode(',', $serviceTypes[$serviceClass->getType()]['services_field2']);
 				foreach ($fields as $field) {
 					list($key, $value) = explode('=', $field);
 					if ($key == 'script') {
 						$extra[$key] = $value;
-                    } elseif ($key == 'account_limit') {
-                        $account_limit = $value;
+					} elseif ($key == 'account_limit') {
+						$account_limit = $value;
 					} else {
 						$options[$key] = $value;
 					}
@@ -138,7 +138,7 @@ class Plugin
 				$event->stopPropagation();
 				return;
 			}
-			request_log(self::$module, $serviceClass->getCustid(), __FUNCTION__, 'cpanel', 'createacct', $options, $response);
+			request_log(self::$module, $serviceClass->getCustid(), __FUNCTION__, 'cpanel', 'createacct', $options, $response, $serviceClass->getId());
 			myadmin_log(self::$module, 'info', 'Response: '.str_replace('\n', '', strip_tags($response)), __LINE__, __FILE__, self::$module, $serviceClass->getId());
 			$response = json_decode($response, true);
 			if (mb_substr($response['result'][0]['statusmsg'], 0, 19) == 'Sorry, the password') {
@@ -147,7 +147,7 @@ class Plugin
 					$options['password'] = $password;
 					myadmin_log(self::$module, 'info', "Trying Password {$options['password']}", __LINE__, __FILE__, self::$module, $serviceClass->getId());
 					$response = $whm->xmlapi_query('createacct', $options);
-					request_log(self::$module, $serviceClass->getCustid(), __FUNCTION__, 'cpanel', 'createacct', $options, $response);
+					request_log(self::$module, $serviceClass->getCustid(), __FUNCTION__, 'cpanel', 'createacct', $options, $response, $serviceClass->getId());
 					myadmin_log(self::$module, 'info', 'Response: '.str_replace('\n', "\n", $response), __LINE__, __FILE__, self::$module, $serviceClass->getId());
 					$response = json_decode($response, true);
 				}
@@ -160,7 +160,7 @@ class Plugin
 					$options['username'] = $username;
 					myadmin_log(self::$module, 'info', 'Trying Username '.$options['username'], __LINE__, __FILE__, self::$module, $serviceClass->getId());
 					$response = $whm->xmlapi_query('createacct', $options);
-					request_log(self::$module, $serviceClass->getCustid(), __FUNCTION__, 'cpanel', 'createacct', $options, $response);
+					request_log(self::$module, $serviceClass->getCustid(), __FUNCTION__, 'cpanel', 'createacct', $options, $response, $serviceClass->getId());
 					myadmin_log(self::$module, 'info', 'Response: '.str_replace('\n', "\n", $response), __LINE__, __FILE__, self::$module, $serviceClass->getId());
 					$response = json_decode($response, true);
 				}
@@ -172,7 +172,7 @@ class Plugin
 					$options['username'] = $username;
 					myadmin_log(self::$module, 'info', 'Trying Username '.$options['username'], __LINE__, __FILE__, self::$module, $serviceClass->getId());
 					$response = $whm->xmlapi_query('createacct', $options);
-					request_log(self::$module, $serviceClass->getCustid(), __FUNCTION__, 'cpanel', 'createacct', $options, $response);
+					request_log(self::$module, $serviceClass->getCustid(), __FUNCTION__, 'cpanel', 'createacct', $options, $response, $serviceClass->getId());
 					myadmin_log(self::$module, 'info', 'Response: '.str_replace('\n', "\n", $response), __LINE__, __FILE__, self::$module, $serviceClass->getId());
 					$response = json_decode($response, true);
 				}
@@ -182,17 +182,17 @@ class Plugin
 				$ip = $response['result'][0]['options']['ip'];
 				if (isset($options['bwlimit']) && $options['bwlimit'] != 'unlimited') {
 					$response3 = $whm->limitbw($username, $options['bwlimit']);
-					request_log(self::$module, $serviceClass->getCustid(), __FUNCTION__, 'cpanel', 'limitbw', ['username' => $username, 'options' => $options['bwlimit']], $response3);
+					request_log(self::$module, $serviceClass->getCustid(), __FUNCTION__, 'cpanel', 'limitbw', ['username' => $username, 'options' => $options['bwlimit']], $response3, $serviceClass->getId());
 					myadmin_log(self::$module, 'info', 'Response: '.str_replace('\n', "\n", strip_tags($response3)), __LINE__, __FILE__, self::$module, $serviceClass->getId());
 				}
 				if ($reseller === true) {
 					$response2 = $whm->setupreseller($username, false);
-					request_log(self::$module, $serviceClass->getCustid(), __FUNCTION__, 'cpanel', 'setupreseller', ['username' => $username], $response2);
+					request_log(self::$module, $serviceClass->getCustid(), __FUNCTION__, 'cpanel', 'setupreseller', ['username' => $username], $response2, $serviceClass->getId());
 					myadmin_log(self::$module, 'info', "Response: {$response2}", __LINE__, __FILE__, self::$module, $serviceClass->getId());
 					$response3 = $whm->listacls();
 
 					$acls = json_decode($response3, true);
-					request_log(self::$module, $serviceClass->getCustid(), __FUNCTION__, 'cpanel', 'listacls', [], $response);
+					request_log(self::$module, $serviceClass->getCustid(), __FUNCTION__, 'cpanel', 'listacls', [], $response, $serviceClass->getId());
 					//myadmin_log(self::$module, 'info', json_encode($acls), __LINE__, __FILE__, self::$module, $serviceClass->getId());
 					if (!isset($acls['acls']['reseller'])) {
 						$acl = [
@@ -240,7 +240,7 @@ class Plugin
 						];
 						$response = $whm->saveacllist($acl);
 						myadmin_log(self::$module, 'info', str_replace('\n', "\n", json_encode($response)), __LINE__, __FILE__, self::$module, $serviceClass->getId());
-						request_log(self::$module, $serviceClass->getCustid(), __FUNCTION__, 'cpanel', 'saveacllist', $acl, $response);
+						request_log(self::$module, $serviceClass->getCustid(), __FUNCTION__, 'cpanel', 'saveacllist', $acl, $response, $serviceClass->getId());
 						myadmin_log(self::$module, 'info', 'Reseller ACL Created', __LINE__, __FILE__, self::$module, $serviceClass->getId());
 					} else {
 						myadmin_log(self::$module, 'info', 'Reseller ACL Exists', __LINE__, __FILE__, self::$module, $serviceClass->getId());
@@ -248,13 +248,13 @@ class Plugin
 					$request = ['reseller' => $username, 'acllist' => 'reseller'];
 					$response = $whm->setacls($request);
 					myadmin_log(self::$module, 'info', str_replace('\n', "\n", json_encode($response)), __LINE__, __FILE__, self::$module, $serviceClass->getId());
-					request_log(self::$module, $serviceClass->getCustid(), __FUNCTION__, 'cpanel', 'setacls', $request, $response);
+					request_log(self::$module, $serviceClass->getCustid(), __FUNCTION__, 'cpanel', 'setacls', $request, $response, $serviceClass->getId());
 					myadmin_log(self::$module, 'info', 'Reseller assigned to ACL', __LINE__, __FILE__, self::$module, $serviceClass->getId());
-                    $whm->setresellerlimits([
-                        'user' => $username,
-                        'enable_account_limit' => 1,
-                        'account_limit' => $account_limit,
-                    ]);
+					$whm->setresellerlimits([
+						'user' => $username,
+						'enable_account_limit' => 1,
+						'account_limit' => $account_limit,
+					]);
 				}
 				$db = get_module_db(self::$module);
 				$username = $db->real_escape($username);
@@ -287,7 +287,7 @@ class Plugin
 					myadmin_log(self::$module, 'info', 'Installing '.$soft->scripts[$script]['fullname'], __LINE__, __FILE__, self::$module, $serviceClass->getId());
 					//$response = myadmin_unstringify($soft->install($script, $data));
 					$response = json_decode($soft->install($script, $data), true);
-					request_log(self::$module, $serviceClass->getCustid(), __FUNCTION__, 'softaculous', 'install', ['script' => $script, 'data' => $data], $response);
+					request_log(self::$module, $serviceClass->getCustid(), __FUNCTION__, 'softaculous', 'install', ['script' => $script, 'data' => $data], $response, $serviceClass->getId());
 					myadmin_log(self::$module, 'info', str_replace('\n', "\n", json_encode($response)), __LINE__, __FILE__, self::$module, $serviceClass->getId());
 				}
 				function_requirements('add_dns_record');
