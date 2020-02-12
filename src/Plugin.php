@@ -369,6 +369,7 @@ class Plugin
 						$response = json_decode($whm->suspendacct($serviceClass->getUsername(), 'Canceled Service'), true);
 					}
 				} catch (\Exception $e) {
+					$event['success'] = false;
 					myadmin_log('cpanel', 'error', 'suspendacct('.$serviceClass->getUsername().') tossed exception '.$e->getMessage(), __LINE__, __FILE__, self::$module, $serviceClass->getId());
 					add_output('Caught exception: '.$e->getMessage().'<br>');
 				}
@@ -432,6 +433,7 @@ class Plugin
 			} elseif ($response['result'][0]['statusmsg'] == "System user {$serviceClass->getUsername()} does not exist!") {
 				return true;
 			} else {
+				$event['success'] = false;
 				return false;
 			}
 		}
