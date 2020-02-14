@@ -165,8 +165,8 @@ class Plugin
 					$response = json_decode($response, true);
 				}
 			}
-			if (preg_match("/^.*This system already has an account named .{1,3}{$username}.{1,3}\.$/m", $response['result'][0]['statusmsg']) || preg_match('/^.*The name of another account on this server has the same initial/m', $response['result'][0]['statusmsg'])) {
-				while (preg_match("/^.*This system already has an account named .{1,3}{$username}.{1,3}\.$/m", $response['result'][0]['statusmsg']) || preg_match('/^.*The name of another account on this server has the same initial/m', $response['result'][0]['statusmsg'])) {
+			if (preg_match("/^.*This system already has an account named .{1,3}{$username}.{1,3}\.$/m", $response['result'][0]['statusmsg']) || preg_match('/^.*The name of another account on this server has the same initial/m', $response['result'][0]['statusmsg']) || preg_match('/^.*is a reserved username on this system/m', $response['result'][0]['statusmsg'])) {
+				while (preg_match("/^.*This system already has an account named .{1,3}{$username}.{1,3}\.$/m", $response['result'][0]['statusmsg']) || preg_match('/^.*The name of another account on this server has the same initial/m', $response['result'][0]['statusmsg']) || preg_match('/^.*is a reserved username on this system/m', $response['result'][0]['statusmsg'])) {
 					$username .= 'a';
 					$username = mb_substr($username, 1);
 					$options['username'] = $username;
