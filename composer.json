@@ -22,7 +22,6 @@
 		"php": ">=5.0.0",
 		"ext-soap": "*",
 		"symfony/event-dispatcher": ">=2.8.26",
-		"cpanelinc/xmlapi-php": ">=2.0.1",
 		"detain/myadmin-plugin-installer": "dev-master"
 	},
 	"require-dev": {
@@ -33,20 +32,6 @@
 		"satooshi/php-coveralls": "*",
 		"codacy/coverage": "dev-master"
 	},
-	"repositories": [
-		{
-			"type": "package",
-			"package": {
-				"name": "cpanelinc/xmlapi-php",
-				"version": "2.0.1",
-				"source": {
-					"url": "https://github.com/CpanelInc/xmlapi-php.git",
-					"type": "git",
-					"reference": "master"
-				}
-			}
-		}
-	],
 	"autoload": {
 		"psr-4": {
 			"Detain\\MyAdminCpanel\\": "src/"
