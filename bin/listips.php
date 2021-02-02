@@ -8,6 +8,8 @@
 * @category Webhosting
 */
 
+use CLIFramework\Component\Table\Table;
+
 require_once __DIR__.'/../../../../include/functions.inc.php';
 $db = get_module_db('webhosting');
 $db2 = get_module_db('webhosting');
@@ -33,8 +35,22 @@ switch ($db->Record['website_type']) {
 	default:
 		try {
 			$whm = whm_api($db->Record['website_id']);
-			$response = json_decode($whm->listips());
-			print_r($response);
+			$response = json_decode($whm->listips(),true);
+$table = new Table;
+$fields = [];
+$badFields = ['netmask', 'network', 'if'];
+foreach (array_keys($response['result'][0]) as $field)
+	if (!in_array($field, $badFields))
+		$fields[] = $field;
+$table->setHeaders($fields);
+foreach ($response['result'] as $row) {
+	$data = [];
+	foreach ($fields as $field)
+		$data[] = $row[$field];
+	$table->addRow($data);
+}
+echo $table->render();
+			//print_r($response);
 		} catch (Exception $e) {
 			$msg = "Caught Exception Processing {$db->Record['website_name']}: ".$e->getMessage();
 			myadmin_log('scripts', 'info', $msg, __LINE__, __FILE__);
