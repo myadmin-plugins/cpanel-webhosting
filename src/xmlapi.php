@@ -169,16 +169,16 @@ class xmlapi
     * @param string $password The password to authenticate with
     * @return Xml_Api object
     */
-    public function __construct($host = null, $user = null, $password = null )
+    public function __construct($host = null, $user = null, $password = null)
     {
         // Check if debugging must be enabled
-        if ( (defined('XMLAPI_DEBUG')) && (XMLAPI_DEBUG == '1') ) {
-             $this->debug = true;
+        if ((defined('XMLAPI_DEBUG')) && (XMLAPI_DEBUG == '1')) {
+            $this->debug = true;
         }
 
         // Check if raw xml output must be enabled
-        if ( (defined('XMLAPI_RAW_XML')) && (XMLAPI_RAW_XML == '1') ) {
-             $this->raw_xml = true;
+        if ((defined('XMLAPI_RAW_XML')) && (XMLAPI_RAW_XML == '1')) {
+            $this->raw_xml = true;
         }
 
         /**
@@ -186,36 +186,35 @@ class xmlapi
         * This can either be passed at this point or by using the set_hash or set_password functions
         **/
 
-        if ( ( defined('XMLAPI_USER') ) && ( strlen(XMLAPI_USER) > 0 ) ) {
+        if ((defined('XMLAPI_USER')) && (strlen(XMLAPI_USER) > 0)) {
             $this->user = XMLAPI_USER;
 
             // set the authtype to pass and place the password in $this->pass
-            if ( ( defined('XMLAPI_PASS') ) && ( strlen(XMLAPI_PASS) > 0 ) ) {
+            if ((defined('XMLAPI_PASS')) && (strlen(XMLAPI_PASS) > 0)) {
                 $this->auth_type = 'pass';
                 $this->auth = XMLAPI_PASS;
             }
 
             // set the authtype to hash and place the hash in $this->auth
-            if ( ( defined('XMLAPI_HASH') ) && ( strlen(XMLAPI_HASH) > 0 ) ) {
+            if ((defined('XMLAPI_HASH')) && (strlen(XMLAPI_HASH) > 0)) {
                 $this->auth_type = 'hash';
                 $this->auth = preg_replace("/(\n|\r|\s)/", '', XMLAPI_HASH);
             }
 
             // Throw warning if XMLAPI_HASH and XMLAPI_PASS are defined
-            if ( ( ( defined('XMLAPI_HASH') ) && ( strlen(XMLAPI_HASH) > 0 ) )
-                && ( ( defined('XMLAPI_PASS') ) && ( strlen(XMLAPI_PASS) > 0 ) ) ) {
+            if (((defined('XMLAPI_HASH')) && (strlen(XMLAPI_HASH) > 0))
+                && ((defined('XMLAPI_PASS')) && (strlen(XMLAPI_PASS) > 0))) {
                 error_log('warning: both XMLAPI_HASH and XMLAPI_PASS are defined, defaulting to XMLAPI_HASH');
             }
 
 
             // Throw a warning if XMLAPI_HASH and XMLAPI_PASS are undefined and XMLAPI_USER is defined
-            if ( !(defined('XMLAPI_HASH') ) || !defined('XMLAPI_PASS') ) {
+            if (!(defined('XMLAPI_HASH')) || !defined('XMLAPI_PASS')) {
                 error_log('warning: XMLAPI_USER set but neither XMLAPI_HASH or XMLAPI_PASS have not been defined');
             }
-
         }
 
-        if ( ( $user != null ) && ( strlen( $user ) < 9 ) ) {
+        if (($user != null) && (strlen($user) < 9)) {
             $this->user = $user;
         }
 
@@ -231,7 +230,7 @@ class xmlapi
 
         // Set the host, error if not defined
         if ($host == null) {
-            if ( (defined('XMLAPI_HOST')) && (strlen(XMLAPI_HOST) > 0) ) {
+            if ((defined('XMLAPI_HOST')) && (strlen(XMLAPI_HOST) > 0)) {
                 $this->host = XMLAPI_HOST;
             } else {
                 throw new Exception("No host defined");
@@ -241,19 +240,18 @@ class xmlapi
         }
 
         // disabling SSL is probably a bad idea.. just saying.
-        if ( defined('XMLAPI_USE_SSL' ) && (XMLAPI_USE_SSL == '0' ) ) {
+        if (defined('XMLAPI_USE_SSL') && (XMLAPI_USE_SSL == '0')) {
             $this->protocol = "http";
         }
 
         // Detemine what the default http client should be.
-        if ( function_exists('curl_setopt') ) {
+        if (function_exists('curl_setopt')) {
             $this->http_client = "curl";
-        } elseif ( ini_get('allow_url_fopen') ) {
+        } elseif (ini_get('allow_url_fopen')) {
             $this->http_client = "fopen";
         } else {
             throw new Exception('allow_url_fopen and curl are neither available in this PHP configuration');
         }
-
     }
 
     /**
@@ -280,7 +278,7 @@ class xmlapi
     * @param bool $debug turn on or off debug mode
     * @see get_debug()
     */
-    public function set_debug( $debug = 1 )
+    public function set_debug($debug = 1)
     {
         $this->debug = $debug;
     }
@@ -304,7 +302,7 @@ class xmlapi
     * @param string $host The host to query
     * @see get_host()
     */
-    public function set_host( $host )
+    public function set_host($host)
     {
         $this->host = $host;
     }
@@ -335,9 +333,9 @@ class xmlapi
     * @see set_protocol()
     * @see get_port()
     */
-    public function set_port( $port )
+    public function set_port($port)
     {
-        if ( !is_int( $port ) ) {
+        if (!is_int($port)) {
             $port = intval($port);
         }
 
@@ -374,7 +372,7 @@ class xmlapi
     * @param string $proto the protocol to use to connect to cpsrvd
     * @see get_protocol()
     */
-    public function set_protocol( $proto )
+    public function set_protocol($proto)
     {
         if ($proto != 'https' && $proto != 'http') {
             throw new Exception('https and http are the only protocols that can be passed to set_protocol');
@@ -413,7 +411,7 @@ class xmlapi
     * @param string $output the output type to be set
     * @see get_output()
     */
-    public function set_output( $output )
+    public function set_output($output)
     {
         if ($output != 'json' && $output != 'xml' && $output != 'array' && $output != 'simplexml') {
             throw new Exception('json, xml, array and simplexml are the only allowed values for set_output');
@@ -447,7 +445,7 @@ class xmlapi
     * @see get_auth_type()
     * @param string auth_type the auth type to be set
     */
-    public function set_auth_type( $auth_type )
+    public function set_auth_type($auth_type)
     {
         if ($auth_type != 'hash' && $auth_type != 'pass') {
             throw new Exception('the only two allowable auth types arehash and path');
@@ -466,7 +464,7 @@ class xmlapi
     * @see set_auth_type()
     * @see set_user()
     */
-    public function set_password( $pass )
+    public function set_password($pass)
     {
         $this->auth_type = 'pass';
         $this->auth = $pass;
@@ -482,7 +480,7 @@ class xmlapi
     * @see set_auth_type()
     * @see set_user()
     */
-    public function set_hash( $hash )
+    public function set_hash($hash)
     {
         $this->auth_type = 'hash';
         $this->auth = preg_replace("/(\n|\r|\s)/", '', $hash);
@@ -509,7 +507,7 @@ class xmlapi
     * @see set_hash()
     * @see get_user()
     */
-    public function set_user( $user )
+    public function set_user($user)
     {
         $this->user = $user;
     }
@@ -524,10 +522,10 @@ class xmlapi
     * @see set_hash()
     * @see set_user()
     */
-    public function hash_auth( $user, $hash )
+    public function hash_auth($user, $hash)
     {
-        $this->set_hash( $hash );
-        $this->set_user( $user );
+        $this->set_hash($hash);
+        $this->set_user($user);
     }
 
     /**
@@ -539,10 +537,10 @@ class xmlapi
     * @see set_pass()
     * @see set_user()
     */
-    public function password_auth( $user, $pass )
+    public function password_auth($user, $pass)
     {
-        $this->set_password( $pass );
-        $this->set_user( $user );
+        $this->set_password($pass);
+        $this->set_user($user);
     }
 
     /**
@@ -587,9 +585,9 @@ class xmlapi
     * @see get_http_client()
     */
 
-    public function set_http_client( $client )
+    public function set_http_client($client)
     {
-        if ( ( $client != 'curl' ) && ( $client != 'fopen' ) ) {
+        if (($client != 'curl') && ($client != 'fopen')) {
             throw new Exception('only curl and fopen and allowed http clients');
         }
         $this->http_client = $client;
@@ -608,7 +606,7 @@ class xmlapi
         return $this->http_client;
     }
 
-     /*
+    /*
     *	Query Functions
     *	--
     *	This is where the actual calling of the XML-API, building API1 & API2 calls happens
@@ -623,7 +621,7 @@ class xmlapi
     * @param array $vars An associative array of the parameters to be passed to the XML-API Calls
     * @return mixed
     */
-    public function xmlapi_query( $function, $vars = array() )
+    public function xmlapi_query($function, $vars = array())
     {
         // Check to make sure all the data needed to perform the query is in place
         if (!$function) {
@@ -656,7 +654,7 @@ class xmlapi
 
         // Set the $auth string
 
-        $authstr = NULL;
+        $authstr = null;
         if ($this->auth_type == 'hash') {
             $authstr = 'Authorization: WHM ' . $this->user . ':' . $this->auth . "\r\n";
         } elseif ($this->auth_type == 'pass') {
@@ -671,7 +669,7 @@ class xmlapi
 
         // Perform the query (or pass the info to the functions that actually do perform the query)
 
-        $response = NULL;
+        $response = null;
         if ($this->http_client == 'curl') {
             $response = $this->curl_query($url, $args, $authstr);
         } elseif ($this->http_client == 'fopen') {
@@ -708,12 +706,12 @@ class xmlapi
 
 
         // perform simplexml transformation (array relies on this)
-        if ( ($this->output == 'simplexml') || $this->output == 'array') {
+        if (($this->output == 'simplexml') || $this->output == 'array') {
             $response = simplexml_load_string($response, null, LIBXML_NOERROR | LIBXML_NOWARNING);
             if (!$response) {
-                    error_log("Some error message here");
+                error_log("Some error message here");
 
-                    return;
+                return;
             }
             if ($this->debug) {
                 error_log("SimpleXML var_dump:\n" . print_r($response, true));
@@ -731,12 +729,12 @@ class xmlapi
         return $response;
     }
 
-    private function curl_query( $url, $postdata, $authstr )
+    private function curl_query($url, $postdata, $authstr)
     {
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
         // Return contents of transfer on curl_exec
-         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
         // Allow self-signed certs
         curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
         // Set the URL
@@ -755,16 +753,16 @@ class xmlapi
 
         $result = curl_exec($curl);
         if ($result == false) {
-            throw new Exception("curl_exec threw error \"" . curl_error($curl) . "\" for " . $url . "?" . $postdata );
+            throw new Exception("curl_exec threw error \"" . curl_error($curl) . "\" for " . $url . "?" . $postdata);
         }
         curl_close($curl);
 
         return $result;
     }
 
-    private function fopen_query( $url, $postdata, $authstr )
+    private function fopen_query($url, $postdata, $authstr)
     {
-        if ( !(ini_get('allow_url_fopen') ) ) {
+        if (!(ini_get('allow_url_fopen'))) {
             throw new Exception('fopen_query called on system without allow_url_fopen enabled in php.ini');
         }
 
@@ -792,7 +790,7 @@ class xmlapi
     private function unserialize_xml($input, $callback = null, $recurse = false)
     {
         // Get input, loading an xml string with simplexml if its the top level of recursion
-        $data = ( (!$recurse) && is_string($input) ) ? simplexml_load_string($input) : $input;
+        $data = ((!$recurse) && is_string($input)) ? simplexml_load_string($input) : $input;
         // Convert SimpleXMLElements to array
         if ($data instanceof SimpleXMLElement) {
             $data = (array) $data;
@@ -826,9 +824,9 @@ class xmlapi
     * @link http://docs.cpanel.net/twiki/bin/view/DeveloperResources/ApiRef/WebHome API1 & API2 Call documentation
     * @link http://docs.cpanel.net/twiki/bin/view/DeveloperResources/ApiBasics/CallingApiOne API1 Documentation
     */
-    public function api1_query($user, $module, $function, $args = array() )
+    public function api1_query($user, $module, $function, $args = array())
     {
-        if ( !isset($module) || !isset($function) || !isset($user) ) {
+        if (!isset($module) || !isset($function) || !isset($user)) {
             error_log("api1_query requires that a module and function are passed to it");
 
             return false;
@@ -845,7 +843,7 @@ class xmlapi
         $func_type = 'cpanel_xmlapi_func';
         $api_type = 'cpanel_xmlapi_apiversion';
 
-        if ( $this->get_output() == 'json' ) {
+        if ($this->get_output() == 'json') {
             $cpuser = 'cpanel_jsonapi_user';
             $module_type = 'cpanel_jsonapi_module';
             $func_type = 'cpanel_jsonapi_func';
@@ -884,7 +882,7 @@ class xmlapi
 
     public function api2_query($user, $module, $function, $args = array())
     {
-        if (!isset($user) || !isset($module) || !isset($function) ) {
+        if (!isset($user) || !isset($module) || !isset($function)) {
             error_log("api2_query requires that a username, module and function are passed to it");
 
             return false;
@@ -900,7 +898,7 @@ class xmlapi
         $func_type = 'cpanel_xmlapi_func';
         $api_type = 'cpanel_xmlapi_apiversion';
 
-        if ( $this->get_output() == 'json' ) {
+        if ($this->get_output() == 'json') {
             $cpuser = 'cpanel_jsonapi_user';
             $module_type = 'cpanel_jsonapi_module';
             $func_type = 'cpanel_jsonapi_func';
@@ -1235,15 +1233,15 @@ class xmlapi
     * @link http://docs.cpanel.net/twiki/bin/view/AllDocumentation/AutomationIntegration/DomainUserData
     */
 
-    public function domainuserdata( $domain )
+    public function domainuserdata($domain)
     {
-        if (!isset( $domain ) ) {
+        if (!isset($domain)) {
             error_log("domainuserdata requires that domain is passed to it");
 
             return false;
         }
 
-        return $this->xmlapi_query("domainuserdata", array( 'domain' => $domain ) );
+        return $this->xmlapi_query("domainuserdata", array( 'domain' => $domain ));
     }
 
     /**
@@ -1257,9 +1255,9 @@ class xmlapi
     * @return mixed
     * @link http://docs.cpanel.net/twiki/bin/view/AllDocumentation/AutomationIntegration/SetSiteIp XML API Call documentation
     */
-    public function setsiteip ( $ip, $user = null, $domain = null )
+    public function setsiteip($ip, $user = null, $domain = null)
     {
-        if ( !isset($ip) ) {
+        if (!isset($ip)) {
             error_log("setsiteip requires that ip is passed to it");
 
             return false;
@@ -1272,9 +1270,9 @@ class xmlapi
         }
 
         if ($user == null) {
-            return $this->xmlapi_query( "setsiteip", array( "ip" => $ip, "domain" => $domain ) );
+            return $this->xmlapi_query("setsiteip", array( "ip" => $ip, "domain" => $domain ));
         } else {
-            return $this->xmlapi_query( "setsiteip", array( "ip" => $ip, "user" => $user ) );
+            return $this->xmlapi_query("setsiteip", array( "ip" => $ip, "user" => $user ));
         }
     }
 
@@ -1317,7 +1315,7 @@ class xmlapi
     * @return mixed
     * @link http://docs.cpanel.net/twiki/bin/view/AllDocumentation/AutomationIntegration/AddZoneRecord XML API Call documentation
     */
-    public function addzonerecord( $zone, $args )
+    public function addzonerecord($zone, $args)
     {
         if (!is_array($args)) {
             error_log("addzonerecord requires that $args passed to it is an array");
@@ -1345,7 +1343,7 @@ class xmlapi
     * @see dumpzone()
     */
 
-    public function editzonerecord( $zone, $line, $args )
+    public function editzonerecord($zone, $line, $args)
     {
         if (!is_array($args)) {
             error_log("editzone requires that $args passed to it is an array");
@@ -1369,9 +1367,9 @@ class xmlapi
     * @return mixed
     * @link http://docs.cpanel.net/twiki/bin/view/AllDocumentation/AutomationIntegration/GetZoneRecord XML API Call documentation
     */
-    public function getzonerecord( $zone, $line )
+    public function getzonerecord($zone, $line)
     {
-        return $this->xmlapi_query('getzonerecord', array( 'domain' => $zone, 'Line' => $line ) );
+        return $this->xmlapi_query('getzonerecord', array( 'domain' => $zone, 'Line' => $line ));
     }
 
     /**
@@ -1458,13 +1456,13 @@ class xmlapi
     */
     public function removezonerecord($zone, $line)
     {
-        if ( !isset($zone) || !isset($line) ) {
+        if (!isset($zone) || !isset($line)) {
             error_log("removezone record requires that a zone and line number is passed to it");
 
             return false;
         }
 
-        return $this->xmlapi_query('removezonerecord', array('zone' => $zone, 'Line' => $line) );
+        return $this->xmlapi_query('removezonerecord', array('zone' => $zone, 'Line' => $line));
     }
 
     /**
@@ -1477,7 +1475,7 @@ class xmlapi
     */
     public function resetzone($domain)
     {
-        if ( !isset($domain) ) {
+        if (!isset($domain)) {
             error_log("resetzone requires that a domain name is passed to it");
 
             return false;
@@ -1738,7 +1736,7 @@ class xmlapi
     */
     public function setresellerips($user, $ip = null)
     {
-        if (!isset($user) ) {
+        if (!isset($user)) {
             error_log("setresellerips requires that a username is passed to it");
 
             return false;
@@ -1748,7 +1746,7 @@ class xmlapi
             $params['ip'] = $ip;
         }
 
-        return $this->xmlapi_query('setresellerips',$params);
+        return $this->xmlapi_query('setresellerips', $params);
     }
 
     /**
@@ -1764,15 +1762,15 @@ class xmlapi
     * @link http://docs.cpanel.net/twiki/bin/view/AllDocumentation/AutomationIntegration/SetResellerLimits XML API Call documentation
     *
     */
-    public function setresellerlimits( $reseller_cfg )
+    public function setresellerlimits($reseller_cfg)
     {
-        if ( !isset($reseller_cfg['user'] ) ) {
+        if (!isset($reseller_cfg['user'])) {
             error_log("setresellerlimits requires that a user is defined in the array passed to it");
 
             return false;
         }
 
-        return $this->xmlapi_query('setresellerlimits',$reseller_cfg);
+        return $this->xmlapi_query('setresellerlimits', $reseller_cfg);
     }
 
     /**
@@ -1787,7 +1785,7 @@ class xmlapi
     */
     public function setresellermainip($reseller, $ip)
     {
-        if ( !isset($reseller) || !isset($ip) ) {
+        if (!isset($reseller) || !isset($ip)) {
             error_log("setresellermainip requires that an reseller and ip are passed to it");
 
             return false;
@@ -1810,15 +1808,15 @@ class xmlapi
     */
     public function setresellerpackagelimits($user, $no_limit, $package = null, $allowed = null, $number = null)
     {
-        if (!isset($user) || !isset($no_limit) ) {
+        if (!isset($user) || !isset($no_limit)) {
             error_log("setresellerpackagelimits requires that a username and no_limit are passed to it by default");
 
             return false;
         }
         if ($no_limit) {
-            return $this->xmlapi_query("setresellerpackagelimits", array( 'user' => $user, "no_limit" => '1') );
+            return $this->xmlapi_query("setresellerpackagelimits", array( 'user' => $user, "no_limit" => '1'));
         } else {
-            if ( is_null($package) || is_null($allowed) ) {
+            if (is_null($package) || is_null($allowed)) {
                 error_log('setresellerpackagelimits requires that package and allowed are passed to it if no_limit eq 0');
 
                 return false;
@@ -1833,7 +1831,7 @@ class xmlapi
             } else {
                 $params['allowed'] = 0;
             }
-            if ( !is_null($number) ) {
+            if (!is_null($number)) {
                 $params['number'] = $number;
             }
 
@@ -1852,7 +1850,7 @@ class xmlapi
     */
     public function suspendreseller($reseller, $reason = null)
     {
-        if (!isset($reseller) ) {
+        if (!isset($reseller)) {
             error_log("suspendreseller requires that the reseller's username is passed to it");
 
             return false;
@@ -1876,7 +1874,7 @@ class xmlapi
     */
     public function unsuspendreseller($user)
     {
-        if (!isset($user) ) {
+        if (!isset($user)) {
             error_log("unsuspendreseller requires that a username is passed to it");
 
             return false;
@@ -1901,7 +1899,7 @@ class xmlapi
             return false;
         }
 
-        return $this->xmlapi_query('acctcounts', array('user' => $user) );
+        return $this->xmlapi_query('acctcounts', array('user' => $user));
     }
 
     /**
@@ -2188,7 +2186,7 @@ class xmlapi
     * @link http://docs.cpanel.net/twiki/bin/view/AllDocumentation/AutomationIntegration/ServiceStatus XML API Call documentation
     */
     public function servicestatus($args=array())
-     {
+    {
         if (!empty($args) && !is_array($args)) {
             $args = array('service'=>$args);
         } elseif (!is_array($args)) {
@@ -2196,7 +2194,7 @@ class xmlapi
         }
 
         return $this->xmlapi_query('servicestatus', $args);
-     }
+    }
 
     /**
     * Configure A Service
@@ -2230,7 +2228,6 @@ class xmlapi
         }
 
         return $this->xmlapi_query('configureservice', $params);
-
     }
 
     ####
@@ -2247,7 +2244,7 @@ class xmlapi
     */
     public function fetchsslinfo($args)
     {
-        if ( (isset($args['domain']) && isset($args['crtdata'])) || (!isset($args['domain']) && !isset($args['crtdata'])) ) {
+        if ((isset($args['domain']) && isset($args['crtdata'])) || (!isset($args['domain']) && !isset($args['crtdata']))) {
             error_log("fetchsslinfo requires domain OR crtdata is passed to it");
         }
         if (isset($args['crtdata'])) {
@@ -2336,7 +2333,7 @@ class xmlapi
     public function park($username, $newdomain, $topdomain)
     {
         $args = array();
-        if ( (!isset($username)) && (!isset($newdomain)) ) {
+        if ((!isset($username)) && (!isset($newdomain))) {
             error_log("park requires that a username and new domain are passed to it");
 
             return false;
@@ -2353,7 +2350,7 @@ class xmlapi
     public function unpark($username, $domain)
     {
         $args = array();
-        if ( (!isset($username)) && (!isset($domain)) ) {
+        if ((!isset($username)) && (!isset($domain))) {
             error_log("unpark requires that a username and domain are passed to it");
 
             return false;
@@ -2449,13 +2446,13 @@ class xmlapi
     // This API function displays a list of all selected stats for a specific user.
     public function stat($username, $args = null)
     {
-        if ( (!isset($username)) || (!isset($args)) ) {
+        if ((!isset($username)) || (!isset($args))) {
             error_log("stat requires that a username and options are passed to it");
 
             return false;
         }
         if (is_array($args)) {
-        $display = '';
+            $display = '';
             foreach ($args as $key => $value) {
                 $display .= $value . '|';
             }
@@ -2466,5 +2463,4 @@ class xmlapi
 
         return $this->api2_query($username, 'StatsBar', 'stat', $values);
     }
-
 }
