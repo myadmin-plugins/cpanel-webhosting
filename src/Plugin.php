@@ -332,12 +332,18 @@ class Plugin
             $whm->set_user($user);
             $whm->set_hash($hash);
             //$whm = whm_api('faith.interserver.net');
-            if (in_array('reseller', explode(',', $event['field1']))) {
-                $response = json_decode($whm->unsuspendreseller($serviceClass->getUsername()), true);
-            } else {
-                $response = json_decode($whm->unsuspendacct($serviceClass->getUsername()), true);
+            try {
+                if (in_array('reseller', explode(',', $event['field1']))) {
+                    $response = json_decode($whm->unsuspendreseller($serviceClass->getUsername()), true);
+                } else {
+                    $response = json_decode($whm->unsuspendacct($serviceClass->getUsername()), true);
+                }
+                myadmin_log(self::$module, 'info', str_replace('\n', "\n", json_encode($response)), __LINE__, __FILE__, self::$module, $serviceClass->getId());
+            } catch (\Exception $e) {
+                $event['success'] = false;
+                myadmin_log('cpanel', 'error', 'unsuspendacct('.$serviceClass->getUsername().') tossed exception '.$e->getMessage(), __LINE__, __FILE__, self::$module, $serviceClass->getId());
+                add_output('Caught exception: '.$e->getMessage().'<br>');
             }
-            myadmin_log(self::$module, 'info', str_replace('\n', "\n", json_encode($response)), __LINE__, __FILE__, self::$module, $serviceClass->getId());
             $event->stopPropagation();
         }
     }
@@ -373,12 +379,12 @@ class Plugin
                     } else {
                         $response = json_decode($whm->suspendacct($serviceClass->getUsername(), 'Canceled Service'), true);
                     }
+                    myadmin_log(self::$module, 'info', str_replace('\n', "\n", json_encode($response)), __LINE__, __FILE__, self::$module, $serviceClass->getId());
                 } catch (\Exception $e) {
                     $event['success'] = false;
                     myadmin_log('cpanel', 'error', 'suspendacct('.$serviceClass->getUsername().') tossed exception '.$e->getMessage(), __LINE__, __FILE__, self::$module, $serviceClass->getId());
                     add_output('Caught exception: '.$e->getMessage().'<br>');
                 }
-                myadmin_log(self::$module, 'info', str_replace('\n', "\n", json_encode($response)), __LINE__, __FILE__, self::$module, $serviceClass->getId());
             }
             $event->stopPropagation();
         }
