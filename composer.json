@@ -21,7 +21,7 @@
 	"require": {
 		"php": ">=5.0.0",
 		"ext-soap": "*",
-		"symfony/event-dispatcher": "5.0.x-dev",
+		"symfony/event-dispatcher": "^5.0@stable",
 		"detain/myadmin-plugin-installer": "dev-master"
 	},
 	"require-dev": {
