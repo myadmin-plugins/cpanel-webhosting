@@ -146,7 +146,14 @@ class Plugin
                     $password = generateRandomString(10, 2, 2, 2, 1);
                     $options['password'] = $password;
                     myadmin_log(self::$module, 'info', "Trying Password {$options['password']}", __LINE__, __FILE__, self::$module, $serviceClass->getId());
-                    $response = $whm->xmlapi_query('createacct', $options);
+                    try {
+                        $response = $whm->xmlapi_query('createacct', $options);
+                    } catch (\Exception $e) {
+                        $event['success'] = false;
+                        myadmin_log('cpanel', 'error', 'Caught Exception from createacct call: '.$e->getMessage(), __LINE__, __FILE__, self::$module, $serviceClass->getId());
+                        $event->stopPropagation();
+                        return;
+                    }
                     request_log(self::$module, $serviceClass->getCustid(), __FUNCTION__, 'cpanel', 'createacct', $options, $response, $serviceClass->getId());
                     myadmin_log(self::$module, 'info', 'Response: '.str_replace('\n', "\n", $response), __LINE__, __FILE__, self::$module, $serviceClass->getId());
                     $response = json_decode($response, true);
@@ -159,7 +166,14 @@ class Plugin
                     $username = mb_substr($username, 1);
                     $options['username'] = $username;
                     myadmin_log(self::$module, 'info', 'Trying Username '.$options['username'], __LINE__, __FILE__, self::$module, $serviceClass->getId());
-                    $response = $whm->xmlapi_query('createacct', $options);
+                    try {
+                        $response = $whm->xmlapi_query('createacct', $options);
+                    } catch (\Exception $e) {
+                        $event['success'] = false;
+                        myadmin_log('cpanel', 'error', 'Caught Exception from initial createacct call: '.$e->getMessage(), __LINE__, __FILE__, self::$module, $serviceClass->getId());
+                        $event->stopPropagation();
+                        return;
+                    }
                     request_log(self::$module, $serviceClass->getCustid(), __FUNCTION__, 'cpanel', 'createacct', $options, $response, $serviceClass->getId());
                     myadmin_log(self::$module, 'info', 'Response: '.str_replace('\n', "\n", $response), __LINE__, __FILE__, self::$module, $serviceClass->getId());
                     $response = json_decode($response, true);
@@ -176,7 +190,14 @@ class Plugin
                     $username = mb_substr($username, 1);
                     $options['username'] = $username;
                     myadmin_log(self::$module, 'info', 'Trying Username '.$options['username'], __LINE__, __FILE__, self::$module, $serviceClass->getId());
-                    $response = $whm->xmlapi_query('createacct', $options);
+                    try {
+                        $response = $whm->xmlapi_query('createacct', $options);
+                    } catch (\Exception $e) {
+                        $event['success'] = false;
+                        myadmin_log('cpanel', 'error', 'Caught Exception from initial createacct call: '.$e->getMessage(), __LINE__, __FILE__, self::$module, $serviceClass->getId());
+                        $event->stopPropagation();
+                        return;
+                    }
                     request_log(self::$module, $serviceClass->getCustid(), __FUNCTION__, 'cpanel', 'createacct', $options, $response, $serviceClass->getId());
                     myadmin_log(self::$module, 'info', 'Response: '.str_replace('\n', "\n", $response), __LINE__, __FILE__, self::$module, $serviceClass->getId());
                     $response = json_decode($response, true);
@@ -186,15 +207,36 @@ class Plugin
                 $event['success'] = true;
                 $ip = $response['result'][0]['options']['ip'];
                 if (isset($options['bwlimit']) && $options['bwlimit'] != 'unlimited') {
-                    $response3 = $whm->limitbw($username, $options['bwlimit']);
+                    try {
+                        $response3 = $whm->limitbw($username, $options['bwlimit']);
+                    } catch (\Exception $e) {
+                        $event['success'] = false;
+                        myadmin_log('cpanel', 'error', 'Caught Exception from limitbw call: '.$e->getMessage(), __LINE__, __FILE__, self::$module, $serviceClass->getId());
+                        $event->stopPropagation();
+                        return;
+                    }
                     request_log(self::$module, $serviceClass->getCustid(), __FUNCTION__, 'cpanel', 'limitbw', ['username' => $username, 'options' => $options['bwlimit']], $response3, $serviceClass->getId());
                     myadmin_log(self::$module, 'info', 'Response: '.str_replace('\n', "\n", strip_tags($response3)), __LINE__, __FILE__, self::$module, $serviceClass->getId());
                 }
                 if ($reseller === true) {
-                    $response2 = $whm->setupreseller($username, false);
+                    try {
+                        $response2 = $whm->setupreseller($username, false);
+                    } catch (\Exception $e) {
+                        $event['success'] = false;
+                        myadmin_log('cpanel', 'error', 'Caught Exception from setupreseller call: '.$e->getMessage(), __LINE__, __FILE__, self::$module, $serviceClass->getId());
+                        $event->stopPropagation();
+                        return;
+                    }
                     request_log(self::$module, $serviceClass->getCustid(), __FUNCTION__, 'cpanel', 'setupreseller', ['username' => $username], $response2, $serviceClass->getId());
                     myadmin_log(self::$module, 'info', "Response: {$response2}", __LINE__, __FILE__, self::$module, $serviceClass->getId());
-                    $response3 = $whm->listacls();
+                    try {
+                        $response3 = $whm->listacls();
+                    } catch (\Exception $e) {
+                        $event['success'] = false;
+                        myadmin_log('cpanel', 'error', 'Caught Exception from listacls call: '.$e->getMessage(), __LINE__, __FILE__, self::$module, $serviceClass->getId());
+                        $event->stopPropagation();
+                        return;
+                    }
 
                     $acls = json_decode($response3, true);
                     request_log(self::$module, $serviceClass->getCustid(), __FUNCTION__, 'cpanel', 'listacls', [], $response, $serviceClass->getId());
@@ -243,7 +285,14 @@ class Plugin
                             'acl-upgrade-account' => 1, // Allow the reseller to upgrade and downgrade accounts.
                             'acllist' => 'reseller'
                         ];
-                        $response = $whm->saveacllist($acl);
+                        try {
+                            $response = $whm->saveacllist($acl);
+                        } catch (\Exception $e) {
+                            $event['success'] = false;
+                            myadmin_log('cpanel', 'error', 'Caught Exception from saveacllist call: '.$e->getMessage(), __LINE__, __FILE__, self::$module, $serviceClass->getId());
+                            $event->stopPropagation();
+                            return;
+                        }
                         myadmin_log(self::$module, 'info', str_replace('\n', "\n", json_encode($response)), __LINE__, __FILE__, self::$module, $serviceClass->getId());
                         request_log(self::$module, $serviceClass->getCustid(), __FUNCTION__, 'cpanel', 'saveacllist', $acl, $response, $serviceClass->getId());
                         myadmin_log(self::$module, 'info', 'Reseller ACL Created', __LINE__, __FILE__, self::$module, $serviceClass->getId());
@@ -251,15 +300,29 @@ class Plugin
                         myadmin_log(self::$module, 'info', 'Reseller ACL Exists', __LINE__, __FILE__, self::$module, $serviceClass->getId());
                     }
                     $request = ['reseller' => $username, 'acllist' => 'reseller'];
-                    $response = $whm->setacls($request);
+                    try {
+                        $response = $whm->setacls($request);
+                    } catch (\Exception $e) {
+                        $event['success'] = false;
+                        myadmin_log('cpanel', 'error', 'Caught Exception from setacls call: '.$e->getMessage(), __LINE__, __FILE__, self::$module, $serviceClass->getId());
+                        $event->stopPropagation();
+                        return;
+                    }
                     myadmin_log(self::$module, 'info', str_replace('\n', "\n", json_encode($response)), __LINE__, __FILE__, self::$module, $serviceClass->getId());
                     request_log(self::$module, $serviceClass->getCustid(), __FUNCTION__, 'cpanel', 'setacls', $request, $response, $serviceClass->getId());
                     myadmin_log(self::$module, 'info', 'Reseller assigned to ACL', __LINE__, __FILE__, self::$module, $serviceClass->getId());
-                    $whm->setresellerlimits([
-                        'user' => $username,
-                        'enable_account_limit' => 1,
-                        'account_limit' => $account_limit,
-                    ]);
+                    try {
+                        $whm->setresellerlimits([
+                            'user' => $username,
+                            'enable_account_limit' => 1,
+                            'account_limit' => $account_limit,
+                        ]);
+                    } catch (\Exception $e) {
+                        $event['success'] = false;
+                        myadmin_log('cpanel', 'error', 'Caught Exception from setresellerlimits call: '.$e->getMessage(), __LINE__, __FILE__, self::$module, $serviceClass->getId());
+                        $event->stopPropagation();
+                        return;
+                    }
                 }
                 $db = get_module_db(self::$module);
                 $username = $db->real_escape($username);
@@ -298,7 +361,14 @@ class Plugin
                 function_requirements('add_dns_record');
                 $response = add_dns_record(14426, 'wh'.$serviceClass->getId(), $ip, 'A', 86400, 0, true);
                 myadmin_log(self::$module, 'info', 'Response: '.str_replace('\n', "\n", json_encode($response)), __LINE__, __FILE__, self::$module, $serviceClass->getId());
-                $response = $whm->park($options['username'], 'wh'.$serviceClass->getId().'.ispot.cc', '');
+                try {
+                    $response = $whm->park($options['username'], 'wh'.$serviceClass->getId().'.ispot.cc', '');
+                } catch (\Exception $e) {
+                    $event['success'] = false;
+                    myadmin_log('cpanel', 'error', 'Caught Exception from park call: '.$e->getMessage(), __LINE__, __FILE__, self::$module, $serviceClass->getId());
+                    $event->stopPropagation();
+                    return;
+                }
                 myadmin_log(self::$module, 'info', 'Response: '.str_replace('\n', "\n", json_encode($response)), __LINE__, __FILE__, self::$module, $serviceClass->getId());
                 $event['success'] = true;
             } else {
@@ -323,16 +393,16 @@ class Plugin
             $ip = $serverdata[$settings['PREFIX'].'_ip'];
             function_requirements('whm_api');
             $user = 'root';
-            $whm = new \xmlapi($ip);
-            //$whm->set_debug('true');
-            $whm->set_port('2087');
-            $whm->set_protocol('https');
-            $whm->set_output('json');
-            $whm->set_auth_type('hash');
-            $whm->set_user($user);
-            $whm->set_hash($hash);
-            //$whm = whm_api('faith.interserver.net');
             try {
+                $whm = new \xmlapi($ip);
+                //$whm->set_debug('true');
+                $whm->set_port('2087');
+                $whm->set_protocol('https');
+                $whm->set_output('json');
+                $whm->set_auth_type('hash');
+                $whm->set_user($user);
+                $whm->set_hash($hash);
+                //$whm = whm_api('faith.interserver.net');
                 if (in_array('reseller', explode(',', $event['field1']))) {
                     $response = json_decode($whm->unsuspendreseller($serviceClass->getUsername()), true);
                 } else {
@@ -364,16 +434,16 @@ class Plugin
                 $ip = $serverdata[$settings['PREFIX'].'_ip'];
                 function_requirements('whm_api');
                 $user = 'root';
-                $whm = new \xmlapi($ip);
-                //$whm->set_debug('true');
-                $whm->set_port('2087');
-                $whm->set_protocol('https');
-                $whm->set_output('json');
-                $whm->set_auth_type('hash');
-                $whm->set_user($user);
-                $whm->set_hash($hash);
-                //$whm = whm_api('faith.interserver.net');
                 try {
+                    $whm = new \xmlapi($ip);
+                    //$whm->set_debug('true');
+                    $whm->set_port('2087');
+                    $whm->set_protocol('https');
+                    $whm->set_output('json');
+                    $whm->set_auth_type('hash');
+                    $whm->set_user($user);
+                    $whm->set_hash($hash);
+                    //$whm = whm_api('faith.interserver.net');
                     if (in_array('reseller', explode(',', $event['field1']))) {
                         $response = json_decode($whm->suspendreseller($serviceClass->getUsername(), 'Canceled Service'), true);
                     } else {
@@ -416,22 +486,40 @@ class Plugin
             $whm->set_hash($hash);
             //$whm = whm_api('faith.interserver.net');
             if (trim($serviceClass->getUsername()) != '') {
-                if (in_array('reseller', explode(',', $event['field1']))) {
-                    $response = json_decode($whm->terminatereseller($serviceClass->getUsername(), true), true);
-                } else {
-                    $response = json_decode($whm->removeacct($serviceClass->getUsername(), false), true);
+                try {
+                    if (in_array('reseller', explode(',', $event['field1']))) {
+                        $response = json_decode($whm->terminatereseller($serviceClass->getUsername(), true), true);
+                    } else {
+                        $response = json_decode($whm->removeacct($serviceClass->getUsername(), false), true);
+                    }
+                } catch (\Exception $e) {
+                    $event['success'] = false;
+                    myadmin_log('cpanel', 'error', 'removeacct('.$serviceClass->getUsername().') tossed exception '.$e->getMessage(), __LINE__, __FILE__, self::$module, $serviceClass->getId());
+                    add_output('Caught exception: '.$e->getMessage().'<br>');
                 }
+
                 myadmin_log(self::$module, 'info', str_replace('\n', "\n", json_encode($response)), __LINE__, __FILE__, self::$module, $serviceClass->getId());
             } else {
                 myadmin_log(self::$module, 'info', "Skipping WHMAPI/Server Removal for {$serviceClass->getHostname()} because username is blank", __LINE__, __FILE__, self::$module, $serviceClass->getId());
             }
-            $dnsr = json_decode($whm->dumpzone($serviceClass->getHostname()), true);
+            try {
+                $dnsr = json_decode($whm->dumpzone($serviceClass->getHostname()), true);
+            } catch (\Exception $e) {
+                myadmin_log('cpanel', 'error', 'dumpzone('.$serviceClass->getHostname().') tossed exception '.$e->getMessage(), __LINE__, __FILE__, self::$module, $serviceClass->getId());
+                add_output('Caught exception: '.$e->getMessage().'<br>');
+            }
+
             if ($dnsr['result'][0]['status'] == 1) {
                 $db = get_module_db(self::$module);
                 $db->query("select * from {$settings['TABLE']} where {$settings['PREFIX']}_hostname='{$serviceClass->getHostname()}' and {$settings['PREFIX']}_id != {$serviceClass->getId()} and {$settings['PREFIX']}_status = 'active'", __LINE__, __FILE__);
                 if ($db->num_rows() == 0) {
                     myadmin_log(self::$module, 'info', "Removing Hanging DNS entry for {$serviceClass->getHostname()}", __LINE__, __FILE__, self::$module, $serviceClass->getId());
-                    $whm->killdns($serviceClass->getHostname());
+                    try {
+                        $whm->killdns($serviceClass->getHostname());
+                    } catch (\Exception $e) {
+                        myadmin_log('cpanel', 'error', 'killdns('.$serviceClass->getHostname().') tossed exception '.$e->getMessage(), __LINE__, __FILE__, self::$module, $serviceClass->getId());
+                        add_output('Caught exception: '.$e->getMessage().'<br>');
+                    }
                 } else {
                     myadmin_log(self::$module, 'info', "Skipping Removing DNS entry for {$serviceClass->getHostname()} because other non deleted sites w/ the same hostname exist", __LINE__, __FILE__, self::$module, $serviceClass->getId());
                 }
