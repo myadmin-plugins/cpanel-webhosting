@@ -98,7 +98,7 @@ class Plugin
                 'cgi' => 1,
                 'frontpage' => 0,
                 'hasshell' => 0,
-                'cpmod' => 'paper_lantern',
+                'cpmod' => 'jupiter',
                 'maxsql' => 'unlimited',
                 'maxpop' => 'unlimited',
                 'maxlst' => 0,
@@ -333,7 +333,7 @@ class Plugin
                     include_once __DIR__.'/../../../../include/webhosting/softaculous/sdk.php';
                     $userdata = $GLOBALS['tf']->accounts->read($serviceClass->getCustid());
                     $soft = new \Softaculous_SDK();
-                    $soft->login = "https://{$username}:{$password}@{$serverdata[$settings['PREFIX'].'_name']}:2083/frontend/paper_lantern/softaculous/index.live.php";
+                    $soft->login = "https://{$username}:{$password}@{$serverdata[$settings['PREFIX'].'_name']}:2083/frontend/jupiter/softaculous/index.live.php";
                     $soft->list_scripts();
                     $data['overwrite_existing'] = 1;
                     $data['softdomain'] = $hostname;
