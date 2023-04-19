@@ -98,6 +98,7 @@ class Plugin
                 'cgi' => 1,
                 'frontpage' => 0,
                 'hasshell' => 0,
+                //'cpmod' => 'paper_lantern',
                 'cpmod' => 'jupiter',
                 'maxsql' => 'unlimited',
                 'maxpop' => 'unlimited',
