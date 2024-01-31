@@ -741,7 +741,10 @@ class xmlapi
         curl_setopt($curl, CURLOPT_URL, $url);
         // Increase buffer size to avoid "funny output" exception
         curl_setopt($curl, CURLOPT_BUFFERSIZE, 131072);
-
+        // set connect timeout to 10min, timeout to 20min
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 600); 
+        curl_setopt($ch, CURLOPT_TIMEOUT, 1200); 
+        
         // Pass authentication header
         $header[0] =$authstr .
             "Content-Type: application/x-www-form-urlencoded\r\n" .
