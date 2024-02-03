@@ -114,7 +114,7 @@ class Plugin
             if ($serviceTypes[$serviceClass->getType()]['services_field2'] != '') {
                 $fields = explode(',', $serviceTypes[$serviceClass->getType()]['services_field2']);
                 foreach ($fields as $field) {
-                    list($key, $value) = explode('=', $field);
+                    [$key, $value] = explode('=', $field);
                     if ($key == 'script') {
                         $extra[$key] = $value;
                     } elseif ($key == 'account_limit') {
@@ -342,8 +342,8 @@ class Plugin
                     $data['admin_username'] = 'admin';
                     $data['admin_pass'] = $password;
                     $data['admin_email'] = $event['email'];
-                    $data['admin_realname'] = (isset($userdata['name']) ? $userdata['name'] : $userdata['account_lid']);
-                    list($data['admin_fname'], $data['admin_lname']) = isset($userdata['name']) ? explode(' ', $userdata['name']) : explode('@', $userdata['account_lid']);
+                    $data['admin_realname'] = ($userdata['name'] ?? $userdata['account_lid']);
+                    [$data['admin_fname'], $data['admin_lname']] = isset($userdata['name']) ? explode(' ', $userdata['name']) : explode('@', $userdata['account_lid']);
                     $data['softdb'] = $soft->scripts[$script]['softname'];
                     $data['dbusername'] = $soft->scripts[$script]['softname'];
                     $data['dbuserpass'] = $password;
@@ -351,7 +351,7 @@ class Plugin
                     $data['site_name'] = $soft->scripts[$script]['fullname'];
                     $data['store_name'] = $soft->scripts[$script]['fullname'];
                     $data['store_owner'] = $userdata['account_lid'];
-                    $data['store_address'] = (isset($userdata['address']) ? $userdata['address'] : '');
+                    $data['store_address'] = ($userdata['address'] ?? '');
                     $data['site_desc'] = $soft->scripts[$script]['fullname'];
                     myadmin_log(self::$module, 'info', 'Installing '.$soft->scripts[$script]['fullname'], __LINE__, __FILE__, self::$module, $serviceClass->getId());
                     //$response = myadmin_unstringify($soft->install($script, $data));

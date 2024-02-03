@@ -621,7 +621,7 @@ class xmlapi
     * @param array $vars An associative array of the parameters to be passed to the XML-API Calls
     * @return mixed
     */
-    public function xmlapi_query($function, $vars = array())
+    public function xmlapi_query($function, $vars = [])
     {
         // Check to make sure all the data needed to perform the query is in place
         if (!$function) {
@@ -769,16 +769,16 @@ class xmlapi
             throw new Exception('fopen_query called on system without allow_url_fopen enabled in php.ini');
         }
 
-        $opts = array(
-            'http' => array(
+        $opts = [
+            'http' => [
                 'allow_self_signed' => true,
                 'method' => 'POST',
                 'header' => $authstr .
                     "Content-Type: application/x-www-form-urlencoded\r\n" .
                     "Content-Length: " . strlen($postdata) . "\r\n" .
                     "\r\n" . $postdata
-            )
-        );
+            ]
+        ];
         $context = stream_context_create($opts);
 
         return file_get_contents($url, false, $context);
@@ -827,7 +827,7 @@ class xmlapi
     * @link http://docs.cpanel.net/twiki/bin/view/DeveloperResources/ApiRef/WebHome API1 & API2 Call documentation
     * @link http://docs.cpanel.net/twiki/bin/view/DeveloperResources/ApiBasics/CallingApiOne API1 Documentation
     */
-    public function api1_query($user, $module, $function, $args = array())
+    public function api1_query($user, $module, $function, $args = [])
     {
         if (!isset($module) || !isset($function) || !isset($user)) {
             error_log("api1_query requires that a module and function are passed to it");
@@ -853,12 +853,12 @@ class xmlapi
             $api_type = 'cpanel_jsonapi_apiversion';
         }
 
-        $call = array(
+        $call = [
                 $cpuser => $user,
                 $module_type => $module,
                 $func_type => $function,
                 $api_type => '1'
-            );
+            ];
         for ($int = 0; $int < count($args);  $int++) {
             $call['arg-' . $int] = $args[$int];
         }
@@ -883,7 +883,7 @@ class xmlapi
     * @link http://docs.cpanel.net/twiki/bin/view/DeveloperResources/ApiBasics/CallingApiTwo API2 Documentation
     */
 
-    public function api2_query($user, $module, $function, $args = array())
+    public function api2_query($user, $module, $function, $args = [])
     {
         if (!isset($user) || !isset($module) || !isset($function)) {
             error_log("api2_query requires that a username, module and function are passed to it");
@@ -988,7 +988,7 @@ class xmlapi
             return false;
         }
 
-        return $this->xmlapi_query('passwd', array('user' => $username, 'pass' => $pass));
+        return $this->xmlapi_query('passwd', ['user' => $username, 'pass' => $pass]);
     }
 
     /**
@@ -1009,7 +1009,7 @@ class xmlapi
             return false;
         }
 
-        return $this->xmlapi_query('limitbw', array('user' => $username, 'bwlimit' => $bwlimit));
+        return $this->xmlapi_query('limitbw', ['user' => $username, 'bwlimit' => $bwlimit]);
     }
 
     /**
@@ -1025,7 +1025,7 @@ class xmlapi
     public function listaccts($searchtype = null, $search = null)
     {
         if ($search) {
-            return $this->xmlapi_query('listaccts', array('searchtype' => $searchtype, 'search' => $search ));
+            return $this->xmlapi_query('listaccts', ['searchtype' => $searchtype, 'search' => $search ]);
         }
 
         return $this->xmlapi_query('listaccts');
@@ -1042,7 +1042,7 @@ class xmlapi
     * @return mixed
     * @link http://docs.cpanel.net/twiki/bin/view/AllDocumentation/AutomationIntegration/ModifyAccount XML API Call documentation
     */
-    public function modifyacct($username, $args = array())
+    public function modifyacct($username, $args = [])
     {
         if (!isset($username)) {
             error_log("modifyacct requires that username is passed to it");
@@ -1077,7 +1077,7 @@ class xmlapi
             return false;
         }
 
-        return $this->xmlapi_query('editquota', array('user' => $username, 'quota' => $quota));
+        return $this->xmlapi_query('editquota', ['user' => $username, 'quota' => $quota]);
     }
 
     /**
@@ -1105,7 +1105,7 @@ class xmlapi
             return false;
         }
 
-        return $this->xmlapi_query('accountsummary', array('user' => $username));
+        return $this->xmlapi_query('accountsummary', ['user' => $username]);
     }
 
     /**
@@ -1127,10 +1127,10 @@ class xmlapi
             return false;
         }
         if ($reason) {
-            return $this->xmlapi_query('suspendacct', array('user' => $username, 'reason' => $reason ));
+            return $this->xmlapi_query('suspendacct', ['user' => $username, 'reason' => $reason ]);
         }
 
-        return $this->xmlapi_query('suspendacct', array('user' => $username));
+        return $this->xmlapi_query('suspendacct', ['user' => $username]);
     }
 
     /**
@@ -1165,10 +1165,10 @@ class xmlapi
             return false;
         }
         if ($keepdns) {
-            return $this->xmlapi_query('removeacct', array('user' => $username, 'keepdns' => '1'));
+            return $this->xmlapi_query('removeacct', ['user' => $username, 'keepdns' => '1']);
         }
 
-        return $this->xmlapi_query('removeacct', array('user' => $username));
+        return $this->xmlapi_query('removeacct', ['user' => $username]);
     }
 
     /**
@@ -1188,7 +1188,7 @@ class xmlapi
             return false;
         }
 
-        return $this->xmlapi_query('unsuspendacct', array('user' => $username));
+        return $this->xmlapi_query('unsuspendacct', ['user' => $username]);
     }
 
     /**
@@ -1209,7 +1209,7 @@ class xmlapi
             return false;
         }
 
-        return $this->xmlapi_query('changepackage', array('user' => $username, 'pkg' => $pkg));
+        return $this->xmlapi_query('changepackage', ['user' => $username, 'pkg' => $pkg]);
     }
 
     /**
@@ -1244,7 +1244,7 @@ class xmlapi
             return false;
         }
 
-        return $this->xmlapi_query("domainuserdata", array( 'domain' => $domain ));
+        return $this->xmlapi_query("domainuserdata", [ 'domain' => $domain ]);
     }
 
     /**
@@ -1273,9 +1273,9 @@ class xmlapi
         }
 
         if ($user == null) {
-            return $this->xmlapi_query("setsiteip", array( "ip" => $ip, "domain" => $domain ));
+            return $this->xmlapi_query("setsiteip", [ "ip" => $ip, "domain" => $domain ]);
         } else {
-            return $this->xmlapi_query("setsiteip", array( "ip" => $ip, "user" => $user ));
+            return $this->xmlapi_query("setsiteip", [ "ip" => $ip, "user" => $user ]);
         }
     }
 
@@ -1303,7 +1303,7 @@ class xmlapi
             return false;
         }
 
-        return $this->xmlapi_query('adddns', array('domain' => $domain, 'ip' => $ip));
+        return $this->xmlapi_query('adddns', ['domain' => $domain, 'ip' => $ip]);
     }
 
     /**
@@ -1372,7 +1372,7 @@ class xmlapi
     */
     public function getzonerecord($zone, $line)
     {
-        return $this->xmlapi_query('getzonerecord', array( 'domain' => $zone, 'Line' => $line ));
+        return $this->xmlapi_query('getzonerecord', [ 'domain' => $zone, 'Line' => $line ]);
     }
 
     /**
@@ -1392,7 +1392,7 @@ class xmlapi
             return false;
         }
 
-        return $this->xmlapi_query('killdns', array('domain' => $domain));
+        return $this->xmlapi_query('killdns', ['domain' => $domain]);
     }
 
     /**
@@ -1426,7 +1426,7 @@ class xmlapi
             return false;
         }
 
-        return $this->xmlapi_query('dumpzone', array('domain' => $domain));
+        return $this->xmlapi_query('dumpzone', ['domain' => $domain]);
     }
 
     /**
@@ -1446,7 +1446,7 @@ class xmlapi
             return false;
         }
 
-        return $this->xmlapi_query('lookupnsip', array('nameserver' => $nameserver));
+        return $this->xmlapi_query('lookupnsip', ['nameserver' => $nameserver]);
     }
 
     /**
@@ -1465,7 +1465,7 @@ class xmlapi
             return false;
         }
 
-        return $this->xmlapi_query('removezonerecord', array('zone' => $zone, 'Line' => $line));
+        return $this->xmlapi_query('removezonerecord', ['zone' => $zone, 'Line' => $line]);
     }
 
     /**
@@ -1484,7 +1484,7 @@ class xmlapi
             return false;
         }
 
-        return $this->xmlapi_query('resetzone', array('domain' => $domain));
+        return $this->xmlapi_query('resetzone', ['domain' => $domain]);
     }
 
     ####
@@ -1529,7 +1529,7 @@ class xmlapi
             return false;
         }
 
-        return $this->xmlapi_query('killpkg', array('pkg' => $pkgname));
+        return $this->xmlapi_query('killpkg', ['pkg' => $pkgname]);
     }
 
     /**
@@ -1588,10 +1588,10 @@ class xmlapi
             return false;
         }
         if ($makeowner) {
-            return $this->xmlapi_query('setupreseller', array('user' => $username, 'makeowner' => '1'));
+            return $this->xmlapi_query('setupreseller', ['user' => $username, 'makeowner' => '1']);
         }
 
-        return $this->xmlapi_query('setupreseller', array('user' => $username, 'makeowner' => '0'));
+        return $this->xmlapi_query('setupreseller', ['user' => $username, 'makeowner' => '0']);
     }
 
     /**
@@ -1657,7 +1657,7 @@ class xmlapi
             return false;
         }
 
-        return $this->xmlapi_query('resellerstats', array('reseller' => $username));
+        return $this->xmlapi_query('resellerstats', ['reseller' => $username]);
     }
 
     /**
@@ -1677,7 +1677,7 @@ class xmlapi
             return false;
         }
 
-        return $this->xmlapi_query('unsetupreseller', array('user' => $username));
+        return $this->xmlapi_query('unsetupreseller', ['user' => $username]);
     }
 
     /**
@@ -1721,10 +1721,10 @@ class xmlapi
         }
         $verify = 'I understand this will irrevocably remove all the accounts owned by the reseller ' . $reseller;
         if ($terminatereseller) {
-            return $this->xmlapi_query('terminatereseller', array('reseller' => $reseller, 'terminatereseller' => '1', 'verify' => $verify));
+            return $this->xmlapi_query('terminatereseller', ['reseller' => $reseller, 'terminatereseller' => '1', 'verify' => $verify]);
         }
 
-        return $this->xmlapi_query('terminatereseller', array('reseller' => $reseller, 'terminatereseller' => '0', 'verify' => $verify));
+        return $this->xmlapi_query('terminatereseller', ['reseller' => $reseller, 'terminatereseller' => '0', 'verify' => $verify]);
     }
 
     /**
@@ -1744,7 +1744,7 @@ class xmlapi
 
             return false;
         }
-        $params = array("user" => $user);
+        $params = ["user" => $user];
         if ($ip != null) {
             $params['ip'] = $ip;
         }
@@ -1794,7 +1794,7 @@ class xmlapi
             return false;
         }
 
-        return $this->xmlapi_query("setresellermainip", array('user' => $reseller, 'ip' => $ip));
+        return $this->xmlapi_query("setresellermainip", ['user' => $reseller, 'ip' => $ip]);
     }
 
     /**
@@ -1817,18 +1817,18 @@ class xmlapi
             return false;
         }
         if ($no_limit) {
-            return $this->xmlapi_query("setresellerpackagelimits", array( 'user' => $user, "no_limit" => '1'));
+            return $this->xmlapi_query("setresellerpackagelimits", [ 'user' => $user, "no_limit" => '1']);
         } else {
             if (is_null($package) || is_null($allowed)) {
                 error_log('setresellerpackagelimits requires that package and allowed are passed to it if no_limit eq 0');
 
                 return false;
             }
-            $params = array(
+            $params = [
                 'user' => $user,
                 'no_limit' => '0',
                 'package' => $package,
-            );
+            ];
             if ($allowed) {
                 $params['allowed'] = 1;
             } else {
@@ -1858,7 +1858,7 @@ class xmlapi
 
             return false;
         }
-        $params = array("user" => $reseller);
+        $params = ["user" => $reseller];
         if ($reason) {
             $params['reason'] = $reason;
         }
@@ -1883,7 +1883,7 @@ class xmlapi
             return false;
         }
 
-        return $this->xmlapi_query('unsuspendreseller', array('user' => $user));
+        return $this->xmlapi_query('unsuspendreseller', ['user' => $user]);
     }
 
     /**
@@ -1902,7 +1902,7 @@ class xmlapi
             return false;
         }
 
-        return $this->xmlapi_query('acctcounts', array('user' => $user));
+        return $this->xmlapi_query('acctcounts', ['user' => $user]);
     }
 
     /**
@@ -1922,7 +1922,7 @@ class xmlapi
 
             return false;
         }
-        $params = array('user' => $user);
+        $params = ['user' => $user];
         if ($nameservers) {
             $params['nameservers'] = $nameservers;
         }
@@ -2000,7 +2000,7 @@ class xmlapi
     public function reboot($force = false)
     {
         if ($force) {
-            return $this->xmlapi_query('reboot', array('force' => '1'));
+            return $this->xmlapi_query('reboot', ['force' => '1']);
         }
 
         return $this->xmlapi_query('reboot');
@@ -2023,7 +2023,7 @@ class xmlapi
             return false;
         }
 
-        return $this->xmlapi_query('addip', array('ip' => $ip, 'netmask' => $netmask));
+        return $this->xmlapi_query('addip', ['ip' => $ip, 'netmask' => $netmask]);
     }
 
     // This function allows you to delete an IP address from your server.
@@ -2039,7 +2039,7 @@ class xmlapi
     */
     public function delip($ip, $ethernetdev = null, $skipifshutdown = false)
     {
-        $args = array();
+        $args = [];
         if (!isset($ip)) {
             error_log("delip requires that an IP is defined in the array passed to it");
 
@@ -2082,7 +2082,7 @@ class xmlapi
             return false;
         }
 
-        return $this->xmlapi_query('sethostname', array('hostname' => $hostname));
+        return $this->xmlapi_query('sethostname', ['hostname' => $hostname]);
     }
 
     /**
@@ -2098,7 +2098,7 @@ class xmlapi
     */
     public function setresolvers($nameserver1, $nameserver2 = null, $nameserver3 = null)
     {
-        $args = array();
+        $args = [];
         if (!isset($nameserver1)) {
             error_log("setresolvers requires that nameserver1 is defined in the array passed to it");
 
@@ -2142,7 +2142,7 @@ class xmlapi
             return false;
         }
 
-        return $this->xmlapi_query('nvset', array('key' => $key, 'value' => $value));
+        return $this->xmlapi_query('nvset', ['key' => $key, 'value' => $value]);
     }
 
     // This function allows you to retrieve and view a non-volatile variable's value.
@@ -2154,7 +2154,7 @@ class xmlapi
             return false;
         }
 
-        return $this->xmlapi_query('nvget', array('key' => $key));
+        return $this->xmlapi_query('nvget', ['key' => $key]);
     }
 
     ####
@@ -2177,7 +2177,7 @@ class xmlapi
             return false;
         }
 
-        return $this->xmlapi_query('restartservice', array('service' => $service));
+        return $this->xmlapi_query('restartservice', ['service' => $service]);
     }
 
     /**
@@ -2188,12 +2188,12 @@ class xmlapi
     * @return mixed
     * @link http://docs.cpanel.net/twiki/bin/view/AllDocumentation/AutomationIntegration/ServiceStatus XML API Call documentation
     */
-    public function servicestatus($args=array())
+    public function servicestatus($args=[])
     {
         if (!empty($args) && !is_array($args)) {
-            $args = array('service'=>$args);
+            $args = ['service'=>$args];
         } elseif (!is_array($args)) {
-            $args = array();
+            $args = [];
         }
 
         return $this->xmlapi_query('servicestatus', $args);
@@ -2216,7 +2216,7 @@ class xmlapi
 
             return false;
         }
-        $params = array('service' => $service);
+        $params = ['service' => $service];
 
         if ($enabled) {
             $params['enabled'] = 1;
@@ -2335,7 +2335,7 @@ class xmlapi
     // This API function parks a domain onto this user's account
     public function park($username, $newdomain, $topdomain)
     {
-        $args = array();
+        $args = [];
         if ((!isset($username)) && (!isset($newdomain))) {
             error_log("park requires that a username and new domain are passed to it");
 
@@ -2352,7 +2352,7 @@ class xmlapi
     // This API function unparks a domain from this user's account.
     public function unpark($username, $domain)
     {
-        $args = array();
+        $args = [];
         if ((!isset($username)) && (!isset($domain))) {
             error_log("unpark requires that a username and domain are passed to it");
 
@@ -2413,7 +2413,7 @@ class xmlapi
     // This API function displays a list of all parked domains for a specific user.
     public function listparkeddomains($username, $domain = null)
     {
-        $args = array();
+        $args = [];
         if (!isset($username)) {
             error_log("listparkeddomains requires that a user is passed to it");
 
@@ -2431,7 +2431,7 @@ class xmlapi
     // This API function displays a list of all addon domains for a specific user.
     public function listaddondomains($username, $domain = null)
     {
-        $args = array();
+        $args = [];
         if (!isset($username)) {
             error_log("listaddondomains requires that a user is passed to it");
 
