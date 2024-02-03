@@ -742,8 +742,8 @@ class xmlapi
         // Increase buffer size to avoid "funny output" exception
         curl_setopt($curl, CURLOPT_BUFFERSIZE, 131072);
         // set connect timeout to 10min, timeout to 20min
-        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 600); 
-        curl_setopt($curl, CURLOPT_TIMEOUT, 1200); 
+        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 600);
+        curl_setopt($curl, CURLOPT_TIMEOUT, 1200);
         
         // Pass authentication header
         $header[0] =$authstr .
