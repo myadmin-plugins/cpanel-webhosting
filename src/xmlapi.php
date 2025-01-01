@@ -94,7 +94,7 @@
 * Changed submission from GET to POST
 *
 *
-* @copyright 2012 cPanel, Inc
+* @copyright 2025 cPanel, Inc
 * @license http://sdk.cpanel.net/license/bsd.html
 * @version 1.0.13
 * @link http://twiki.cpanel.net/twiki/bin/view/AllDocumentation/AutomationIntegration/XmlApi
@@ -122,7 +122,7 @@
 *
 * @category Cpanel
 * @package xmlapi
-* @copyright 2012 cPanel, Inc.
+* @copyright 2025 cPanel, Inc.
 * @license http://sdk.cpanel.net/license/bsd.html
 * @version Release: 1.0.13
 * @link http://twiki.cpanel.net/twiki/bin/view/AllDocumentation/AutomationIntegration/XmlApi
