@@ -493,44 +493,42 @@ class Plugin
                     } else {
                         $response = json_decode($whm->removeacct($serviceClass->getUsername(), false), true);
                     }
+                    myadmin_log(self::$module, 'info', str_replace('\n', "\n", json_encode($response)), __LINE__, __FILE__, self::$module, $serviceClass->getId());
                 } catch (\Exception $e) {
                     $event['success'] = false;
                     myadmin_log('cpanel', 'error', 'removeacct('.$serviceClass->getUsername().') tossed exception '.$e->getMessage(), __LINE__, __FILE__, self::$module, $serviceClass->getId());
                     add_output('Caught exception: '.$e->getMessage().'<br>');
                 }
-
-                myadmin_log(self::$module, 'info', str_replace('\n', "\n", json_encode($response)), __LINE__, __FILE__, self::$module, $serviceClass->getId());
             } else {
                 myadmin_log(self::$module, 'info', "Skipping WHMAPI/Server Removal for {$serviceClass->getHostname()} because username is blank", __LINE__, __FILE__, self::$module, $serviceClass->getId());
             }
             try {
                 $dnsr = json_decode($whm->dumpzone($serviceClass->getHostname()), true);
+                if ($dnsr['result'][0]['status'] == 1) {
+                    $db = get_module_db(self::$module);
+                    $db->query("select * from {$settings['TABLE']} where {$settings['PREFIX']}_hostname='{$serviceClass->getHostname()}' and {$settings['PREFIX']}_id != {$serviceClass->getId()} and {$settings['PREFIX']}_status = 'active'", __LINE__, __FILE__);
+                    if ($db->num_rows() == 0) {
+                        myadmin_log(self::$module, 'info', "Removing Hanging DNS entry for {$serviceClass->getHostname()}", __LINE__, __FILE__, self::$module, $serviceClass->getId());
+                        try {
+                            $whm->killdns($serviceClass->getHostname());
+                        } catch (\Exception $e) {
+                            myadmin_log('cpanel', 'error', 'killdns('.$serviceClass->getHostname().') tossed exception '.$e->getMessage(), __LINE__, __FILE__, self::$module, $serviceClass->getId());
+                            add_output('Caught exception: '.$e->getMessage().'<br>');
+                        }
+                    } else {
+                        myadmin_log(self::$module, 'info', "Skipping Removing DNS entry for {$serviceClass->getHostname()} because other non deleted sites w/ the same hostname exist", __LINE__, __FILE__, self::$module, $serviceClass->getId());
+                    }
+                }
             } catch (\Exception $e) {
                 myadmin_log('cpanel', 'error', 'dumpzone('.$serviceClass->getHostname().') tossed exception '.$e->getMessage(), __LINE__, __FILE__, self::$module, $serviceClass->getId());
                 add_output('Caught exception: '.$e->getMessage().'<br>');
             }
-
-            if ($dnsr['result'][0]['status'] == 1) {
-                $db = get_module_db(self::$module);
-                $db->query("select * from {$settings['TABLE']} where {$settings['PREFIX']}_hostname='{$serviceClass->getHostname()}' and {$settings['PREFIX']}_id != {$serviceClass->getId()} and {$settings['PREFIX']}_status = 'active'", __LINE__, __FILE__);
-                if ($db->num_rows() == 0) {
-                    myadmin_log(self::$module, 'info', "Removing Hanging DNS entry for {$serviceClass->getHostname()}", __LINE__, __FILE__, self::$module, $serviceClass->getId());
-                    try {
-                        $whm->killdns($serviceClass->getHostname());
-                    } catch (\Exception $e) {
-                        myadmin_log('cpanel', 'error', 'killdns('.$serviceClass->getHostname().') tossed exception '.$e->getMessage(), __LINE__, __FILE__, self::$module, $serviceClass->getId());
-                        add_output('Caught exception: '.$e->getMessage().'<br>');
-                    }
-                } else {
-                    myadmin_log(self::$module, 'info', "Skipping Removing DNS entry for {$serviceClass->getHostname()} because other non deleted sites w/ the same hostname exist", __LINE__, __FILE__, self::$module, $serviceClass->getId());
-                }
-            }
             $event->stopPropagation();
             if (trim($serviceClass->getUsername()) == '') {
                 return true;
-            } elseif ($response['result'][0]['status'] == 1) {
+            } elseif (isset($response) && $response['result'][0]['status'] == 1) {
                 return true;
-            } elseif ($response['result'][0]['statusmsg'] == "System user {$serviceClass->getUsername()} does not exist!") {
+            } elseif (isset($response) && $response['result'][0]['statusmsg'] == "System user {$serviceClass->getUsername()} does not exist!") {
                 return true;
             } else {
                 $event['success'] = false;
