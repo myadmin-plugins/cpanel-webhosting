@@ -1,11 +1,14 @@
 {
 	"name": "detain/myadmin-cpanel-webhosting",
 	"type": "myadmin-plugin",
-	"description": "Cpanel Webhosting Class",
+	"description": "MyAdmin cPanel Webhosting Plugin - Provides cPanel and WHM integration for the MyAdmin control panel, including account provisioning, DNS management, reseller configuration, and XML-API client functionality.",
 	"keywords": [
 		"cpanel",
+		"whm",
+		"webhosting",
 		"administration",
-		"webhosting"
+		"xml-api",
+		"myadmin"
 	],
 	"license": "LGPL-2.1-only",
 	"authors": [
@@ -25,16 +28,16 @@
 		"detain/myadmin-plugin-installer": "dev-master"
 	},
 	"require-dev": {
-		"phpunit/phpunit": "*",
-		"phpunit/phpunit-mock-objects": "*",
-		"vlucas/phpdotenv": "*",
-		"codeclimate/php-test-reporter": "dev-master",
-		"satooshi/php-coveralls": "*",
-		"codacy/coverage": "dev-master"
+		"phpunit/phpunit": "^9.6"
 	},
 	"autoload": {
 		"psr-4": {
 			"Detain\\MyAdminCpanel\\": "src/"
+		}
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"Detain\\MyAdminCpanel\\Tests\\": "tests/"
 		}
 	}
 }

@@ -1,28 +1,80 @@
-# Cpanel Webhosting Class
+# MyAdmin cPanel Webhosting Plugin
 
-Cpanel Webhosting Class
+[![Tests](https://github.com/detain/myadmin-cpanel-webhosting/actions/workflows/tests.yml/badge.svg)](https://github.com/detain/myadmin-cpanel-webhosting/actions/workflows/tests.yml)
+[![Latest Stable Version](https://poser.pugx.org/detain/myadmin-cpanel-webhosting/version)](https://packagist.org/packages/detain/myadmin-cpanel-webhosting)
+[![Total Downloads](https://poser.pugx.org/detain/myadmin-cpanel-webhosting/downloads)](https://packagist.org/packages/detain/myadmin-cpanel-webhosting)
+[![License](https://poser.pugx.org/detain/myadmin-cpanel-webhosting/license)](https://packagist.org/packages/detain/myadmin-cpanel-webhosting)
 
-## Build Status and Code Analysis
+A MyAdmin plugin that provides full cPanel and WHM integration for webhosting management. This package handles account provisioning, suspension, reactivation, termination, DNS zone management, reseller configuration, package management, and SSL certificate operations through the cPanel XML-API.
 
-Site          | Status
---------------|---------------------------
-![Travis-CI](http://i.is.cc/storage/GYd75qN.png "Travis-CI")     | [![Build Status](https://travis-ci.org/detain/myadmin-cpanel-webhosting.svg?branch=master)](https://travis-ci.org/detain/myadmin-cpanel-webhosting)
-![CodeClimate](http://i.is.cc/storage/GYlageh.png "CodeClimate")  | [![Code Climate](https://codeclimate.com/github/detain/myadmin-cpanel-webhosting/badges/gpa.svg)](https://codeclimate.com/github/detain/myadmin-cpanel-webhosting) [![Test Coverage](https://codeclimate.com/github/detain/myadmin-cpanel-webhosting/badges/coverage.svg)](https://codeclimate.com/github/detain/myadmin-cpanel-webhosting/coverage) [![Issue Count](https://codeclimate.com/github/detain/myadmin-cpanel-webhosting/badges/issue_count.svg)](https://codeclimate.com/github/detain/myadmin-cpanel-webhosting)
-![Scrutinizer](http://i.is.cc/storage/GYeUnux.png "Scrutinizer")   | [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/myadmin-plugins/cpanel-webhosting/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/myadmin-plugins/cpanel-webhosting/?branch=master) [![Code Coverage](https://scrutinizer-ci.com/g/myadmin-plugins/cpanel-webhosting/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/myadmin-plugins/cpanel-webhosting/?branch=master) [![Build Status](https://scrutinizer-ci.com/g/myadmin-plugins/cpanel-webhosting/badges/build.png?b=master)](https://scrutinizer-ci.com/g/myadmin-plugins/cpanel-webhosting/build-status/master)
-![Codacy](http://i.is.cc/storage/GYi66Cx.png "Codacy")        | [![Codacy Badge](https://api.codacy.com/project/badge/Grade/226251fc068f4fd5b4b4ef9a40011d06)](https://www.codacy.com/app/detain/myadmin-cpanel-webhosting) [![Codacy Badge](https://api.codacy.com/project/badge/Coverage/25fa74eb74c947bf969602fcfe87e349)](https://www.codacy.com/app/detain/myadmin-cpanel-webhosting?utm_source=github.com&utm_medium=referral&utm_content=detain/myadmin-cpanel-webhosting&utm_campaign=Badge_Coverage)
-![Coveralls](http://i.is.cc/storage/GYjNSim.png "Coveralls")    | [![Coverage Status](https://coveralls.io/repos/github/detain/db_abstraction/badge.svg?branch=master)](https://coveralls.io/github/detain/myadmin-cpanel-webhosting?branch=master)
-![Packagist](http://i.is.cc/storage/GYacBEX.png "Packagist")     | [![Latest Stable Version](https://poser.pugx.org/detain/myadmin-cpanel-webhosting/version)](https://packagist.org/packages/detain/myadmin-cpanel-webhosting) [![Total Downloads](https://poser.pugx.org/detain/myadmin-cpanel-webhosting/downloads)](https://packagist.org/packages/detain/myadmin-cpanel-webhosting) [![Latest Unstable Version](https://poser.pugx.org/detain/myadmin-cpanel-webhosting/v/unstable)](//packagist.org/packages/detain/myadmin-cpanel-webhosting) [![Monthly Downloads](https://poser.pugx.org/detain/myadmin-cpanel-webhosting/d/monthly)](https://packagist.org/packages/detain/myadmin-cpanel-webhosting) [![Daily Downloads](https://poser.pugx.org/detain/myadmin-cpanel-webhosting/d/daily)](https://packagist.org/packages/detain/myadmin-cpanel-webhosting) [![License](https://poser.pugx.org/detain/myadmin-cpanel-webhosting/license)](https://packagist.org/packages/detain/myadmin-cpanel-webhosting)
+## Features
 
+- **Account Management** - Create, suspend, unsuspend, and terminate cPanel hosting accounts
+- **Reseller Support** - Full reseller account setup with ACL configuration and account limits
+- **DNS Management** - Add, edit, and remove DNS zones and records
+- **Package Management** - Create, edit, delete, and list hosting packages
+- **SSL Certificate Management** - Generate, install, and list SSL certificates
+- **Auto-Login** - API endpoint for automatic cPanel login via session tokens
+- **XML-API Client** - Complete PHP client for the cPanel/WHM XML-API with curl and fopen support
+- **Event-Driven Architecture** - Integrates with Symfony EventDispatcher for modular hook-based operation
 
 ## Installation
 
-Install with composer like
+Install via Composer:
 
 ```sh
 composer require detain/myadmin-cpanel-webhosting
 ```
 
+## Usage
+
+### Plugin Registration
+
+The plugin registers event hooks automatically through the `getHooks()` method:
+
+```php
+use Detain\MyAdminCpanel\Plugin;
+
+$hooks = Plugin::getHooks();
+// Returns hook mappings for: settings, activate, reactivate,
+// deactivate, terminate, api.register, function.requirements, ui.menu
+```
+
+### XML-API Client
+
+The included `xmlapi` class provides direct access to the cPanel/WHM XML-API:
+
+```php
+$whm = new xmlapi('your-server-ip');
+$whm->set_port('2087');
+$whm->set_protocol('https');
+$whm->set_output('json');
+$whm->hash_auth('root', $accessHash);
+
+// List accounts
+$accounts = $whm->listaccts();
+
+// Create an account
+$whm->createacct([
+    'username' => 'newuser',
+    'password' => 'securepass',
+    'domain'   => 'example.com',
+]);
+```
+
+## Running Tests
+
+```sh
+composer install
+vendor/bin/phpunit
+```
+
+To generate a coverage report:
+
+```sh
+vendor/bin/phpunit --coverage-text
+```
+
 ## License
 
-The Cpanel Webhosting Class class is licensed under the LGPL-v2.1 license.
-
+This package is licensed under the [LGPL-2.1](https://www.gnu.org/licenses/old-licenses/lgpl-2.1.en.html) license.
