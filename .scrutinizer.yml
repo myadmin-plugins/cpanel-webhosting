@@ -10,7 +10,6 @@ build:
             - ~/.composer/cache
             - tmp/
             - vendor/
-            - composer.lock
     dependencies:
         override:
             - composer self-update
@@ -28,58 +27,53 @@ build:
                     format: 'clover'
 checks:
     php:
-        duplication: true
-        uppercase_constants: true
-        return_doc_comment_if_not_inferrable: true
-        return_doc_comments: true
-        remove_extra_empty_lines: true
-        phpunit_assertions: true
+        argument_type_checks: true
+        avoid_closing_tag: true
+        avoid_corrupting_byteorder_marks: true
+        avoid_duplicate_types: true
         avoid_fixme_comments: true
-        param_doc_comment_if_not_inferrable: true
-        parameter_doc_comments: true
-        simplify_boolean_return: true
-        remove_extra_empty_lines: true
-        property_assignments: true
-        properties_in_camelcaps: true
-        precedence_mistakes: true
-        precedence_in_conditions: true
-        phpunit_assertions: true
-        php5_style_constructor: true
-        parse_doc_comments: true
-        parameters_in_camelcaps: true
-        parameter_doc_comments: true
-        param_doc_comment_if_not_inferrable: true
-        one_class_per_file: true
-        non_commented_empty_catch_block: true
-        no_unnecessary_if: true
-        no_trailing_whitespace: true
-        no_short_open_tag: true
-        no_non_implemented_abstract_methods: true
-        no_goto: true
-        no_long_variable_names:
-            maximum: '25'
-        more_specific_types_in_doc_comments: true
-        missing_arguments: true
-        instanceof_class_exists: true
+        avoid_perl_style_comments: true
+        avoid_usage_of_logical_operators: true
+        blank_line_after_namespace_declaration: true
+        code_rating: true
+        comparison_always_same_result: true
+        deadlock_detection_in_loops: true
+        deprecated_code_usage: true
+        duplication: true
+        encourage_shallow_comparison: true
+        fix_doc_comments: true
         fix_use_statements:
             remove_unused: true
             preserve_multiple: false
             preserve_blanklines: false
             order_alphabetically: true
-        fix_doc_comments: true
-        encourage_shallow_comparison: true
-        deprecated_code_usage: true
-        deadlock_detection_in_loops: true
-        comparison_always_same_result: true
-        code_rating: true
-        blank_line_after_namespace_declaration: true
-        avoid_usage_of_logical_operators: true
-        avoid_perl_style_comments: true
-        avoid_fixme_comments: true
-        avoid_duplicate_types: true
-        avoid_corrupting_byteorder_marks: true
-        avoid_closing_tag: true
-        argument_type_checks: true
+        instanceof_class_exists: true
+        missing_arguments: true
+        more_specific_types_in_doc_comments: true
+        no_goto: true
+        no_long_variable_names:
+            maximum: '25'
+        no_non_implemented_abstract_methods: true
+        no_short_open_tag: true
+        no_trailing_whitespace: true
+        no_unnecessary_if: true
+        non_commented_empty_catch_block: true
+        one_class_per_file: true
+        param_doc_comment_if_not_inferrable: true
+        parameter_doc_comments: true
+        parameters_in_camelcaps: true
+        parse_doc_comments: true
+        php5_style_constructor: true
+        phpunit_assertions: true
+        precedence_in_conditions: true
+        precedence_mistakes: true
+        properties_in_camelcaps: true
+        property_assignments: true
+        remove_extra_empty_lines: true
+        return_doc_comment_if_not_inferrable: true
+        return_doc_comments: true
+        simplify_boolean_return: true
+        uppercase_constants: true
 coding_style:
     php:
         indentation:

@@ -5,3 +5,6 @@ vendor/
 .idea/libraries
 .phpunit.cache
 .phpunit.cache
+
+# Caliber local state
+.caliber/
