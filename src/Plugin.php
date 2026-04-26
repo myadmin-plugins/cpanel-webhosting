@@ -159,7 +159,7 @@ class Plugin
                     myadmin_log(self::$module, 'info', 'Response: '.str_replace('\n', "\n", $response), __LINE__, __FILE__, self::$module, $serviceClass->getId());
                     $response = json_decode($response, true);
                 }
-                $GLOBALS['tf']->history->add($settings['PREFIX'], 'password', $serviceClass->getId(), $options['password']);
+                \MyAdmin\App::history()->add($settings['PREFIX'], 'password', $serviceClass->getId(), $options['password']);
             }
             if ($response['result'][0]['statusmsg'] == 'Sorry, a group for that username already exists.') {
                 while ($response['result'][0]['statusmsg'] == 'Sorry, a group for that username already exists.') {
@@ -332,7 +332,7 @@ class Plugin
                 if (isset($extra['script']) && $extra['script'] > 0) {
                     $script = (int) $extra['script'];
                     include_once __DIR__.'/../../../../include/webhosting/softaculous/sdk.php';
-                    $userdata = $GLOBALS['tf']->accounts->read($serviceClass->getCustid());
+                    $userdata = \MyAdmin\App::accounts()->read($serviceClass->getCustid());
                     $soft = new \Softaculous_SDK();
                     $soft->login = "https://{$username}:{$password}@{$serverdata[$settings['PREFIX'].'_name']}:2083/frontend/jupiter/softaculous/index.live.php";
                     $soft->list_scripts();
@@ -553,7 +553,7 @@ class Plugin
                 $event['status'] = 'error';
                 $event['status_text'] = 'Error Code '.$response['faultcode'].': '.$response['fault'];
             } else {
-                $GLOBALS['tf']->history->add($settings['TABLE'], 'change_ip', $event['newip'], $serviceClass->getId(), $serviceClass->getCustid());
+                \MyAdmin\App::history()->add($settings['TABLE'], 'change_ip', $event['newip'], $serviceClass->getId(), $serviceClass->getCustid());
                 $serviceClass->set_ip($event['newip'])->save();
                 $event['status'] = 'ok';
                 $event['status_text'] = 'The IP Address has been changed.';
@@ -568,7 +568,7 @@ class Plugin
     public static function getMenu(GenericEvent $event)
     {
         $menu = $event->getSubject();
-        if ($GLOBALS['tf']->ima == 'admin') {
+        if (\MyAdmin\App::ima() == 'admin') {
             function_requirements('has_acl');
             if (has_acl('module_config')) {
                 $menu->add_menu(self::$module, self::$module.'api', 'API', '/images/myadmin/api.png');

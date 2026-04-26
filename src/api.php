@@ -18,7 +18,7 @@ function api_auto_cpanel_login($id)
 {
     $return = ['status' => 'error', 'status_text' => ''];
     $module = 'webhosting';
-    $custid = get_custid($GLOBALS['tf']->session->account_id, 'vps');
+    $custid = get_custid(\MyAdmin\App::session()->account_id, 'vps');
     $settings = get_module_settings($module);
     $db = get_module_db($module);
     $id = (int)$id;
