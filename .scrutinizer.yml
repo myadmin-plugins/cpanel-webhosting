@@ -1,30 +1,47 @@
+# Scrutinizer CI configuration -- modern format (PHP 8.3, named nodes).
+# Reference: https://scrutinizer-ci.com/docs/configuration/build_reference
+
 filter:
     excluded_paths:
-        - tests/*
+        - 'tests/*'
+        - 'vendor/*'
+    dependency_paths:
+        - 'vendor/*'
+
 build:
     environment:
-        php: 7.0
-    cache:
-        disabled:             false
-        directories:
-            - ~/.composer/cache
-            - tmp/
-            - vendor/
-    dependencies:
-        override:
-            - composer self-update
-            - composer install --no-interaction --dev --prefer-dist --ansi
-    tests:
-        override:
-            #- jshint-run $(ls public_html/js/*.js)
-            #- shellcheck-run -s bash $(ls scripts/*/*.sh)
-            #- csslint-run --exclude-list=public_html/css/domains.css,public_html/css/minified,public_html/css/reset.css,public_html/css/price_win.css public_html/css
-            -
-                command: 'vendor/bin/phpunit --bootstrap vendor/autoload.php tests/ -v --coverage-clover coverage.xml --whitelist src/'
-                #command: 'phpdbg -qrr vendor/bin/phpunit --bootstrap vendor/autoload.php tests/ -v --coverage-clover coverage.xml --whitelist src/'
-                coverage:
-                    file: 'coverage.xml'
-                    format: 'clover'
+        php:
+            version: '8.3'
+            ini:
+                'date.timezone': 'America/New_York'
+                'memory_limit': '512M'
+        variables:
+            COMPOSER_DISCARD_CHANGES: 'true'
+
+    nodes:
+        analysis:
+            tests:
+                override:
+                    - php-scrutinizer-run
+
+        tests:
+            cache:
+                disabled: false
+                directories:
+                    - ~/.composer/cache
+                    - vendor/
+            dependencies:
+                override:
+                    - 'composer self-update --no-interaction'
+                    - 'composer install --no-interaction --prefer-dist --no-progress --ansi'
+            tests:
+                override:
+                    -
+                        command: 'vendor/bin/phpunit --coverage-clover=coverage.xml'
+                        coverage:
+                            file: 'coverage.xml'
+                            format: 'clover'
+
 checks:
     php:
         argument_type_checks: true
@@ -63,7 +80,6 @@ checks:
         parameter_doc_comments: true
         parameters_in_camelcaps: true
         parse_doc_comments: true
-        php5_style_constructor: true
         phpunit_assertions: true
         precedence_in_conditions: true
         precedence_mistakes: true
@@ -74,6 +90,7 @@ checks:
         return_doc_comments: true
         simplify_boolean_return: true
         uppercase_constants: true
+
 coding_style:
     php:
         indentation:
@@ -178,3 +195,8 @@ coding_style:
                 general: lower
             constants:
                 true_false_null: lower
+
+build_failure_conditions:
+    - 'elements.rating(<= D).new.exists'                       # No new D-or-worse rated elements
+    - 'issues.severity(>= MAJOR).new.exists'                   # No new MAJOR+ severity issues
+    - 'project.metric_change("scrutinizer.test_coverage", < -0.05)' # Coverage cannot drop more than 5%
