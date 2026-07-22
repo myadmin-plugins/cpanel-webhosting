@@ -88,6 +88,8 @@ class Plugin
                 $whm->set_hash($hash);
             } catch (\Exception $e) {
                 $event['success'] = false;
+                $event['status'] = 'error';
+                $event['status_text'] = $e->getMessage();
                 myadmin_log('cpanel', 'error', $e->getMessage(), __LINE__, __FILE__, self::$module, $serviceClass->getId());
                 chatNotify('Failed [Website '.$serviceClass->getId().'](https://my.interserver.net/admin/view_website?id='.$serviceClass->getId().') cPanel Activation - xmlapi/WHM init exception ('.$ip.'): '.$e->getMessage(), 'notifications');
                 $event->stopPropagation();
@@ -135,8 +137,11 @@ class Plugin
             try {
                 $response = $whm->xmlapi_query('createacct', $options);
             } catch (\Exception $e) {
+                $error_msg = 'Caught Exception from initial createacct call: '.$e->getMessage();
                 $event['success'] = false;
-                myadmin_log('cpanel', 'error', 'Caught Exception from initial createacct call: '.$e->getMessage(), __LINE__, __FILE__, self::$module, $serviceClass->getId());
+                $event['status'] = 'error';
+                $event['status_text'] = $error_msg;
+                myadmin_log('cpanel', 'error', $error_msg, __LINE__, __FILE__, self::$module, $serviceClass->getId());
                 chatNotify('Failed [Website '.$serviceClass->getId().'](https://my.interserver.net/admin/view_website?id='.$serviceClass->getId().') cPanel Activation - createacct exception (user:'.$username.' domain:'.$hostname.'): '.$e->getMessage(), 'notifications');
                 $event->stopPropagation();
                 return;
@@ -152,8 +157,11 @@ class Plugin
                     try {
                         $response = $whm->xmlapi_query('createacct', $options);
                     } catch (\Exception $e) {
+                        $error_msg = 'Caught Exception from createacct call: '.$e->getMessage();
                         $event['success'] = false;
-                        myadmin_log('cpanel', 'error', 'Caught Exception from createacct call: '.$e->getMessage(), __LINE__, __FILE__, self::$module, $serviceClass->getId());
+                        $event['status'] = 'error';
+                        $event['status_text'] = $error_msg;
+                        myadmin_log('cpanel', 'error', $error_msg, __LINE__, __FILE__, self::$module, $serviceClass->getId());
                         chatNotify('Failed [Website '.$serviceClass->getId().'](https://my.interserver.net/admin/view_website?id='.$serviceClass->getId().') cPanel Activation - createacct exception during password retry (user:'.$username.' domain:'.$hostname.'): '.$e->getMessage(), 'notifications');
                         $event->stopPropagation();
                         return;
@@ -174,7 +182,10 @@ class Plugin
                         $response = $whm->xmlapi_query('createacct', $options);
                     } catch (\Exception $e) {
                         $event['success'] = false;
-                        myadmin_log('cpanel', 'error', 'Caught Exception from createacct call (group retry): '.$e->getMessage(), __LINE__, __FILE__, self::$module, $serviceClass->getId());
+                        $error_msg = 'Caught Exception from createacct call (group retry): '.$e->getMessage();
+                        $event['status'] = 'error';
+                        $event['status_text'] = $error_msg;
+                        myadmin_log('cpanel', 'error', $error_msg, __LINE__, __FILE__, self::$module, $serviceClass->getId());
                         chatNotify('Failed [Website '.$serviceClass->getId().'](https://my.interserver.net/admin/view_website?id='.$serviceClass->getId().') cPanel Activation - createacct exception during group-name retry (user:'.$username.' domain:'.$hostname.'): '.$e->getMessage(), 'notifications');
                         $event->stopPropagation();
                         return;
@@ -198,8 +209,11 @@ class Plugin
                     try {
                         $response = $whm->xmlapi_query('createacct', $options);
                     } catch (\Exception $e) {
+                        $error_msg = 'Caught Exception from createacct call (username retry): '.$e->getMessage();
                         $event['success'] = false;
-                        myadmin_log('cpanel', 'error', 'Caught Exception from createacct call (username retry): '.$e->getMessage(), __LINE__, __FILE__, self::$module, $serviceClass->getId());
+                        $event['status'] = 'error';
+                        $event['status_text'] = $error_msg;
+                        myadmin_log('cpanel', 'error', $error_msg, __LINE__, __FILE__, self::$module, $serviceClass->getId());
                         chatNotify('Failed [Website '.$serviceClass->getId().'](https://my.interserver.net/admin/view_website?id='.$serviceClass->getId().') cPanel Activation - createacct exception during username retry (user:'.$username.' domain:'.$hostname.'): '.$e->getMessage(), 'notifications');
                         $event->stopPropagation();
                         return;
@@ -216,8 +230,11 @@ class Plugin
                     try {
                         $response3 = $whm->limitbw($username, $options['bwlimit']);
                     } catch (\Exception $e) {
+                        $error_msg = 'Caught Exception from limitbw call: '.$e->getMessage();
                         $event['success'] = false;
-                        myadmin_log('cpanel', 'error', 'Caught Exception from limitbw call: '.$e->getMessage(), __LINE__, __FILE__, self::$module, $serviceClass->getId());
+                        $event['status'] = 'error';
+                        $event['status_text'] = $error_msg;
+                        myadmin_log('cpanel', 'error', $error_msg, __LINE__, __FILE__, self::$module, $serviceClass->getId());
                         chatNotify('Failed [Website '.$serviceClass->getId().'](https://my.interserver.net/admin/view_website?id='.$serviceClass->getId().') cPanel Activation - limitbw exception (user:'.$username.' bw:'.$options['bwlimit'].'): '.$e->getMessage(), 'notifications');
                         $event->stopPropagation();
                         return;
@@ -229,8 +246,11 @@ class Plugin
                     try {
                         $response2 = $whm->setupreseller($username, false);
                     } catch (\Exception $e) {
+                        $error_msg = 'Caught Exception from setupreseller call: '.$e->getMessage();
                         $event['success'] = false;
-                        myadmin_log('cpanel', 'error', 'Caught Exception from setupreseller call: '.$e->getMessage(), __LINE__, __FILE__, self::$module, $serviceClass->getId());
+                        $event['status'] = 'error';
+                        $event['status_text'] = $error_msg;
+                        myadmin_log('cpanel', 'error', $error_msg, __LINE__, __FILE__, self::$module, $serviceClass->getId());
                         chatNotify('Failed [Website '.$serviceClass->getId().'](https://my.interserver.net/admin/view_website?id='.$serviceClass->getId().') cPanel Activation - setupreseller exception (user:'.$username.'): '.$e->getMessage(), 'notifications');
                         $event->stopPropagation();
                         return;
@@ -240,8 +260,11 @@ class Plugin
                     try {
                         $response3 = $whm->listacls();
                     } catch (\Exception $e) {
+                        $error_msg = 'Caught Exception from listacls call: '.$e->getMessage();
                         $event['success'] = false;
-                        myadmin_log('cpanel', 'error', 'Caught Exception from listacls call: '.$e->getMessage(), __LINE__, __FILE__, self::$module, $serviceClass->getId());
+                        $event['status'] = 'error';
+                        $event['status_text'] = $error_msg;
+                        myadmin_log('cpanel', 'error', $error_msg, __LINE__, __FILE__, self::$module, $serviceClass->getId());
                         chatNotify('Failed [Website '.$serviceClass->getId().'](https://my.interserver.net/admin/view_website?id='.$serviceClass->getId().') cPanel Activation - listacls exception (user:'.$username.'): '.$e->getMessage(), 'notifications');
                         $event->stopPropagation();
                         return;
@@ -297,8 +320,11 @@ class Plugin
                         try {
                             $response = $whm->saveacllist($acl);
                         } catch (\Exception $e) {
+                            $error_msg = 'Caught Exception from saveacllist call: '.$e->getMessage();
                             $event['success'] = false;
-                            myadmin_log('cpanel', 'error', 'Caught Exception from saveacllist call: '.$e->getMessage(), __LINE__, __FILE__, self::$module, $serviceClass->getId());
+                            $event['status'] = 'error';
+                            $event['status_text'] = $error_msg;
+                            myadmin_log('cpanel', 'error', $error_msg, __LINE__, __FILE__, self::$module, $serviceClass->getId());
                             chatNotify('Failed [Website '.$serviceClass->getId().'](https://my.interserver.net/admin/view_website?id='.$serviceClass->getId().') cPanel Activation - saveacllist exception (user:'.$username.'): '.$e->getMessage(), 'notifications');
                             $event->stopPropagation();
                             return;
@@ -313,8 +339,11 @@ class Plugin
                     try {
                         $response = $whm->setacls($request);
                     } catch (\Exception $e) {
+                        $error_msg = 'Caught Exception from setacls call: '.$e->getMessage();
                         $event['success'] = false;
-                        myadmin_log('cpanel', 'error', 'Caught Exception from setacls call: '.$e->getMessage(), __LINE__, __FILE__, self::$module, $serviceClass->getId());
+                        $event['status'] = 'error';
+                        $event['status_text'] = $error_msg;
+                        myadmin_log('cpanel', 'error', $error_msg, __LINE__, __FILE__, self::$module, $serviceClass->getId());
                         chatNotify('Failed [Website '.$serviceClass->getId().'](https://my.interserver.net/admin/view_website?id='.$serviceClass->getId().') cPanel Activation - setacls exception (user:'.$username.'): '.$e->getMessage(), 'notifications');
                         $event->stopPropagation();
                         return;
@@ -329,8 +358,11 @@ class Plugin
                             'account_limit' => $account_limit,
                         ]);
                     } catch (\Exception $e) {
+                        $error_msg = 'Caught Exception from setresellerlimits call: '.$e->getMessage();
                         $event['success'] = false;
-                        myadmin_log('cpanel', 'error', 'Caught Exception from setresellerlimits call: '.$e->getMessage(), __LINE__, __FILE__, self::$module, $serviceClass->getId());
+                        $event['status'] = 'error';
+                        $event['status_text'] = $error_msg;
+                        myadmin_log('cpanel', 'error', $error_msg, __LINE__, __FILE__, self::$module, $serviceClass->getId());
                         chatNotify('Failed [Website '.$serviceClass->getId().'](https://my.interserver.net/admin/view_website?id='.$serviceClass->getId().') cPanel Activation - setresellerlimits exception (user:'.$username.' limit:'.$account_limit.'): '.$e->getMessage(), 'notifications');
                         $event->stopPropagation();
                         return;
@@ -376,8 +408,11 @@ class Plugin
                 try {
                     $response = $whm->park($options['username'], 'wh'.$serviceClass->getId().'.ispot.cc', '');
                 } catch (\Exception $e) {
+                    $error_msg = 'Caught Exception from park call: '.$e->getMessage();
                     $event['success'] = false;
-                    myadmin_log('cpanel', 'error', 'Caught Exception from park call: '.$e->getMessage(), __LINE__, __FILE__, self::$module, $serviceClass->getId());
+                    $event['status'] = 'error';
+                    $event['status_text'] = $error_msg;
+                    myadmin_log('cpanel', 'error', $error_msg, __LINE__, __FILE__, self::$module, $serviceClass->getId());
                     chatNotify('Failed [Website '.$serviceClass->getId().'](https://my.interserver.net/admin/view_website?id='.$serviceClass->getId().') cPanel Activation - park exception (user:'.$options['username'].' domain:wh'.$serviceClass->getId().'.ispot.cc): '.$e->getMessage(), 'notifications');
                     $event->stopPropagation();
                     return;
@@ -385,8 +420,11 @@ class Plugin
                 myadmin_log(self::$module, 'info', 'Response: '.str_replace('\n', "\n", json_encode($response)), __LINE__, __FILE__, self::$module, $serviceClass->getId());
                 $event['success'] = true;
             } else {
-                myadmin_log(self::$module, 'warning', 'Returning With Setup Failed from Response: '.str_replace('\n', "\n", json_encode($response)), __LINE__, __FILE__, self::$module, $serviceClass->getId());
+                $error_msg = 'Returning With Setup Failed from Response: '.str_replace('\n', "\n", json_encode($response));
                 $event['success'] = false;
+                $event['status'] = 'error';
+                $event['status_text'] = $error_msg;
+                myadmin_log(self::$module, 'warning', $error_msg, __LINE__, __FILE__, self::$module, $serviceClass->getId());
                 $statusMsg = is_array($response) && isset($response['result'][0]['statusmsg']) ? $response['result'][0]['statusmsg'] : '';
                 chatNotify('Failed [Website '.$serviceClass->getId().'](https://my.interserver.net/admin/view_website?id='.$serviceClass->getId().') cPanel Activation - createacct status != 1 (user:'.$username.' domain:'.$hostname.') statusmsg: '.$statusMsg, 'notifications');
             }
@@ -425,8 +463,11 @@ class Plugin
                 }
                 myadmin_log(self::$module, 'info', str_replace('\n', "\n", json_encode($response)), __LINE__, __FILE__, self::$module, $serviceClass->getId());
             } catch (\Exception $e) {
+                $error_msg = 'unsuspendacct('.$serviceClass->getUsername().') tossed exception '.$e->getMessage();
                 $event['success'] = false;
-                myadmin_log('cpanel', 'error', 'unsuspendacct('.$serviceClass->getUsername().') tossed exception '.$e->getMessage(), __LINE__, __FILE__, self::$module, $serviceClass->getId());
+                $event['status'] = 'error';
+                $event['status_text'] = $error_msg;
+                myadmin_log('cpanel', 'error', $error_msg, __LINE__, __FILE__, self::$module, $serviceClass->getId());
                 add_output('Caught exception: '.$e->getMessage().'<br>');
             }
             $event->stopPropagation();
@@ -466,8 +507,11 @@ class Plugin
                     }
                     myadmin_log(self::$module, 'info', str_replace('\n', "\n", json_encode($response)), __LINE__, __FILE__, self::$module, $serviceClass->getId());
                 } catch (\Exception $e) {
+                    $error_msg = 'suspendacct('.$serviceClass->getUsername().') tossed exception '.$e->getMessage();
                     $event['success'] = false;
-                    myadmin_log('cpanel', 'error', 'suspendacct('.$serviceClass->getUsername().') tossed exception '.$e->getMessage(), __LINE__, __FILE__, self::$module, $serviceClass->getId());
+                    $event['status'] = 'error';
+                    $event['status_text'] = $error_msg;
+                    myadmin_log('cpanel', 'error', $error_msg, __LINE__, __FILE__, self::$module, $serviceClass->getId());
                     add_output('Caught exception: '.$e->getMessage().'<br>');
                 }
             }
@@ -509,8 +553,11 @@ class Plugin
                     }
                     myadmin_log(self::$module, 'info', str_replace('\n', "\n", json_encode($response)), __LINE__, __FILE__, self::$module, $serviceClass->getId());
                 } catch (\Exception $e) {
+                    $error_msg = 'removeacct('.$serviceClass->getUsername().') tossed exception '.$e->getMessage();
                     $event['success'] = false;
-                    myadmin_log('cpanel', 'error', 'removeacct('.$serviceClass->getUsername().') tossed exception '.$e->getMessage(), __LINE__, __FILE__, self::$module, $serviceClass->getId());
+                    $event['status'] = 'error';
+                    $event['status_text'] = $error_msg;
+                    myadmin_log('cpanel', 'error', $error_msg, __LINE__, __FILE__, self::$module, $serviceClass->getId());
                     add_output('Caught exception: '.$e->getMessage().'<br>');
                 }
             } else {
@@ -526,7 +573,11 @@ class Plugin
                         try {
                             $whm->killdns($serviceClass->getHostname());
                         } catch (\Exception $e) {
-                            myadmin_log('cpanel', 'error', 'killdns('.$serviceClass->getHostname().') tossed exception '.$e->getMessage(), __LINE__, __FILE__, self::$module, $serviceClass->getId());
+                            $error_msg = 'killdns('.$serviceClass->getHostname().') tossed exception '.$e->getMessage();
+                            $event['success'] = false;
+                            $event['status'] = 'error';
+                            $event['status_text'] = $error_msg;
+                            myadmin_log('cpanel', 'error', $error_msg, __LINE__, __FILE__, self::$module, $serviceClass->getId());
                             add_output('Caught exception: '.$e->getMessage().'<br>');
                         }
                     } else {
