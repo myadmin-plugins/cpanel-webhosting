@@ -223,6 +223,86 @@ class Plugin
                     $response = json_decode($response, true);
                 }
             }
+            // (XID um9n2k) The domain "example.com" already exists in the userdata.
+            // Rather than fail the reactivation, adopt the existing account: locate it, unsuspend it, and relink it locally so the customer keeps their existing site data. Recreating would wipe their files/db.
+            if ($response['result'][0]['status'] != 1
+                && preg_match('/already exists in the userdata/i', (string) ($response['result'][0]['statusmsg'] ?? ''))) {
+                myadmin_log(self::$module, 'info', 'Domain '.$hostname.' already exists in cPanel userdata - adopting existing account instead of recreating', __LINE__, __FILE__, self::$module, $serviceClass->getId());
+                $existingUser = '';
+                $existingIp = '';
+                $lookup = null;
+                try {
+                    $lookup = json_decode($whm->listaccts('domain', $hostname), true);
+                } catch (\Exception $e) {
+                    myadmin_log('cpanel', 'error', 'Caught Exception from listaccts lookup during adopt: '.$e->getMessage(), __LINE__, __FILE__, self::$module, $serviceClass->getId());
+                }
+                request_log(self::$module, $serviceClass->getCustid(), __FUNCTION__, 'cpanel', 'listaccts', ['searchtype' => 'domain', 'search' => $hostname], $lookup, $serviceClass->getId());
+                if (is_array($lookup) && !empty($lookup['acct'][0]['user'])) {
+                    $existingUser = $lookup['acct'][0]['user'];
+                    $existingIp = $lookup['acct'][0]['ip'] ?? '';
+                }
+                if ($existingUser !== '') {
+                    // Ownership guard: the domain being present on the server does NOT by
+                    // itself prove the account belongs to this customer - a stale account
+                    // from a previous, different customer could own the same domain on the
+                    // same box. getTerminate() never clears the local username, so a
+                    // terminated-but-uncleaned service still holds its original cPanel
+                    // username; require the found account to match it before adopting.
+                    $knownUser = trim($serviceClass->getUsername());
+                    if ($knownUser === '') {
+                        $error_msg = 'Domain '.$hostname.' already exists on the server as cPanel account '.$existingUser.', but this service has no stored username to confirm ownership - refusing to auto-adopt, manual review required';
+                        $event['success'] = false;
+                        $event['status'] = 'error';
+                        $event['status_text'] = $error_msg;
+                        myadmin_log('cpanel', 'warning', $error_msg, __LINE__, __FILE__, self::$module, $serviceClass->getId());
+                        chatNotify('Manual review [Website '.$serviceClass->getId().'](https://my.interserver.net/admin/view_website?id='.$serviceClass->getId().') cPanel Activation - domain '.$hostname.' exists as account '.$existingUser.' but service has no stored username to confirm ownership; not adopted', 'notifications');
+                        $event->stopPropagation();
+                        return;
+                    }
+                    if (strcasecmp($existingUser, $knownUser) !== 0) {
+                        $error_msg = 'Domain '.$hostname.' already exists on the server as cPanel account '.$existingUser.', which does not match this service username '.$knownUser.' - refusing to auto-adopt a possibly foreign account, manual review required';
+                        $event['success'] = false;
+                        $event['status'] = 'error';
+                        $event['status_text'] = $error_msg;
+                        myadmin_log('cpanel', 'warning', $error_msg, __LINE__, __FILE__, self::$module, $serviceClass->getId());
+                        chatNotify('Manual review [Website '.$serviceClass->getId().'](https://my.interserver.net/admin/view_website?id='.$serviceClass->getId().') cPanel Activation - domain '.$hostname.' owned by account '.$existingUser.' != service username '.$knownUser.'; possible foreign account, not adopted', 'notifications');
+                        $event->stopPropagation();
+                        return;
+                    }
+                    // Ownership confirmed: the existing account matches this service's stored username.
+                    $username = $existingUser;
+                    $unsuspend = null;
+                    try {
+                        if ($reseller === true) {
+                            $unsuspend = json_decode($whm->unsuspendreseller($existingUser), true);
+                        } else {
+                            $unsuspend = json_decode($whm->unsuspendacct($existingUser), true);
+                        }
+                        myadmin_log(self::$module, 'info', 'unsuspend response during adopt: '.str_replace('\n', "\n", json_encode($unsuspend)), __LINE__, __FILE__, self::$module, $serviceClass->getId());
+                    } catch (\Exception $e) {
+                        myadmin_log('cpanel', 'error', 'Caught Exception from unsuspend during adopt: '.$e->getMessage(), __LINE__, __FILE__, self::$module, $serviceClass->getId());
+                    }
+                    request_log(self::$module, $serviceClass->getCustid(), __FUNCTION__, 'cpanel', 'unsuspendacct', ['user' => $existingUser], $unsuspend, $serviceClass->getId());
+                    $db = get_module_db(self::$module);
+                    $oldIp = $serviceClass->getIp();
+                    $oldUsername = $serviceClass->getUsername();
+                    $escUser = $db->real_escape($existingUser);
+                    $escIp = $db->real_escape($existingIp);
+                    $db->query("update {$settings['TABLE']} set {$settings['PREFIX']}_ip='{$escIp}', {$settings['PREFIX']}_username='{$escUser}' where {$settings['PREFIX']}_id='{$serviceClass->getId()}'", __LINE__, __FILE__);
+                    \MyAdmin\App::history()->add($settings['PREFIX'], 'ip', $existingIp, $oldIp, $serviceClass->getCustid());
+                    \MyAdmin\App::history()->add($settings['PREFIX'], 'username', $existingUser, $oldUsername, $serviceClass->getCustid());
+                    website_welcome_email($serviceClass->getId());
+                    $event['success'] = true;
+                    $event['status'] = 'ok';
+                    $event['status_text'] = 'Adopted existing cPanel account '.$existingUser.' for domain '.$hostname;
+                    myadmin_log(self::$module, 'info', 'Adopted existing cPanel account '.$existingUser.' ('.$existingIp.') for domain '.$hostname, __LINE__, __FILE__, self::$module, $serviceClass->getId());
+                    chatNotify('Recovered [Website '.$serviceClass->getId().'](https://my.interserver.net/admin/view_website?id='.$serviceClass->getId().') cPanel Activation - adopted existing account '.$existingUser.' for domain '.$hostname.' (was already in userdata)', 'notifications');
+                    $event->stopPropagation();
+                    return;
+                }
+                // Reported as existing but no matching account was found - fall through to normal failure handling below.
+                myadmin_log('cpanel', 'warning', 'Domain '.$hostname.' reported as existing in userdata but no matching account was found via listaccts', __LINE__, __FILE__, self::$module, $serviceClass->getId());
+            }
             if ($response['result'][0]['status'] == 1) {
                 $event['success'] = true;
                 $ip = $response['result'][0]['options']['ip'];
