@@ -19,13 +19,16 @@
 	],
 	"config": {
 		"bin-dir": "vendor\/bin",
-		"minimum-stability": "dev"
+		"minimum-stability": "dev",
+		"allow-plugins": {
+			"detain/myadmin-plugin-installer": true
+		}
 	},
 	"require": {
 		"php": ">=5.0.0",
 		"ext-soap": "*",
 		"symfony/event-dispatcher": "*@stable",
-		"detain/myadmin-plugin-installer": "dev-master"
+		"detain/myadmin-plugin-installer": "^2.1"
 	},
 	"require-dev": {
 		"phpunit/phpunit": "^9.6"
