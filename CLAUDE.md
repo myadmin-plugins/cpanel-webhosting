@@ -76,6 +76,28 @@ Examples: `bin/listaccts.php <hostname>` · `bin/suspendacct.php <hostname> <use
 - `.bettercodehub.yml` — PHP language config
 
 <!-- caliber:managed:pre-commit -->
+## Plugin contract harness
+
+This package is on the shared contract harness from `detain/myadmin-plugin-installer`.
+`tests/ContractTest.php` is **generated** — run `composer myadmin:scaffold-tests` (add
+`--force --write` to re-emit it), never hand-edit it.
+
+The harness **executes** the plugin: it defines the bare constants the class body references
+and then calls `getHooks()`, `getSettings()`, `getMenu()`, `apiRegister()` and — for
+`type=service` packages — the activate/deactivate/change-ip/queue handlers, for real.
+
+**So do not write reflection-only tests for the plugin class.** Asserting a handler exists,
+is public, is static and takes one parameter passes whether or not the handler works; three
+production bugs in this fleet were sitting behind assertions of exactly that shape. Older
+guidance in this repo that says those methods must not be called predates the harness.
+
+The harness is **additive**: it runs alongside this package's existing tests, and nothing is
+deleted to make room for it. Run the whole suite, never `--filter ContractTest` alone — the
+contract class primes constants and calls `register_module()`, neither of which can be undone.
+
+See the `plugin-contract-tests` skill for the full workflow, and `docs/testing-harness.md` in
+the installer.
+
 ## Before Committing
 
 **IMPORTANT:** Before every git commit, you MUST ensure Caliber syncs agent configs with the latest code changes.
